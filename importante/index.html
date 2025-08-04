@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homenagem aos Meus Pais</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fafafa;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            color: #333;
+        }
+
+        header {
+            background-color: #FF6347;
+            color: white;
+            padding: 30px 0;
+            font-size: 2.5em;
+            text-transform: uppercase;
+        }
+
+        .content {
+            padding: 50px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1.2em;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .quote {
+            font-style: italic;
+            font-size: 1.3em;
+            color: #555;
+            margin-top: 30px;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    Homenagem aos Meus Pais
+</header>
+
+<div class="content">
+    <h2>Para o Melhor Casal de Pais do Mundo</h2>
+    <p>Eu sou eternamente grato por tudo o que vocês fizeram por mim. Cada sorriso, cada gesto de amor, cada sacrifício... vocês me ensinaram tanto sobre a vida, o amor e a perseverança. O que eu sou hoje é graças a vocês!</p>
+    
+    <div class="button-container">
+        <button onclick="showMessage()">Clique para uma mensagem especial!</button>
+    </div>
+    
+    <div class="quote">
+        <p id="special-message"></p>
+    </div>
+</div>
+
+<footer>
+    Criado com muito amor por [Seu Nome]
+</footer>
+
+<script>
+    function showMessage() {
+        const message = "Mãe e Pai, vocês são tudo para mim! Obrigado por me guiarem com tanto carinho e por me ensinarem o verdadeiro significado de amor. Eu amo vocês!";
+        document.getElementById("special-message").innerText = message;
+    }
+</script>
+
+</body>
+</html>

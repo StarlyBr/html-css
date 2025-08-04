@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Clone</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .container h1 {
+            color: #1877f2;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .container button:hover {
+            background-color: #145dbf;
+        }
+        .container a {
+            display: block;
+            margin-top: 10px;
+            color: #1877f2;
+            text-decoration: none;
+        }
+        .container a:hover {
+            text-decoration: underlaine;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Facebook</h1>
+        <form>
+            <input type="email" placeholder="Email ou telefone" required>
+            <input type="password" placeholder="Senha" required>
+            <button type="submit">Entrar</button>
+        </form>
+        <a href="#">Esqueceu a senha?</a>
+        <a href="#">Criar nova conta</a>
+    </div>
+</body>
+</html>

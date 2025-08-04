@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notícias de Hoje</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafafa;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            background-color: #ff6347;
+            color: white;
+            padding: 20px;
+        }
+        .news {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Notícias de Hoje</h1>
+</header>
+
+<div class="news">
+    <h2>Última Notícia:</h2>
+    <p id="news-content">Carregando...</p>
+    <button onclick="loadNews()">Carregar Notícia</button>
+</div>
+
+<footer>
+    <p>&copy; 2025 Notícias de Hoje</p>
+</footer>
+
+<script>
+    function loadNews() {
+        document.getElementById("news-content").innerText = "Hoje, o mundo está mais conectado do que nunca!";
+    }
+</script>
+
+</body>
+</html>
