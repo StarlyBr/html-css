@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#4285f4">
+  <meta name="description" content="Site móvel otimizado com as melhores práticas">
+  <title>Super Site Mobile</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <style>
+    :root {
+      --primary: #4285f4;
+      --secondary: #34a853;
+      --dark: #202124;
+      --light: #f8f9fa;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      color: var(--dark);
+      background: var(--light);
+      overflow-x: hidden;
+    }
+    
+    /* Layout Principal */
+    .app {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    
+    /* Cabeçalho */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: white;
+      box-shadow: var(--shadow);
+      padding: 1rem;
+    }
+    
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    
+    .menu-toggle {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--dark);
+    }
+    
+    .nav-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 80%;
+      max-width: 300px;
+      height: 100vh;
+      background: white;
+      box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+      transition: right 0.3s ease;
+      padding: 2rem;
+      z-index: 101;
+    }
+    
+    .nav-menu.active {
+      right: 0;
+    }
+    
+    .nav-menu ul {
+      list-style: none;
+      margin-top: 2rem;
+    }
+    
+    .nav-menu li {
+      margin-bottom: 1.5rem;
+    }
+    
+    .nav-menu a {
+      text-decoration: none;
+      color: var(--dark);
+      font-size: 1.1rem;
+      transition: color 0.2s;
+    }
+    
+    .nav-menu a:hover {
+      color: var(--primary);
+    }
+    
+    .close-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    
+    .overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    /* Conteúdo Principal */
+    main {
+      flex: 1;
+      padding: 1.5rem;
+    }
+    
+    .hero {
+      text-align: center;
+      padding: 2rem 0;
+      margin-bottom: 2rem;
+    }
+    
+    .hero h1 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+    
+    .hero p {
+      font-size: 1.1rem;
+      color: #555;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+    
+    .btn {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-secondary {
+      background: var(--secondary);
+    }
+    
+    /* Seções */
+    .section {
+      margin-bottom: 3rem;
+    }
+    
+    .section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+    }
+    
+    .card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: transform 0.3s;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .card h3 {
+      margin-bottom: 0.5rem;
+      color: var(--dark);
+    }
+    
+    /* Rodapé */
+    footer {
+      background: var(--dark);
+      color: white;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 2rem;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+    }
+    
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+    
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .social-icons a {
+      color: white;
+      font-size: 1.5rem;
+    }
+    
+    /* Animações */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate {
+      animation: fadeIn 0.6s ease forwards;
+    }
+    
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+    .delay-3 { animation-delay: 0.6s; }
+    
+    /* Carregamento Otimizado */
+    img, iframe {
+      max-width: 100%;
+      height: auto;
+    }
+    
+    img.lazy {
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    img.lazy.loaded {
+      opacity: 1;
+    }
+    
+    /* Dark Mode */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: #121212;
+        color: #e0e0e0;
+      }
+      
+      header, .card {
+        background: #1e1e1e;
+        color: #e0e0e0;
+      }
+      
+      .card h3, .nav-menu a {
+        color: #e0e0e0;
+      }
+    }
+    
+    /* Media Queries para Tablets */
+    @media (min-width: 768px) {
+      .hero h1 {
+        font-size: 3rem;
+      }
+      
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+      }
+    }
+    
+    /* Media Queries para Desktop */
+    @media (min-width: 1024px) {
+      .menu-toggle {
+        display: none;
+      }
+      
+      .nav-menu {
+        position: static;
+        width: auto;
+        height: auto;
+        background: transparent;
+        box-shadow: none;
+        padding: 0;
+      }
+      
+      .nav-menu ul {
+        display: flex;
+        gap: 1.5rem;
+        margin-top: 0;
+      }
+      
+      .nav-menu li {
+        margin-bottom: 0;
+      }
+      
+      .close-btn, .overlay {
+        display: none;
+      }
+      
+      .card-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Cabeçalho -->
+    <header>
+      <nav class="navbar">
+        <a href="#" class="logo">SuperMobile</a>
+        <button class="menu-toggle" aria-label="Abrir menu">☰</button>
+        
+        <div class="nav-menu">
+          <button class="close-btn" aria-label="Fechar menu">×</button>
+          <ul>
+            <li><a href="#home" class="nav-link">Início</a></li>
+            <li><a href="#features" class="nav-link">Recursos</a></li>
+            <li><a href="#about" class="nav-link">Sobre</a></li>
+            <li><a href="#contact" class="nav-link">Contato</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="overlay"></div>
+    </header>
+    
+    <!-- Conteúdo Principal -->
+    <main>
+      <section id="home" class="hero">
+        <h1 class="animate">O Melhor Site para Celulares</h1>
+        <p class="animate delay-1">Desenvolvido com as melhores práticas de design mobile, performance e acessibilidade.</p>
+        <a href="#features" class="btn animate delay-2">Conheça os Recursos</a>
+      </section>
+      
+      <section id="features" class="section">
+        <h2 class="animate">Recursos Incríveis</h2>
+        <div class="card-grid">
+          <div class="card animate delay-1">
+            <h3>Design Responsivo</h3>
+            <p>Adapta-se perfeitamente a qualquer tamanho de tela, desde smartphones até desktops.</p>
+          </div>
+          <div class="card animate delay-2">
+            <h3>Performance Otimizada</h3>
+            <p>Carregamento ultrarrápido mesmo em conexões 3G, com lazy loading de imagens.</p>
+          </div>
+          <div class="card animate delay-3">
+            <h3>PWA Habilitado</h3>
+            <p>Funciona offline e pode ser instalado como um aplicativo no seu celular.</p>
+          </div>
+        </div>
+      </section>
+      
+      <section id="about" class="section">
+        <h2 class="animate">Sobre Nós</h2>
+        <div class="card animate delay-1">
+          <h3>Nossa Missão</h3>
+          <p>Criar experiências móveis excepcionais que combinam beleza, performance e usabilidade.</p>
+          <p>Utilizamos as tecnologias mais modernas para garantir que seu site seja rápido, acessível e fácil de usar em qualquer dispositivo.</p>
+          <a href="#contact" class="btn btn-secondary">Fale Conosco</a>
+        </div>
+      </section>
+    </main>
+    
+    <!-- Rodapé -->
+    <footer id="contact">
+      <div class="footer-links">
+        <a href="#home">Início</a>
+        <a href="#features">Recursos</a>
+        <a href="#about">Sobre</a>
+        <a href="#contact">Contato</a>
+        <a href="#" target="_blank">Política de Privacidade</a>
+      </div>
+      
+      <div class="social-icons">
+        <a href="#" aria-label="Facebook">📘</a>
+        <a href="#" aria-label="Twitter">🐦</a>
+        <a href="#" aria-label="Instagram">📷</a>
+        <a href="#" aria-label="LinkedIn">💼</a>
+      </div>
+      
+      <p>© 2023 SuperMobile. Todos os direitos reservados.</p>
+    </footer>
+  </div>
+  
+  <script>
+    // Menu Mobile
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    const overlay = document.querySelector('.overlay');
+    const closeBtn = document.querySelector('.close-btn');
+    
+    menuToggle.addEventListener('click', () => {
+      navMenu.classList.add('active');
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+    
+    closeBtn.addEventListener('click', closeMenu);
+    overlay.addEventListener('click', closeMenu);
+    
+    function closeMenu() {
+      navMenu.classList.remove('active');
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    
+    // Fechar menu ao clicar em um link
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+    
+    // Lazy Loading
+    if ('loading' in HTMLImageElement.prototype) {
+      // Navegador suporta lazy loading nativo
+      const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+      lazyImages.forEach(img => {
+        img.classList.add('lazy');
+        img.addEventListener('load', () => {
+          img.classList.add('loaded');
+        });
+      });
+    } else {
+      // Fallback para lazy loading com Intersection Observer
+      const lazyLoadObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src;
+            img.classList.add('loaded');
+            observer.unobserve(img);
+          }
+        });
+      });
+      
+      document.querySelectorAll('img.lazy').forEach(img => {
+        lazyLoadObserver.observe(img);
+      });
+    }
+    
+    // Service Worker para PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').then(
+          registration => {
+            console.log('ServiceWorker registrado com sucesso: ', registration.scope);
+          },
+          err => {
+            console.log('Falha ao registrar ServiceWorker: ', err);
+          }
+        );
+      });
+    }
+    
+    // Animações ao rolar
+    const animateElements = document.querySelectorAll('.animate');
+    
+    const animateOnScroll = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = 1;
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    animateElements.forEach(el => {
+      el.style.opacity = 0;
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      animateOnScroll.observe(el);
+    });
+  </script>
+</body>
+</html>
