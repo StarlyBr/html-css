@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Minhas Tarefas</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📝 Minha Agenda de Tarefas</h1>
+      <button id="toggle-theme" class="btn theme-toggle">🌙 Modo Escuro</button>
+    </header>
+
+    <!-- Alerta de vencimento -->
+    <div id="alert-vencimento" class="alert hidden"></div>
+
+    <!-- Formulário de nova tarefa -->
+    <form id="add-form" class="add-form">
+      <input type="text" id="titulo" placeholder="Digite uma nova tarefa" required />
+      <input type="date" id="data" />
+      <select id="categoria">
+        <option value="">Categoria</option>
+        <option value="trabalho">💼 Trabalho</option>
+        <option value="estudo">📚 Estudo</option>
+        <option value="pessoal">🏠 Pessoal</option>
+        <option value="saude">💪 Saúde</option>
+      </select>
+      <button type="submit">Adicionar</button>
+    </form>
+
+    <!-- Busca e filtros -->
+    <div class="controls">
+      <input type="text" id="search" placeholder="Buscar tarefas..." class="search-input" />
+
+      <div class="filter-actions">
+        <div class="filters">
+          <button class="filter-btn active" data-filter="all">Todas</button>
+          <button class="filter-btn" data-filter="active">Ativas</button>
+          <button class="filter-btn" data-filter="completed">Concluídas</button>
+        </div>
+        <button id="export-json" class="btn export-btn">📤 Exportar JSON</button>
+      </div>
+    </div>
+
+    <!-- Lista de tarefas -->
+    <ul id="task-list" class="task-list"></ul>
+
+    <!-- Mensagem vazia -->
+    <p id="empty-message" class="empty">Nenhuma tarefa encontrada.</p>
+  </div>
+
+  <!-- Áudios -->
+  <audio id="sound-complete" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3" preload="auto"></audio>
+  <audio id="sound-alert" src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" preload="auto"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
