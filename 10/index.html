@@ -1,0 +1,469 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projetos Educacionais - Viagem, Música e Jogos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            font-size: 42px;
+            color: #00ffff;
+            text-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 32px;
+            color: #ff0080;
+            text-shadow: 0 0 10px rgba(255, 0, 128, 0.7);
+            margin: 30px 0 20px;
+            border-bottom: 3px solid #ff0080;
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            font-size: 24px;
+            color: #00ff80;
+            margin: 20px 0 15px;
+        }
+        
+        .project {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .project p {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .project img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .instrument {
+            display: flex;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            align-items: center;
+        }
+        
+        .instrument img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-right: 20px;
+        }
+        
+        .game-character {
+            display: flex;
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .game-character img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-right: 20px;
+        }
+        
+        .timeline {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        
+        .timeline-item {
+            margin: 15px 0;
+            padding: 10px;
+            border-left: 3px solid #00ffff;
+            padding-left: 15px;
+        }
+        
+        .highlight {
+            color: #00ffff;
+            font-weight: bold;
+        }
+        
+        .fact {
+            background: rgba(0, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #00ffff;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #aaa;
+            font-size: 16px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .nav-btn {
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #ff0080, #00ffff);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .active {
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+            
+            h2 {
+                font-size: 26px;
+            }
+            
+            .project {
+                padding: 20px;
+            }
+            
+            .instrument, .game-character {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .instrument img, .game-character img {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>PROJETOS EDUCACIONAIS</h1>
+            <p>Conhecimento sobre Viagem, Música e História dos Jogos</p>
+        </header>
+        
+        <div class="navigation">
+            <button class="nav-btn" onclick="showSection('viagem')">🌍 Viagem</button>
+            <button class="nav-btn" onclick="showSection('musica')">🎵 Música</button>
+            <button class="nav-btn" onclick="showSection('jogos')">🎮 Jogos</button>
+        </div>
+        
+        <!-- Seção de Viagem -->
+        <div id="viagem" class="section active">
+            <div class="project">
+                <h2>✈️ Descobrindo o Mundo: Uma Jornada pela Cultura e Aventura</h2>
+                
+                <img src="https://placehold.co/1200x300/16213e/26314e?text=Viagem+Pelo+Mundo" alt="Paisagens do mundo">
+                
+                <p>As viagens são uma das experiências mais enriquecedoras que podemos ter. Elas nos permitem conhecer novas culturas, sabores, idiomas e maneiras de ver o mundo. Desde as praias paradisíacas até as montanhas imponentes, cada destino tem sua própria história para contar.</p>
+                
+                <h3>Destinos Imperdíveis</h3>
+                
+                <div class="instrument">
+                    <img src="https://placehold.co/120x120/ff0080/ffffff?text=Paris" alt="Paris">
+                    <div>
+                        <h3>Paris, França - A Cidade Luz</h3>
+                        <p>Conhecida como a capital do amor e da moda, Paris encanta com sua arquitetura clássica, museus de renome mundial como o Louvre e a icônica Torre Eiffel. A cidade é um verdadeiro conto de fadas moderno, onde cada esquina esconde um pedaço de história e romance.</p>
+                        <p class="fact">🔍 <span class="highlight">Curiosidade:</span> A Torre Eiffel foi construída em 1889 como entrada temporária para a Exposição Universal e quase foi demolida após 20 anos!</p>
+                    </div>
+                </div>
+                
+                <div class="instrument">
+                    <img src="https://placehold.co/120x120/00ffff/ffffff?text=Tóquio" alt="Tóquio">
+                    <div>
+                        <h3>Tóquio, Japão - Tradição e Futuro</h3>
+                        <p>A capital japonesa é um contraste fascinante entre tradição e tecnologia. Você pode visitar templos centenários pela manhã e à tarde estar em um restaurante com robôs servindo sua comida. A cultura japonesa valoriza a harmonia, a cortesia e a estética em todos os aspectos da vida.</p>
+                        <p class="fact">🔍 <span class="highlight">Curiosidade:</span> Tóquio é a maior área metropolitana do mundo, com mais de 37 milhões de habitantes!</p>
+                    </div>
+                </div>
+                
+                <div class="instrument">
+                    <img src="https://placehold.co/120x120/00ff80/ffffff?text=Rio" alt="Rio de Janeiro">
+                    <div>
+                        <h3>Rio de Janeiro, Brasil - A Cidade Maravilhosa</h3>
+                        <p>Com suas praias deslumbrantes como Copacabana e Ipanema, o Cristo Redentor observando a cidade e o Pão de Açúcar, o Rio é um dos destinos mais vibrantes do mundo. A cultura carioca é marcada pela alegria, pela música e pela hospitalidade do povo brasileiro.</p>
+                        <p class="fact">🔍 <span class="highlight">Curiosidade:</span> O Cristo Redentor foi eleito uma das Sete Maravilhas do Mundo Moderno em 2007!</p>
+                    </div>
+                </div>
+                
+                <h3>Dicas para Viajar Melhor</h3>
+                
+                <div class="fact">
+                    <span class="highlight">Planejamento:</span> Pesquise sobre o destino, clima, cultura local e documentação necessária com antecedência.
+                </div>
+                
+                <div class="fact">
+                    <span class="highlight">Respeito Cultural:</span> Aprenda algumas frases básicas no idioma local e respeite as tradições e costumes do país que você está visitando.
+                </div>
+                
+                <div class="fact">
+                    <span class="highlight">Sustentabilidade:</span> Viaje de forma responsável, evitando desperdícios e respeitando a natureza e os locais que você visita.
+                </div>
+            </div>
+        </div>
+        
+        <!-- Seção de Música -->
+        <div id="musica" class="section">
+            <div class="project">
+                <h2>🎵 A Orquestra Mágica: Conhecendo os Instrumentos Musicais</h2>
+                
+                <img src="https://placehold.co/1200x300/16213e/26314e?text=Orquestra" alt="Orquestra">
+                
+                <p>A música é uma linguagem universal que toca nossas emoções e nos conecta com outras pessoas. Ela é criada por uma variedade incrível de instrumentos, cada um com seu som único e sua história fascinante. Vamos explorar os principais grupos de instrumentos musicais!</p>
+                
+                <h3>Instrumentos de Cordas</h3>
+                
+                <div class="instrument">
+                    <img src="https://placehold.co/120x120/ff8000/ffffff?text=Violino" alt="Violino">
+                    <div>
+                        <h3>Violino</h3>
+                        <p>O violino é um dos instrumentos de cordas mais conhecidos. Tem quatro cordas e é tocado com um arco. É essencial em orquestras clássicas, mas também é usado em diversos estilos musicais, desde música country até rock progressivo.</p>
+                        <p class="fact">🔍 <span class="highlight">Curiosidade:</span> O som do violino é amplificado pela caixa de ressonância de madeira, que pode levar meses para ser construída por artesãos especializados.</p>
+                    </div>
+                </div>
+                
+                <div class="instrument">
+                    <img src="https://placehold.co/120x120/ff0080/ffffff?text=Guitarra" alt="Guitarra">
+                    <div>
+                        <h3>Guitarra</h3>
+                        <p>A guitarra é um dos instrumentos mais populares do mundo. Pode ser acústica (sem amplificação) ou elétrica. Tem seis cordas e é tocada com os dedos ou uma palheta. É fundamental no rock, pop, blues e muitos outros gêneros.</p>
+                        <p class="fact">🔍 <span class="highlight">Curiosidade:</span> A guitarra elétrica foi inventada nos anos 1930, revolucionando a música popular ao permitir sons mais altos e efeitos especiais.</p>
+                    </div>
+                </div>
+                
+                <h3>Instrumentos de Sopro</h3>
+                
+                <div class="instrument">
+                    <img src="https://placehold.co/120x120/00ffff/ffffff?text=Flauta" alt="Flauta">
+                    <div>
+                        <h3>Flauta</h3>
+                        <p>A flauta transversal é um instrumento de sopro feito geralmente de metal. O músico sopra na lateral do instrumento e controla as notas com os dedos sobre os furos. Tem um som claro e brilhante.</p>
+                        <p class="fact">🔍 <span class="highlight">Curiosidade:</span> A flauta é um dos instrumentos mais antigos do mundo, com versões encontradas em sítios arqueológicos com mais de 40.000 anos!</p>
+                    </div>
+                </div>
+                
+                <div class="instrument">
+                    <img src="https://placehold.co/120x120/00ff80/ffffff?text=Saxofone" alt="Saxofone">
+                    <div>
+                        <h3>Saxofone</h3>
+                        <p>Inventado no século XIX, o saxofone é feito de metal e usa uma palheta como o clarinete. É muito usado no jazz, mas também aparece em música clássica, rock e pop. Tem um som expressivo e versátil.</p>
+                        <p class="fact">🔍 <span class="highlight">Curiosidade:</span> O saxofone foi inventado por Adolphe Sax, que quase morreu várias vezes durante experimentos com explosivos na juventude!</p>
+                    </div>
+                </div>
+                
+                <h3>Instrumentos de Percussão</h3>
+                
+                <div class="instrument">
+                    <img src="https://placehold.co/120x120/ff0000/ffffff?text=Bateria" alt="Bateria">
+                    <div>
+                        <h3>Bateria</h3>
+                        <p>A bateria é o coração do ritmo em muitas bandas. É composta por vários tambores e pratos que são tocados com baquetas. O baterista coordena os movimentos dos dois braços e das duas pernas para criar padrões rítmicos complexos.</p>
+                        <p class="fact">🔍 <span class="highlight">Curiosidade:</span> Um baterista profissional pode tocar mais de 1.000 batidas por minuto com cada membro!</p>
+                    </div>
+                </div>
+                
+                <div class="instrument">
+                    <img src="https://placehold.co/120x120/800080/ffffff?text=Piano" alt="Piano">
+                    <div>
+                        <h3>Piano</h3>
+                        <p>O piano é um instrumento de cordas percutidas. Quando você pressiona uma tecla, um martelo bate em uma corda dentro do instrumento. Tem 88 teclas e pode tocar melodia e harmonia ao mesmo tempo, sendo um dos instrumentos mais completos.</p>
+                        <p class="fact">🔍 <span class="highlight">Curiosidade:</span> O piano moderno foi inventado por Bartolomeo Cristofori por volta de 1700 e originalmente se chamava "gravicembalo col piano e forte" (cravo com sons suaves e fortes).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Seção de Jogos -->
+        <div id="jogos" class="section">
+            <div class="project">
+                <h2>🎮 Heróis dos Videogames: A História de Sonic e Mario</h2>
+                
+                <img src="https://placehold.co/1200x300/16213e/26314e?text=Jogos+Clássicos" alt="Jogos clássicos">
+                
+                <p>Mario e Sonic são dois dos personagens mais icônicos da história dos videogames. Criados em épocas diferentes e por empresas rivais, ambos se tornaram símbolos da indústria e conquistaram milhões de fãs ao redor do mundo. Vamos descobrir como esses heróis foram criados!</p>
+                
+                <h3>🍄 A Jornada de Mario: O Encanador Mais Famoso do Mundo</h3>
+                
+                <div class="game-character">
+                    <img src="https://placehold.co/150x150/ff0000/ffffff?text=Mario" alt="Mario">
+                    <div>
+                        <h3>Origens Humildes</h3>
+                        <p>Mario foi criado por Shigeru Miyamoto, um dos designers mais influentes da história dos videogames. Ele apareceu pela primeira vez em 1981 no jogo "Donkey Kong", onde era apenas um personagem chamado "Jumpman" (homem que pula).</p>
+                        <p>Na época, os gráficos eram muito simples, então Miyamoto deu a Mario um bigode grande para que pudesse ser visto claramente sem precisar de um nariz detalhado. O chapéu foi adicionado para evitar a necessidade de animar cabelo.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline">
+                    <h3>Timeline da Carreira de Mario</h3>
+                    
+                    <div class="timeline-item">
+                        <strong>1981:</strong> Mario aparece como "Jumpman" em Donkey Kong, tentando resgatar sua namorada (Pauline) de um gorila.
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <strong>1983:</strong> Lançamento de Mario Bros., onde Mario e seu irmão Luigi lutam contra criaturas nas tubulações.
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <strong>1985:</strong> Super Mario Bros. revoluciona os jogos com sua jogabilidade de plataforma e mundo aberto, tornando-se um fenômeno global.
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <strong>1996:</strong> Super Mario 64 introduz a jogabilidade em 3D, definindo padrões para todos os jogos de plataforma futuros.
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <strong>2017:</strong> Super Mario Odyssey leva a franquia a novos patamar com mundos enormes e mecânicas inovadoras.
+                    </div>
+                </div>
+                
+                <div class="fact">
+                    <span class="highlight">Curiosidade:</span> Mario foi nomeado em homenagem a Mario Segale, o proprietário do armazém da Nintendo of America, que surpreendeu os funcionários ao aparecer inesperadamente!
+                </div>
+                
+                <h3>⚡ Sonic: O Ouriço Azul que Corre Contra o Tempo</h3>
+                
+                <div class="game-character">
+                    <img src="https://placehold.co/150x150/00ffff/ffffff?text=Sonic" alt="Sonic">
+                    <div>
+                        <h3>Um Herói para a Nova Geração</h3>
+                        <p>Sonic foi criado pela SEGA na virada dos anos 1990 como uma resposta direta ao sucesso de Mario. A empresa queria um mascote que representasse velocidade, atitude e um estilo mais moderno para competir com a Nintendo.</p>
+                        <p>O design de Sonic foi desenvolvido por Naoto Ohshima, com influências de personagens como Mickey Mouse (para ser memorável) e Felix the Cat (pela simplicidade). A cor azul foi escolhida porque combinava com o logotipo da SEGA.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline">
+                    <h3>Timeline da Carreira de Sonic</h3>
+                    
+                    <div class="timeline-item">
+                        <strong>1991:</strong> Lançamento de Sonic the Hedgehog para o SEGA Genesis, apresentando o conceito de "jogo rápido" com loops, rampas e zonas coloridas.
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <strong>1992:</strong> Sonic the Hedgehog 2 dobra a velocidade e introduz o parceiro Tails, um ouriço com duas caudas que pode voar.
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <strong>1994:</strong> Sonic the Hedgehog 3 e Sonic & Knuckles expandem o universo com novas habilidades e o personagem Knuckles, o ouriço vermelho.
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <strong>2006:</strong> Sonic the Hedgehog marca a transição para gráficos 3D, embora tenha recebido críticas mistas.
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <strong>2020:</strong> O filme de Sonic the Hedgehog é um sucesso de bilheteria, revitalizando o personagem para uma nova geração.
+                    </div>
+                </div>
+                
+                <div class="fact">
+                    <span class="highlight">Curiosidade:</span> Sonic foi projetado para ser capaz de rodar a 100 mph (160 km/h), e seu nome vem de "sonic speed" (velocidade sônica)!
+                </div>
+                
+                <h3>O Legado dos Mestres dos Jogos</h3>
+                
+                <p>Hoje, Mario e Sonic são mais do que simples personagens de videogame. Eles são ícones culturais que aparecem em filmes, séries de TV, brinquedos, roupas e até parques temáticos. A rivalidade entre Nintendo e SEGA nos anos 1990, conhecida como a "Guerra dos Consoles", ajudou a impulsionar a indústria de videogames para novos patamares.</p>
+                
+                <p>Curiosamente, em 2008, Mario e Sonic finalmente se encontraram nos Jogos Olímpicos de Pequim em um jogo crossover, simbolizando o fim da rivalidade e o reconhecimento mútuo de seus legados.</p>
+                
+                <div class="fact">
+                    <span class="highlight">Fato Interessante:</span> Ambos os personagens foram criados por acidente! Mario nasceu de limitações técnicas de gráficos, enquanto Sonic foi originalmente concebido como um ouriço eriçado, mas o designer achou que parecia um ouriço comum e manteve assim!
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Projetos Educacionais - Aprendendo com Diversão | © 2023</p>
+        </footer>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
