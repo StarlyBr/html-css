@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Fake</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+        }
+        /* Tela de login */
+        #login-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .login-box h1 {
+            color: #1877f2;
+            margin-bottom: 20px;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+        }
+        .login-box button {
+            background: #1877f2;
+            color: white;
+            padding: 10px;
+            border: none;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .login-box button:hover {
+            background: #165ec9;
+        }
+        /* Página principal */
+        #feed-page {
+            display: none;
+        }
+        .navbar {
+            background: #1877f2;
+            padding: 10px;
+            color: white;
+            font-size: 18px;
+        }
+        .feed {
+            max-width: 500px;
+            margin: 20px auto;
+        }
+        .post {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .post h3 {
+            margin: 0 0 10px;
+        }
+        .post button {
+            background: none;
+            border: none;
+            color: #1877f2;
+            cursor: pointer;
+        }
+        .like-count {
+            font-size: 14px;
+            color: gray;
+        }
+        .comment-section {
+            margin-top: 10px;
+        }
+        .comment-section input {
+            width: 80%;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .comment-section button {
+            padding: 5px 8px;
+            background: #42b72a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .comments {
+            margin-top: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Página de login -->
+    <div id="login-page">
+        <div class="login-box">
+            <h1>facebook</h1>
+            <input type="text" id="login-email" placeholder="Email">
+            <input type="password" id="login-password" placeholder="Senha">
+            <button onclick="login()">Entrar</button>
+        </div>
+    </div>
+
+    <!-- Página do feed -->
+    <div id="feed-page">
+        <div class="navbar">Facebook Fake</div>
+        <div class="feed" id="feed">
+            <!-- Post modelo -->
+        </div>
+    </div>
+
+    <script>
+        const posts = [
+            { id: 1, user: "João Silva", text: "Bom dia, galera! ☀️", likes: 0, comments: [] },
+            { id: 2, user: "Maria Oliveira", text: "Adorei o novo filme do Mario! 🍄", likes: 0, comments: [] },
+            { id: 3, user: "Lucas Santos", text: "Treino feito! 💪🔥", likes: 0, comments: [] }
+        ];
+
+        function login() {
+            let email = document.getElementById("login-email").value;
+            let password = document.getElementById("login-password").value;
+            if (email && password) {
+                document.getElementById("login-page").style.display = "none";
+                document.getElementById("feed-page").style.display = "block";
+                renderFeed();
+            } else {
+                alert("Preencha todos os campos!");
+            }
+        }
+
+        function renderFeed() {
+            const feed = document.getElementById("feed");
+            feed.innerHTML = "";
+            posts.forEach(post => {
+                const postElement = document.createElement("div");
+                postElement.classList.add("post");
+                postElement.innerHTML = `
+                    <h3>${post.user}</h3>
+                    <p>${post.text}</p>
+                    <button onclick="likePost(${post.id})">Curtir</button>
+                    <span class="like-count">${post.likes} curtidas</span>
+                    <div class="comment-section">
+                        <input type="text" id="comment-${post.id}" placeholder="Escreva um comentário...">
+                        <button onclick="addComment(${post.id})">Comentar</button>
+                        <div class="comments" id="comments-${post.id}"></div>
+                    </div>
+                `;
+                feed.appendChild(postElement);
+            });
+        }
+
+        function likePost(id) {
+            const post = posts.find(p => p.id === id);
+            post.likes++;
+            renderFeed();
+        }
+
+        function addComment(id) {
+            const commentInput = document.getElementById(`comment-${id}`);
+            const commentText = commentInput.value.trim();
+            if (commentText) {
+                const post = posts.find(p => p.id === id);
+                post.comments.push(commentText);
+                commentInput.value = "";
+                renderComments(id);
+            }
+        }
+
+        function renderComments(id) {
+            const post = posts.find(p => p.id === id);
+            const commentsDiv = document.getElementById(`comments-${id}`);
+            commentsDiv.innerHTML = post.comments.map(c => `<p>💬 ${c}</p>`).join("");
+        }
+    </script>
+</body>
+</html>

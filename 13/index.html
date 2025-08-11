@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X - O que está acontecendo?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1da1f2;
+            --primary-hover: #1a91da;
+            --black: #000000;
+            --white: #ffffff;
+            --gray-50: #f7f9f9;
+            --gray-100: #e6e8ea;
+            --gray-200: #ccd6dd;
+            --gray-300: #98a1a8;
+            --gray-400: #717b83;
+            --gray-500: #5b6a75;
+            --gray-600: #3d4a54;
+            --gray-700: #28333b;
+            --gray-800: #1b242c;
+            --gray-900: #141a20;
+            --red: #e0245e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 800;
+            font-size: 2rem;
+            color: var(--black);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--primary-color);
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 40px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--gray-100);
+            border-radius: 9999px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: var(--gray-50);
+        }
+
+        .search-bar input:focus {
+            border-color: var(--primary-color);
+            background-color: var(--white);
+            box-shadow: 0 0 0 3px rgba(29, 161, 242, 0.2);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-actions button {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-actions button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 270px;
+            padding: 20px;
+            position: sticky;
+            top: 70px;
+            height: calc(100vh - 90px);
+            overflow-y: auto;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-bottom: 8px;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-item:hover {
+            background-color: rgba(29, 161, 242, 0.1);
+        }
+
+        .sidebar-item.active {
+            color: var(--primary-color);
+            font-weight: 800;
+        }
+
+        .sidebar-item i {
+            margin-right: 16px;
+            font-size: 1.5rem;
+            width: 30px;
+            text-align: center;
+        }
+
+        .sidebar-item span {
+            display: inline-block;
+        }
+
+        .trends-section {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .trends-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .trends-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--gray-900);
+        }
+
+        .trends-title small {
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        .trends-more {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .trend-item {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .trend-item:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .trend-category {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-bottom: 2px;
+        }
+
+        .trend-name {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--gray-900);
+            margin-bottom: 2px;
+        }
+
+        .trend-stats {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+        }
+
+        .who-to-follow {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .who-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .who-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--gray-900);
+        }
+
+        .who-more {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .follow-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .follow-item:last-child {
+            border-bottom: none;
+        }
+
+        .follow-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .follow-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .follow-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .follow-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--gray-900);
+        }
+
+        .follow-username {
+            color: var(--gray-500);
+            font-size: 0.85rem;
+        }
+
+        .follow-button {
+            background-color: var(--gray-100);
+            color: var(--gray-900);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .follow-button:hover {
+            background-color: var(--gray-200);
+        }
+
+        .follow-button.following {
+            background-color: var(--gray-800);
+            color: var(--white);
+        }
+
+        .follow-button.following:hover {
+            background-color: var(--gray-700);
+        }
+
+        /* Feed */
+        .feed-container {
+            flex: 1;
+            max-width: 600px;
+            border-left: 1px solid var(--gray-100);
+            border-right: 1px solid var(--gray-100);
+        }
+
+        .feed-header {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--gray-100);
+            position: sticky;
+            top: 70px;
+            background-color: var(--white);
+            z-index: 10;
+        }
+
+        .feed-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--gray-900);
+        }
+
+        .compose-post {
+            display: flex;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .compose-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .compose-content {
+            flex: 1;
+        }
+
+        .compose-input {
+            width: 100%;
+            padding: 15px 0;
+            border: none;
+            font-size: 1.1rem;
+            resize: none;
+            outline: none;
+            font-family: inherit;
+            color: var(--gray-900);
+        }
+
+        .compose-input::placeholder {
+            color: var(--gray-500);
+        }
+
+        .compose-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .compose-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .compose-icon {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--primary-color);
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .compose-icon:hover {
+            color: var(--primary-hover);
+        }
+
+        .post-button {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .post-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .post-button:disabled {
+            background-color: var(--gray-200);
+            color: var(--gray-500);
+            cursor: not-allowed;
+        }
+
+        .post {
+            display: flex;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--gray-100);
+            transition: background-color 0.2s ease;
+            cursor: pointer;
+        }
+
+        .post:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .post-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .post-content {
+            flex: 1;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .post-author {
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-right: 5px;
+        }
+
+        .post-username {
+            color: var(--gray-500);
+            margin-right: 5px;
+        }
+
+        .post-dot {
+            color: var(--gray-500);
+            margin: 0 5px;
+        }
+
+        .post-time {
+            color: var(--gray-500);
+        }
+
+        .post-body {
+            margin: 10px 0;
+            font-size: 1.1rem;
+            line-height: 1.4;
+            color: var(--gray-900);
+        }
+
+        .post-image {
+            width: 100%;
+            border-radius: 16px;
+            margin: 10px 0;
+            max-height: 500px;
+            object-fit: cover;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            max-width: 400px;
+            margin-top: 10px;
+        }
+
+        .action-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gray-500);
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            padding: 8px 12px;
+            border-radius: 9999px;
+        }
+
+        .action-button:hover {
+            color: var(--primary-color);
+            background-color: rgba(29, 161, 242, 0.1);
+        }
+
+        .action-button.replies:hover {
+            color: var(--gray-400);
+            background-color: rgba(152, 161, 168, 0.1);
+        }
+
+        .action-button.reposts:hover {
+            color: var(--green);
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .action-button.likes:hover {
+            color: var(--red);
+            background-color: rgba(224, 36, 94, 0.1);
+        }
+
+        .action-button.bookmark:hover {
+            color: var(--primary-color);
+            background-color: rgba(29, 161, 242, 0.1);
+        }
+
+        .action-button.share:hover {
+            color: var(--primary-color);
+            background-color: rgba(29, 161, 242, 0.1);
+        }
+
+        .action-count {
+            font-size: 0.9rem;
+            margin-left: 5px;
+        }
+
+        .replies-count {
+            color: var(--gray-500);
+        }
+
+        .reposts-count {
+            color: var(--green, #17bf63);
+        }
+
+        .likes-count {
+            color: var(--red);
+        }
+
+        .bookmark-active {
+            color: var(--primary-color) !important;
+        }
+
+        .like-active {
+            color: var(--red) !important;
+        }
+
+        /* Right Sidebar */
+        .right-sidebar {
+            width: 350px;
+            padding: 20px 0 20px 20px;
+        }
+
+        .trending-for-you {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .trending-header {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 15px;
+        }
+
+        .trending-item {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .trending-item:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .trending-category {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-bottom: 2px;
+        }
+
+        .trending-name {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--gray-900);
+            margin-bottom: 2px;
+        }
+
+        .trending-stats {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+        }
+
+        .follow-suggestions {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .suggestions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .suggestions-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--gray-900);
+        }
+
+        .suggestions-more {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .suggestion-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .suggestion-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .suggestion-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--gray-900);
+        }
+
+        .suggestion-username {
+            color: var(--gray-500);
+            font-size: 0.85rem;
+        }
+
+        .suggestion-action {
+            background-color: var(--gray-100);
+            color: var(--gray-900);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .suggestion-action:hover {
+            background-color: var(--gray-200);
+        }
+
+        .footer {
+            color: var(--gray-500);
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+        }
+
+        .footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Icons using CSS */
+        .icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .icon-home {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'%3E%3C/path%3E%3Cpolyline points='9 22 9 12 15 12 15 22'%3E%3C/polyline%3E%3C/svg%3E");
+        }
+
+        .icon-explore {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3C/svg%3E");
+        }
+
+        .icon-notifications {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9'%3E%3C/path%3E%3Cpath d='M13.73 21a2 2 0 0 1-3.46 0'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        .icon-messages {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        .icon-post {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'%3E%3C/path%3E%3Cpolyline points='14 2 14 8 20 8'%3E%3C/polyline%3E%3Cline x1='16' y1='13' x2='8' y2='13'%3E%3C/line%3E%3Cline x1='16' y1='17' x2='8' y2='17'%3E%3C/line%3E%3Cline x1='10' y1='9' x2='8' y2='9'%3E%3C/line%3E%3C/svg%3E");
+        }
+
+        .icon-verified {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 11.08V12a10 10 0 1 1-5.93-9.14'%3E%3C/path%3E%3Cpolyline points='22 4 12 14.01 9 11.01'%3E%3C/polyline%3E%3C/svg%3E");
+        }
+
+        .icon-more {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='1'%3E%3C/circle%3E%3Ccircle cx='19' cy='12' r='1'%3E%3C/circle%3E%3Ccircle cx='5' cy='12' r='1'%3E%3C/circle%3E%3C/svg%3E");
+        }
+
+        .icon-reply {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 12l-4-4 4-4'%3E%3C/path%3E%3Cpath d='M5 8h11a4 4 0 0 1 4 4v0a4 4 0 0 1-4 4H5'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        .icon-repost {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7'%3E%3C/path%3E%3Cpolyline points='16 3 21 3 21 8'%3E%3C/polyline%3E%3Cline x1='15' y1='9' x2='21' y2='3'%3E%3C/line%3E%3Cpolyline points='8 21 3 21 3 16'%3E%3C/polyline%3E%3Cline x1='3' y1='21' x2='9' y2='15'%3E%3C/line%3E%3C/svg%3E");
+        }
+
+        .icon-like {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        .icon-bookmark {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        .icon-share {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='18' cy='5' r='3'%3E%3C/circle%3E%3Ccircle cx='6' cy='12' r='3'%3E%3C/circle%3E%3Ccircle cx='18' cy='19' r='3'%3E%3C/circle%3E%3Cline x1='8.59' y1='13.51' x2='15.42' y2='17.49'%3E%3C/line%3E%3Cline x1='15.41' y1='6.51' x2='8.59' y2='10.49'%3E%3C/line%3E%3C/svg%3E");
+        }
+
+        .icon-image {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Ccircle cx='8.5' cy='8.5' r='1.5'%3E%3C/circle%3E%3Cpolyline points='21 15 16 10 5 21'%3E%3C/polyline%3E%3C/svg%3E");
+        }
+
+        .icon-poll {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='20' x2='18' y2='10'%3E%3C/line%3E%3Cline x1='12' y1='20' x2='12' y2='4'%3E%3C/line%3E%3Cline x1='6' y1='20' x2='6' y2='14'%3E%3C/line%3E%3C/svg%3E");
+        }
+
+        .icon-emoji {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cpath d='M8 14s1.5 2 4 2 4-2 4-2'%3E%3C/path%3E%3Cline x1='9' y1='9' x2='9.01' y2='9'%3E%3C/line%3E%3Cline x1='15' y1='9' x2='15.01' y2='9'%3E%3C/line%3E%3C/svg%3E");
+        }
+
+        .icon-gif {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='3' width='20' height='14' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='8' y1='21' x2='16' y2='21'%3E%3C/line%3E%3Cline x1='12' y1='17' x2='12' y2='21'%3E%3C/line%3E%3Cpath d='M16 8h-4v4'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        .icon-schedule {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .right-sidebar {
+                display: none;
+            }
+            
+            .main-layout {
+                justify-content: center;
+            }
+            
+            .feed-container {
+                border: none;
+                max-width: 600px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                display: none;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .search-bar {
+                margin: 0;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            
+            .feed-container {
+                border: none;
+                max-width: 100%;
+            }
+            
+            .compose-post {
+                padding: 15px;
+            }
+            
+            .post {
+                padding: 15px;
+            }
+            
+            .post-actions {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="#" class="logo">X</a>
+            
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar no X">
+            </div>
+            
+            <div class="nav-actions">
+                <button id="new-post-btn">Postar</button>
+                <div class="user-profile">
+                    <div class="user-avatar">JS</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <aside class="sidebar">
+            <div class="sidebar-item active">
+                <i class="icon icon-home"></i>
+                <span>Início</span>
+            </div>
+            <div class="sidebar-item">
+                <i class="icon icon-explore"></i>
+                <span>Explorar</span>
+            </div>
+            <div class="sidebar-item">
+                <i class="icon icon-notifications"></i>
+                <span>Notificações</span>
+            </div>
+            <div class="sidebar-item">
+                <i class="icon icon-messages"></i>
+                <span>Mensagens</span>
+            </div>
+            <div class="sidebar-item">
+                <i class="icon icon-post"></i>
+                <span>Postagens</span>
+            </div>
+            <div class="sidebar-item">
+                <i class="icon icon-verified"></i>
+                <span>X Premium</span>
+            </div>
+            <div class="sidebar-item">
+                <i class="icon icon-profile"></i>
+                <span>Perfil</span>
+            </div>
+            <div class="sidebar-item">
+                <i class="icon icon-more"></i>
+                <span>Mais</span>
+            </div>
+
+            <button class="post-button" style="width: 100%; margin-top: 20px;">Postar</button>
+
+            <div class="trends-section">
+                <div class="trends-header">
+                    <div class="trends-title">Trending em <small>Brasil</small></div>
+                    <div class="trends-more">Mostrar mais</div>
+                </div>
+                
+                <div class="trend-item">
+                    <div class="trend-category">Trending</div>
+                    <div class="trend-name">#Tecnologia</div>
+                    <div class="trend-stats">42.5K posts</div>
+                </div>
+                
+                <div class="trend-item">
+                    <div class="trend-category">Política · Trending</div>
+                    <div class="trend-name">Eleições 2024</div>
+                    <div class="trend-stats">28.3K posts</div>
+                </div>
+                
+                <div class="trend-item">
+                    <div class="trend-category">Entretenimento · Trending</div>
+                    <div class="trend-name">Novela das 9</div>
+                    <div class="trend-stats">19.7K posts</div>
+                </div>
+                
+                <div class="trend-item">
+                    <div class="trend-category">Esportes · Trending</div>
+                    <div class="trend-name">#Futebol</div>
+                    <div class="trend-stats">55.2K posts</div>
+                </div>
+                
+                <div class="trend-item">
+                    <div class="trend-category">Trending</div>
+                    <div class="trend-name">Inteligência Artificial</div>
+                    <div class="trend-stats">37.8K posts</div>
+                </div>
+            </div>
+
+            <div class="who-to-follow">
+                <div class="who-header">
+                    <div class="who-title">Quem seguir</div>
+                    <div class="who-more">Mostrar mais</div>
+                </div>
+                
+                <div class="follow-item">
+                    <div class="follow-info">
+                        <div class="follow-avatar">AM</div>
+                        <div class="follow-details">
+                            <div class="follow-name">Ana Martins</div>
+                            <div class="follow-username">@anamartins</div>
+                        </div>
+                    </div>
+                    <button class="follow-button">Seguir</button>
+                </div>
+                
+                <div class="follow-item">
+                    <div class="follow-info">
+                        <div class="follow-avatar">PC</div>
+                        <div class="follow-details">
+                            <div class="follow-name">Pedro Costa</div>
+                            <div class="follow-username">@pedrocosta</div>
+                        </div>
+                    </div>
+                    <button class="follow-button">Seguir</button>
+                </div>
+                
+                <div class="follow-item">
+                    <div class="follow-info">
+                        <div class="follow-avatar">ML</div>
+                        <div class="follow-details">
+                            <div class="follow-name">Maria Lima</div>
+                            <div class="follow-username">@mariatlima</div>
+                        </div>
+                    </div>
+                    <button class="follow-button">Seguir</button>
+                </div>
+            </div>
+        </aside>
+
+        <main class="feed-container">
+            <div class="feed-header">
+                <h2 class="feed-title">Início</h2>
+            </div>
+
+            <div class="compose-post">
+                <div class="compose-avatar">JS</div>
+                <div class="compose-content">
+                    <textarea class="compose-input" placeholder="O que está acontecendo?" maxlength="280"></textarea>
+                    <div class="compose-actions">
+                        <div class="compose-icons">
+                            <div class="compose-icon">
+                                <i class="icon icon-image"></i>
+                                <span>Mídia</span>
+                            </div>
+                            <div class="compose-icon">
+                                <i class="icon icon-poll"></i>
+                                <span>Enquete</span>
+                            </div>
+                            <div class="compose-icon">
+                                <i class="icon icon-emoji"></i>
+                                <span>Emoji</span>
+                            </div>
+                            <div class="compose-icon">
+                                <i class="icon icon-gif"></i>
+                                <span>GIF</span>
+                            </div>
+                            <div class="compose-icon">
+                                <i class="icon icon-schedule"></i>
+                                <span>Agendar</span>
+                            </div>
+                        </div>
+                        <button class="post-button" id="post-button" disabled>Postar</button>
+                    </div>
+                </div>
+            </div>
+
+            <article class="post">
+                <div class="post-avatar">AM</div>
+                <div class="post-content">
+                    <div class="post-header">
+                        <div class="post-author">Ana Martins</div>
+                        <div class="post-username">@anamartins</div>
+                        <div class="post-dot">·</div>
+                        <div class="post-time">2h</div>
+                    </div>
+                    <div class="post-body">
+                        Acabei de lançar meu novo projeto de design de interface! Trabalhei nos últimos 3 meses nesse sistema de gerenciamento para pequenas empresas. O feedback inicial tem sido incrível! 🚀
+                    </div>
+                    <img src="https://placehold.co/600x400/1da1f2/white?text=Projeto+de+Design" alt="Projeto de Design" class="post-image">
+                    <div class="post-actions">
+                        <button class="action-button replies">
+                            <i class="icon icon-reply"></i>
+                            <span class="action-count replies-count">45</span>
+                        </button>
+                        <button class="action-button reposts">
+                            <i class="icon icon-repost"></i>
+                            <span class="action-count reposts-count">12</span>
+                        </button>
+                        <button class="action-button likes">
+                            <i class="icon icon-like"></i>
+                            <span class="action-count likes-count">234</span>
+                        </button>
+                        <button class="action-button bookmark">
+                            <i class="icon icon-bookmark"></i>
+                        </button>
+                        <button class="action-button share">
+                            <i class="icon icon-share"></i>
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="post">
+                <div class="post-avatar">PC</div>
+                <div class="post-content">
+                    <div class="post-header">
+                        <div class="post-author">Pedro Costa</div>
+                        <div class="post-username">@pedrocosta</div>
+                        <div class="post-dot">·</div>
+                        <div class="post-time">4h</div>
+                    </div>
+                    <div class="post-body">
+                        A inteligência artificial está transformando a forma como desenvolvemos software. Hoje aprendi sobre modelos de linguagem de próxima geração e como eles podem ajudar na escrita de código mais eficiente. O futuro é agora! 💡
+                    </div>
+                    <div class="post-actions">
+                        <button class="action-button replies">
+                            <i class="icon icon-reply"></i>
+                            <span class="action-count replies-count">89</span>
+                        </button>
+                        <button class="action-button reposts">
+                            <i class="icon icon-repost"></i>
+                            <span class="action-count reposts-count">34</span>
+                        </button>
+                        <button class="action-button likes">
+                            <i class="icon icon-like"></i>
+                            <span class="action-count likes-count">567</span>
+                        </button>
+                        <button class="action-button bookmark">
+                            <i class="icon icon-bookmark"></i>
+                        </button>
+                        <button class="action-button share">
+                            <i class="icon icon-share"></i>
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="post">
+                <div class="post-avatar">ML</div>
+                <div class="post-content">
+                    <div class="post-header">
+                        <div class="post-author">Maria Lima</div>
+                        <div class="post-username">@mariatlima</div>
+                        <div class="post-dot">·</div>
+                        <div class="post-time">6h</div>
+                    </div>
+                    <div class="post-body">
+                        Participando da conferência de startups em São Paulo! Conhecendo empreendedores incríveis e trocando ideias sobre inovação. O ecossistema brasileiro está aquecido! 🔥 #Startups #Inovação
+                    </div>
+                    <img src="https://placehold.co/600x300/1da1f2/white?text=Conferência+de+Startups" alt="Conferência de Startups" class="post-image">
+                    <div class="post-actions">
+                        <button class="action-button replies">
+                            <i class="icon icon-reply"></i>
+                            <span class="action-count replies-count">23</span>
+                        </button>
+                        <button class="action-button reposts">
+                            <i class="icon icon-repost"></i>
+                            <span class="action-count reposts-count">8</span>
+                        </button>
+                        <button class="action-button likes">
+                            <i class="icon icon-like"></i>
+                            <span class="action-count likes-count">189</span>
+                        </button>
+                        <button class="action-button bookmark">
+                            <i class="icon icon-bookmark"></i>
+                        </button>
+                        <button class="action-button share">
+                            <i class="icon icon-share"></i>
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="post">
+                <div class="post-avatar">RF</div>
+                <div class="post-content">
+                    <div class="post-header">
+                        <div class="post-author">Rafael Ferreira</div>
+                        <div class="post-username">@rafaferreira</div>
+                        <div class="post-dot">·</div>
+                        <div class="post-time">8h</div>
+                    </div>
+                    <div class="post-body">
+                        O mercado de tecnologia está aquecido! Estou contratando desenvolvedores front-end com experiência em React e TypeScript. Se você ou alguém que você conhece está procurando novos desafios, me envie uma DM! 💼
+                    </div>
+                    <div class="post-actions">
+                        <button class="action-button replies">
+                            <i class="icon icon-reply"></i>
+                            <span class="action-count replies-count">15</span>
+                        </button>
+                        <button class="action-button reposts">
+                            <i class="icon icon-repost"></i>
+                            <span class="action-count reposts-count">42</span>
+                        </button>
+                        <button class="action-button likes">
+                            <i class="icon icon-like"></i>
+                            <span class="action-count likes-count">78</span>
+                        </button>
+                        <button class="action-button bookmark">
+                            <i class="icon icon-bookmark"></i>
+                        </button>
+                        <button class="action-button share">
+                            <i class="icon icon-share"></i>
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="post">
+                <div class="post-avatar">CL</div>
+                <div class="post-content">
+                    <div class="post-header">
+                        <div class="post-author">Carla Lima</div>
+                        <div class="post-username">@carlalima</div>
+                        <div class="post-dot">·</div>
+                        <div class="post-time">12h</div>
+                    </div>
+                    <div class="post-body">
+                        Acabei de completar meu curso de UX Design e estou procurando oportunidades para aplicar meus conhecimentos! Se você conhece alguma vaga ou projeto interessante, por favor me avise. Estou aberta a freelances também! 🎨
+                    </div>
+                    <div class="post-actions">
+                        <button class="action-button replies">
+                            <i class="icon icon-reply"></i>
+                            <span class="action-count replies-count">33</span>
+                        </button>
+                        <button class="action-button reposts">
+                            <i class="icon icon-repost"></i>
+                            <span class="action-count reposts-count">19</span>
+                        </button>
+                        <button class="action-button likes">
+                            <i class="icon icon-like"></i>
+                            <span class="action-count likes-count">156</span>
+                        </button>
+                        <button class="action-button bookmark">
+                            <i class="icon icon-bookmark"></i>
+                        </button>
+                        <button class="action-button share">
+                            <i class="icon icon-share"></i>
+                        </button>
+                    </div>
+                </div>
+            </article>
+        </main>
+
+        <aside class="right-sidebar">
+            <div class="trending-for-you">
+                <h3 class="trending-header">Trending para você</h3>
+                
+                <div class="trending-item">
+                    <div class="trending-category">Trending</div>
+                    <div class="trending-name">#JavaScript</div>
+                    <div class="trending-stats">125.3K posts</div>
+                </div>
+                
+                <div class="trending-item">
+                    <div class="trending-category">Trending</div>
+                    <div class="trending-name">#UXDesign</div>
+                    <div class="trending-stats">89.7K posts</div>
+                </div>
+                
+                <div class="trending-item">
+                    <div class="trending-category">Trending</div>
+                    <div class="trending-name">#Python</div>
+                    <div class="trending-stats">203.5K posts</div>
+                </div>
+                
+                <div class="trending-item">
+                    <div class="trending-category">Trending</div>
+                    <div class="trending-name">#StartupBrasil</div>
+                    <div class="trending-stats">67.2K posts</div>
+                </div>
+                
+                <div class="trending-item">
+                    <div class="trending-category">Trending</div>
+                    <div class="trending-name">Web3</div>
+                    <div class="trending-stats">45.8K posts</div>
+                </div>
+            </div>
+
+            <div class="follow-suggestions">
+                <div class="suggestions-header">
+                    <div class="suggestions-title">Quem seguir</div>
+                    <div class="suggestions-more">Mostrar mais</div>
+                </div>
+                
+                <div class="suggestion-item">
+                    <div class="suggestion-info">
+                        <div class="suggestion-avatar">TG</div>
+                        <div class="suggestion-details">
+                            <div class="suggestion-name">Tiago Gomes</div>
+                            <div class="suggestion-username">@tiagogomes</div>
+                        </div>
+                    </div>
+                    <button class="suggestion-action">Seguir</button>
+                </div>
+                
+                <div class="suggestion-item">
+                    <div class="suggestion-info">
+                        <div class="suggestion-avatar">JS</div>
+                        <div class="suggestion-details">
+                            <div class="suggestion-name">João Silva</div>
+                            <div class="suggestion-username">@joaosilva</div>
+                        </div>
+                    </div>
+                    <button class="suggestion-action">Seguir</button>
+                </div>
+                
+                <div class="suggestion-item">
+                    <div class="suggestion-info">
+                        <div class="suggestion-avatar">RF</div>
+                        <div class="suggestion-details">
+                            <div class="suggestion-name">Rafael Ferreira</div>
+                            <div class="suggestion-username">@rafaferreira</div>
+                        </div>
+                    </div>
+                    <button class="suggestion-action">Seguir</button>
+                </div>
+                
+                <div class="suggestion-item">
+                    <div class="suggestion-info">
+                        <div class="suggestion-avatar">CL</div>
+                        <div class="suggestion-details">
+                            <div class="suggestion-name">Carla Lima</div>
+                            <div class="suggestion-username">@carlalima</div>
+                        </div>
+                    </div>
+                    <button class="suggestion-action">Seguir</button>
+                </div>
+                
+                <div class="suggestion-item">
+                    <div class="suggestion-info">
+                        <div class="suggestion-avatar">ML</div>
+                        <div class="suggestion-details">
+                            <div class="suggestion-name">Maria Lima</div>
+                            <div class="suggestion-username">@mariatlima</div>
+                        </div>
+                    </div>
+                    <button class="suggestion-action">Seguir</button>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>© 2023 X Corp. · <a href="#">Termos</a> · <a href="#">Privacidade</a> · <a href="#">Cookie</a> · <a href="#">Anúncios</a> · <a href="#">Mais</a></p>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // Post button enable/disable based on content
+        const composeInput = document.querySelector('.compose-input');
+        const postButton = document.getElementById('post-button');
+        
+        composeInput.addEventListener('input', function() {
+            postButton.disabled = this.value.trim().length === 0;
+        });
+
+        // Like functionality
+        document.querySelectorAll('.action-button.likes').forEach(button => {
+            button.addEventListener('click', function() {
+                const countElement = this.querySelector('.likes-count');
+                const currentCount = parseInt(countElement.textContent);
+                
+                if (this.classList.contains('like-active')) {
+                    this.classList.remove('like-active');
+                    countElement.textContent = currentCount - 1;
+                } else {
+                    this.classList.add('like-active');
+                    countElement.textContent = currentCount + 1;
+                }
+            });
+        });
+
+        // Bookmark functionality
+        document.querySelectorAll('.action-button.bookmark').forEach(button => {
+            button.addEventListener('click', function() {
+                if (this.classList.contains('bookmark-active')) {
+                    this.classList.remove('bookmark-active');
+                } else {
+                    this.classList.add('bookmark-active');
+                }
+            });
+        });
+
+        // Follow functionality
+        document.querySelectorAll('.follow-button, .suggestion-action').forEach(button => {
+            button.addEventListener('click', function() {
+                if (this.textContent === 'Seguir') {
+                    this.textContent = 'Seguindo';
+                    this.classList.add('following');
+                } else {
+                    this.textContent = 'Seguir';
+                    this.classList.remove('following');
+                }
+            });
+        });
+
+        // Post functionality
+        document.getElementById('post-button').addEventListener('click', function() {
+            const content = composeInput.value.trim();
+            
+            if (content) {
+                // Create new post element
+                const newPost = document.createElement('article');
+                newPost.className = 'post';
+                newPost.innerHTML = `
+                    <div class="post-avatar">JS</div>
+                    <div class="post-content">
+                        <div class="post-header">
+                            <div class="post-author">João Silva</div>
+                            <div class="post-username">@joaosilva</div>
+                            <div class="post-dot">·</div>
+                            <div class="post-time">agora</div>
+                        </div>
+                        <div class="post-body">${content}</div>
+                        <div class="post-actions">
+                            <button class="action-button replies">
+                                <i class="icon icon-reply"></i>
+                                <span class="action-count replies-count">0</span>
+                            </button>
+                            <button class="action-button reposts">
+                                <i class="icon icon-repost"></i>
+                                <span class="action-count reposts-count">0</span>
+                            </button>
+                            <button class="action-button likes">
+                                <i class="icon icon-like"></i>
+                                <span class="action-count likes-count">0</span>
+                            </button>
+                            <button class="action-button bookmark">
+                                <i class="icon icon-bookmark"></i>
+                            </button>
+                            <button class="action-button share">
+                                <i class="icon icon-share"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add like functionality to the new post
+                const likeButton = newPost.querySelector('.action-button.likes');
+                likeButton.addEventListener('click', function() {
+                    const countElement = this.querySelector('.likes-count');
+                    const currentCount = parseInt(countElement.textContent);
+                    
+                    if (this.classList.contains('like-active')) {
+                        this.classList.remove('like-active');
+                        countElement.textContent = currentCount - 1;
+                    } else {
+                        this.classList.add('like-active');
+                        countElement.textContent = currentCount + 1;
+                    }
+                });
+                
+                // Add bookmark functionality to the new post
+                const bookmarkButton = newPost.querySelector('.action-button.bookmark');
+                bookmarkButton.addEventListener('click', function() {
+                    if (this.classList.contains('bookmark-active')) {
+                        this.classList.remove('bookmark-active');
+                    } else {
+                        this.classList.add('bookmark-active');
+                    }
+                });
+                
+                // Insert new post at the beginning of the feed
+                const feed = document.querySelector('.feed-container');
+                const composePost = document.querySelector('.compose-post');
+                feed.insertBefore(newPost, composePost.nextSibling);
+                
+                // Clear the textarea and disable the button
+                composeInput.value = '';
+                postButton.disabled = true;
+            }
+        });
+
+        // Make posts clickable
+        document.querySelectorAll('.post').forEach(post => {
+            post.addEventListener('click', function(e) {
+                // Don't trigger if clicking on action buttons
+                if (e.target.closest('.action-button')) {
+                    return;
+                }
+                alert('Visualizando post detalhado...');
+            });
+        });
+
+        // Simulate real-time updates
+        setInterval(() => {
+            // Randomly update like counts
+            const likeButtons = document.querySelectorAll('.action-button.likes');
+            if (likeButtons.length > 0 && Math.random() > 0.8) {
+                const randomButton = likeButtons[Math.floor(Math.random() * likeButtons.length)];
+                const countElement = randomButton.querySelector('.likes-count');
+                const currentCount = parseInt(countElement.textContent);
+                
+                if (!randomButton.classList.contains('like-active')) {
+                    countElement.textContent = currentCount + 1;
+                }
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

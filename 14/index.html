@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>eBook Saúde e Bem-estar</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f9f9f9;
+    color: #222;
+    margin: 0; padding: 0;
+    line-height: 1.6;
+  }
+  header {
+    background: #009879;
+    color: white;
+    padding: 20px 15px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  main {
+    max-width: 900px;
+    margin: 30px auto;
+    background: white;
+    padding: 25px 35px;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  }
+  h1, h2 {
+    color: #009879;
+  }
+  h1 {
+    font-size: 28px;
+    margin-bottom: 15px;
+  }
+  h2 {
+    margin-top: 40px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #009879;
+    padding-bottom: 6px;
+  }
+  p {
+    margin-bottom: 15px;
+  }
+  ul {
+    margin-left: 20px;
+    margin-bottom: 20px;
+  }
+  img {
+    max-width: 100%;
+    margin: 20px 0;
+    border-radius: 6px;
+  }
+  nav {
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  nav button {
+    background: #009879;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    margin: 0 8px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  nav button:hover {
+    background: #007f63;
+  }
+  footer {
+    text-align: center;
+    margin: 40px 0 20px;
+    color: #555;
+    font-size: 14px;
+  }
+  @media (max-width: 600px) {
+    main {
+      padding: 15px 20px;
+    }
+    nav button {
+      padding: 10px 14px;
+      margin: 4px 4px;
+      font-size: 14px;
+    }
+  }
+</style>
+</head>
+<body>
+<header>eBook: Saúde e Bem-estar — Guia Prático para uma Vida Equilibrada</header>
+<main id="content">
+  <!-- Conteúdo dinâmico por JS -->
+</main>
+<nav>
+  <button id="prevBtn">← Anterior</button>
+  <button id="nextBtn">Próximo →</button>
+</nav>
+<footer>© 2025 Saúde e Bem-estar | Criado por você</footer>
+
+<script>
+const chapters = [
+  {
+    title: "Introdução",
+    content: `
+    <p>A saúde e o bem-estar são pilares fundamentais para uma vida longa, feliz e produtiva. Este guia prático oferece dicas e informações essenciais para você cuidar do corpo e da mente, promovendo equilíbrio em todas as áreas da sua vida.</p>
+    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80" alt="Bem-estar">
+    `
+  },
+  {
+    title: "Alimentação Saudável",
+    content: `
+    <ul>
+      <li>Priorize alimentos naturais: frutas, verduras, legumes, grãos integrais e proteínas magras.</li>
+      <li>Evite alimentos ultraprocessados, ricos em açúcar, sódio e gorduras saturadas.</li>
+      <li>Consuma fibras para melhorar a digestão e o funcionamento intestinal.</li>
+      <li>Faça refeições regulares e evite pular o café da manhã.</li>
+      <li>Modere o consumo de sal e açúcar.</li>
+    </ul>
+    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80" alt="Alimentação Saudável">
+    `
+  },
+  {
+    title: "Importância da Atividade Física",
+    content: `
+    <ul>
+      <li>Pratique ao menos 150 minutos de atividade moderada por semana (como caminhada, dança ou bicicleta).</li>
+      <li>Combine exercícios aeróbicos com atividades de fortalecimento muscular.</li>
+      <li>Escolha exercícios que você goste para manter a motivação.</li>
+      <li>Alongue-se regularmente para evitar lesões e melhorar a flexibilidade.</li>
+    </ul>
+    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=900&q=80" alt="Exercícios">
+    `
+  },
+  {
+    title: "Saúde Mental e Bem-estar Emocional",
+    content: `
+    <ul>
+      <li>Reserve momentos diários para relaxar e cuidar da mente.</li>
+      <li>Pratique técnicas de respiração, meditação ou mindfulness.</li>
+      <li>Mantenha uma rede de apoio social: amigos, família ou grupos.</li>
+      <li>Procure ajuda profissional quando sentir necessidade.</li>
+      <li>Estabeleça metas realistas e comemore pequenas conquistas.</li>
+    </ul>
+    <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=900&q=80" alt="Meditação">
+    `
+  },
+  {
+    title: "Sono e Descanso",
+    content: `
+    <ul>
+      <li>Durma entre 7 a 9 horas por noite para melhor recuperação física e mental.</li>
+      <li>Crie uma rotina para dormir e acordar sempre nos mesmos horários.</li>
+      <li>Evite telas e estímulos eletrônicos pelo menos 1 hora antes de dormir.</li>
+      <li>Tenha um ambiente confortável, escuro e silencioso no quarto.</li>
+      <li>Evite cafeína e refeições pesadas perto da hora de dormir.</li>
+    </ul>
+    <img src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=900&q=80" alt="Sono">
+    `
+  },
+  {
+    title: "Hidratação",
+    content: `
+    <ul>
+      <li>Beba pelo menos 2 litros de água por dia (mais em dias quentes ou com atividade física).</li>
+      <li>Carregue sempre uma garrafinha de água para facilitar o consumo.</li>
+      <li>Prefira água ao invés de refrigerantes ou bebidas açucaradas.</li>
+      <li>Consuma frutas ricas em água, como melancia, laranja e pepino.</li>
+    </ul>
+    <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=80" alt="Hidratação">
+    `
+  },
+  {
+    title: "Hábitos Saudáveis para o Dia a Dia",
+    content: `
+    <ul>
+      <li>Evite fumar e o consumo excessivo de álcool.</li>
+      <li>Pratique a higiene adequada das mãos para prevenir doenças.</li>
+      <li>Use protetor solar diariamente.</li>
+      <li>Controle o estresse com atividades prazerosas e descanso.</li>
+      <li>Faça pausas durante o trabalho para movimentar o corpo e os olhos.</li>
+    </ul>
+    <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80" alt="Hábitos Saudáveis">
+    `
+  },
+  {
+    title: "Prevenção e Check-ups",
+    content: `
+    <ul>
+      <li>Realize exames médicos periódicos conforme sua faixa etária e histórico familiar.</li>
+      <li>Mantenha a vacinação em dia.</li>
+      <li>Observe sinais do corpo e não hesite em consultar um profissional.</li>
+      <li>Adote um estilo de vida preventivo para evitar doenças crônicas.</li>
+    </ul>
+    <img src="https://images.unsplash.com/photo-1580281658624-80a1984a204e?auto=format&fit=crop&w=900&q=80" alt="Check-up Médico">
+    `
+  },
+  {
+    title: "Dicas para Manter a Motivação",
+    content: `
+    <ul>
+      <li>Estabeleça objetivos claros e mensuráveis.</li>
+      <li>Celebre pequenas vitórias no caminho.</li>
+      <li>Busque inspiração em histórias reais e exemplos.</li>
+      <li>Encontre parceiros ou grupos para acompanhar sua jornada.</li>
+      <li>Seja paciente e gentil consigo mesmo.</li>
+    </ul>
+    <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=900&q=80" alt="Motivação">
+    `
+  },
+  {
+    title: "Conclusão",
+    content: `
+    <p>Cuidar da saúde e do bem-estar é um investimento que traz benefícios para toda a vida. Com pequenas mudanças diárias, você pode alcançar uma vida mais equilibrada, feliz e produtiva. Lembre-se: o primeiro passo começa agora!</p>
+    <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=900&q=80" alt="Vida Equilibrada">
+    `
+  }
+];
+
+let currentChapter = 0;
+const contentDiv = document.getElementById('content');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+function renderChapter() {
+  const chapter = chapters[currentChapter];
+  contentDiv.innerHTML = `<h1>${chapter.title}</h1>${chapter.content}`;
+  prevBtn.disabled = currentChapter === 0;
+  nextBtn.disabled = currentChapter === chapters.length -1;
+}
+
+prevBtn.addEventListener('click', () => {
+  if(currentChapter > 0){
+    currentChapter--;
+    renderChapter();
+  }
+});
+nextBtn.addEventListener('click', () => {
+  if(currentChapter < chapters.length - 1){
+    currentChapter++;
+    renderChapter();
+  }
+});
+
+renderChapter();
+</script>
+</body>
+</html>
