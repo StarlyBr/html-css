@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Três Sites - Snake, Quiz e WhatsApp</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background-color: #128C7E;
+            color: white;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background-color: #fff;
+            border: 2px solid #128C7E;
+            color: #128C7E;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tab.active {
+            background-color: #128C7E;
+            color: white;
+        }
+        
+        .tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .content {
+            display: none;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            min-height: 500px;
+        }
+        
+        .content.active {
+            display: block;
+        }
+        
+        /* Snake Game Styles */
+        #snake-game {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        #game-canvas {
+            border: 3px solid #128C7E;
+            border-radius: 10px;
+            background-color: #f0f8ff;
+        }
+        
+        #score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #128C7E;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #128C7E;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #075e54;
+        }
+        
+        /* Quiz Styles */
+        #quiz {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .question-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #128C7E;
+        }
+        
+        .question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #128C7E;
+        }
+        
+        .options {
+            display: grid;
+            gap: 10px;
+        }
+        
+        .option {
+            padding: 12px;
+            background-color: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option:hover {
+            border-color: #128C7E;
+            background-color: #e6f7ff;
+        }
+        
+        .option.selected {
+            border-color: #128C7E;
+            background-color: #d4f1e7;
+        }
+        
+        .option.correct {
+            border-color: #28a745;
+            background-color: #d4f1e7;
+        }
+        
+        .option.incorrect {
+            border-color: #dc3545;
+            background-color: #f8d7da;
+        }
+        
+        .result {
+            text-align: center;
+            padding: 30px;
+            background-color: #d4f1e7;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .result h2 {
+            color: #128C7E;
+            margin-bottom: 10px;
+        }
+        
+        .result p {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        /* WhatsApp Styles */
+        #whatsapp {
+            display: flex;
+            height: 600px;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar {
+            width: 30%;
+            background-color: #f0f2f5;
+            border-right: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            padding: 15px;
+            background-color: #128C7E;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h3 {
+            font-weight: 600;
+        }
+        
+        .menu {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .menu i {
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        .search {
+            padding: 10px;
+            background-color: white;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .search input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+        }
+        
+        .chats {
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .chat {
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .chat:hover {
+            background-color: #e6f7ff;
+        }
+        
+        .chat.active {
+            background-color: #d4f1e7;
+        }
+        
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ddd;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .chat-info {
+            flex: 1;
+        }
+        
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .chat-name {
+            font-weight: 600;
+        }
+        
+        .chat-time {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .chat-message {
+            font-size: 0.9rem;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+        
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #e6f7ff;
+        }
+        
+        .chat-header {
+            padding: 15px;
+            background-color: #128C7E;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chat-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        
+        .messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .message {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        
+        .received {
+            align-self: flex-start;
+            background-color: white;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .sent {
+            align-self: flex-end;
+            background-color: #dcf8c6;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .input-area {
+            padding: 15px;
+            background-color: #f0f2f5;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .input-area input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            outline: none;
+        }
+        
+        .input-area button {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #128C7E;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            #whatsapp {
+                flex-direction: column;
+            }
+            
+            .sidebar, .main {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Três Sites em Um</h1>
+            <p class="description">Jogo da Cobrinha, Quiz de 10 Perguntas e Interface do WhatsApp</p>
+        </header>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="snake">🐍 Jogo da Cobrinha</div>
+            <div class="tab" data-tab="quiz">📝 Quiz de 10 Perguntas</div>
+            <div class="tab" data-tab="whatsapp">💬 WhatsApp</div>
+        </div>
+        
+        <div id="snake" class="content active">
+            <div id="snake-game">
+                <canvas id="game-canvas" width="400" height="400"></canvas>
+                <div id="score">Pontuação: 0</div>
+                <div class="controls">
+                    <button id="start-btn">Iniciar Jogo</button>
+                    <button id="reset-btn">Reiniciar</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="quiz" class="content">
+            <div id="quiz-container">
+                <!-- Questions will be generated by JavaScript -->
+            </div>
+            <div class="result" id="result">
+                <h2>Quiz Concluído!</h2>
+                <p>Você acertou <span id="score-count">0</span> de 10 perguntas.</p>
+                <button id="restart-quiz">Reiniciar Quiz</button>
+            </div>
+        </div>
+        
+        <div id="whatsapp" class="content">
+            <div class="sidebar">
+                <div class="header">
+                    <h3>WhatsApp</h3>
+                    <div class="menu">
+                        <i>🔍</i>
+                        <i>⋮</i>
+                    </div>
+                </div>
+                <div class="search">
+                    <input type="text" placeholder="Pesquisar ou começar uma nova conversa">
+                </div>
+                <div class="chats">
+                    <div class="chat active" data-chat="ana">
+                        <div class="avatar" style="background-image: url('https://placehold.co/50x50/128C7E/white?text=AM')"></div>
+                        <div class="chat-info">
+                            <div class="chat-header">
+                                <div class="chat-name">Ana Maria</div>
+                                <div class="chat-time">14:30</div>
+                            </div>
+                            <div class="chat-message">Olá, tudo bem?</div>
+                        </div>
+                    </div>
+                    <div class="chat" data-chat="pedro">
+                        <div class="avatar" style="background-image: url('https://placehold.co/50x50/28a745/white?text=PF')"></div>
+                        <div class="chat-info">
+                            <div class="chat-header">
+                                <div class="chat-name">Pedro Ferreira</div>
+                                <div class="chat-time">12:15</div>
+                            </div>
+                            <div class="chat-message">Vamos ao cinema hoje?</div>
+                        </div>
+                    </div>
+                    <div class="chat" data-chat="grupo-familia">
+                        <div class="avatar" style="background-image: url('https://placehold.co/50x50/dc3545/white?text=GF')"></div>
+                        <div class="chat-info">
+                            <div class="chat-header">
+                                <div class="chat-name">Grupo da Família</div>
+                                <div class="chat-time">10:45</div>
+                            </div>
+                            <div class="chat-message">Mãe: Almoço às 13h hoje</div>
+                        </div>
+                    </div>
+                    <div class="chat" data-chat="joao">
+                        <div class="avatar" style="background-image: url('https://placehold.co/50x50/ffc107/white?text=JS')"></div>
+                        <div class="chat-info">
+                            <div class="chat-header">
+                                <div class="chat-name">João Silva</div>
+                                <div class="chat-time">Ontem</div>
+                            </div>
+                            <div class="chat-message">Conseguiu terminar o trabalho?</div>
+                        </div>
+                    </div>
+                    <div class="chat" data-chat="maria">
+                        <div class="avatar" style="background-image: url('https://placehold.co/50x50/6f42c1/white?text=MC')"></div>
+                        <div class="chat-info">
+                            <div class="chat-header">
+                                <div class="chat-name">Maria Costa</div>
+                                <div class="chat-time">Ontem</div>
+                            </div>
+                            <div class="chat-message">Obrigada pelo presente! ❤️</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="main">
+                <div class="chat-header">
+                    <img src="https://placehold.co/40x40/128C7E/white?text=AM" alt="Ana Maria">
+                    <div>Ana Maria</div>
+                    <div style="margin-left: auto;">⋮</div>
+                </div>
+                <div class="messages" id="messages">
+                    <div class="message received">Olá! Tudo ótimo, e você?</div>
+                    <div class="message sent">Oi Ana! Tudo bem sim, obrigado por perguntar. Como foi seu dia?</div>
+                    <div class="message received">Foi ótimo! Terminei aquele projeto que estava me deixando preocupada.</div>
+                    <div class="message sent">Que ótimo! Parabéns! Você merece comemorar!</div>
+                    <div class="message received">Obrigada! Estava pensando em tomar um sorvete depois do trabalho. Quer ir junto?</div>
+                    <div class="message sent">Adoraria! Que horas você termina?</div>
+                    <div class="message received">Termino às 18h. Podemos nos encontrar na sorveteria da praça.</div>
+                    <div class="message sent">Perfeito! Te vejo lá às 18h então. 😊</div>
+                </div>
+                <div class="input-area">
+                    <input type="text" placeholder="Digite uma mensagem">
+                    <button>➤</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab Switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Snake Game
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const startButton = document.getElementById('start-btn');
+        const resetButton = document.getElementById('reset-btn');
+        
+        const gridSize = 20;
+        let snake = [{ x: 10, y: 10 }];
+        let food = { x: 15, y: 15 };
+        let direction = 'right';
+        let nextDirection = 'right';
+        let score = 0;
+        let gameInterval;
+        let gameRunning = false;
+        
+        function drawSnake() {
+            snake.forEach(segment => {
+                ctx.fillStyle = '#128C7E';
+                ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize, gridSize);
+                ctx.strokeStyle = '#075e54';
+                ctx.strokeRect(segment.x * gridSize, segment.y * gridSize, gridSize, gridSize);
+            });
+        }
+        
+        function drawFood() {
+            ctx.fillStyle = '#28a745';
+            ctx.beginPath();
+            ctx.arc(
+                food.x * gridSize + gridSize / 2,
+                food.y * gridSize + gridSize / 2,
+                gridSize / 2,
+                0,
+                Math.PI * 2
+            );
+            ctx.fill();
+        }
+        
+        function moveSnake() {
+            direction = nextDirection;
+            const head = { ...snake[0] };
+            
+            switch (direction) {
+                case 'up':
+                    head.y--;
+                    break;
+                case 'down':
+                    head.y++;
+                    break;
+                case 'left':
+                    head.x--;
+                    break;
+                case 'right':
+                    head.x++;
+                    break;
+            }
+            
+            // Check wall collision
+            if (head.x < 0 || head.x >= canvas.width / gridSize || 
+                head.y < 0 || head.y >= canvas.height / gridSize) {
+                gameOver();
+                return;
+            }
+            
+            // Check self collision
+            if (snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+                gameOver();
+                return;
+            }
+            
+            snake.unshift(head);
+            
+            // Check food collision
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                scoreElement.textContent = `Pontuação: ${score}`;
+                generateFood();
+            } else {
+                snake.pop();
+            }
+        }
+        
+        function generateFood() {
+            let newFood;
+            do {
+                newFood = {
+                    x: Math.floor(Math.random() * (canvas.width / gridSize)),
+                    y: Math.floor(Math.random() * (canvas.height / gridSize))
+                };
+            } while (snake.some(segment => segment.x === newFood.x && segment.y === newFood.y));
+            
+            food = newFood;
+        }
+        
+        function clearCanvas() {
+            ctx.fillStyle = '#f0f8ff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        function gameLoop() {
+            clearCanvas();
+            moveSnake();
+            drawFood();
+            drawSnake();
+        }
+        
+        function startGame() {
+            if (gameRunning) return;
+            
+            resetGame();
+            gameRunning = true;
+            gameInterval = setInterval(gameLoop, 150);
+        }
+        
+        function resetGame() {
+            clearInterval(gameInterval);
+            snake = [{ x: 10, y: 10 }];
+            direction = 'right';
+            nextDirection = 'right';
+            score = 0;
+            scoreElement.textContent = `Pontuação: ${score}`;
+            generateFood();
+            gameRunning = false;
+            clearCanvas();
+            drawFood();
+            drawSnake();
+        }
+        
+        function gameOver() {
+            clearInterval(gameInterval);
+            gameRunning = false;
+            alert(`Fim de jogo! Sua pontuação: ${score}`);
+        }
+        
+        startButton.addEventListener('click', startGame);
+        resetButton.addEventListener('click', resetGame);
+        
+        document.addEventListener('keydown', (e) => {
+            switch (e.key) {
+                case 'ArrowUp':
+                    if (direction !== 'down') nextDirection = 'up';
+                    e.preventDefault();
+                    break;
+                case 'ArrowDown':
+                    if (direction !== 'up') nextDirection = 'down';
+                    e.preventDefault();
+                    break;
+                case 'ArrowLeft':
+                    if (direction !== 'right') nextDirection = 'left';
+                    e.preventDefault();
+                    break;
+                case 'ArrowRight':
+                    if (direction !== 'left') nextDirection = 'right';
+                    e.preventDefault();
+                    break;
+            }
+        });
+        
+        // Initialize snake game
+        resetGame();
+        
+        // Quiz
+        const quizContainer = document.getElementById('quiz-container');
+        const resultContainer = document.getElementById('result');
+        const scoreCount = document.getElementById('score-count');
+        const restartQuizBtn = document.getElementById('restart-quiz');
+        
+        const questions = [
+            {
+                question: "Qual é a capital do Brasil?",
+                options: ["São Paulo", "Rio de Janeiro", "Brasília", "Salvador"],
+                correct: 2
+            },
+            {
+                question: "Quem pintou a Mona Lisa?",
+                options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"],
+                correct: 2
+            },
+            {
+                question: "Qual é o maior planeta do sistema solar?",
+                options: ["Terra", "Júpiter", "Saturno", "Marte"],
+                correct: 1
+            },
+            {
+                question: "Em que ano começou a Segunda Guerra Mundial?",
+                options: ["1914", "1939", "1945", "1918"],
+                correct: 1
+            },
+            {
+                question: "Qual é o elemento químico com símbolo O?",
+                options: ["Ouro", "Osmio", "Oxigênio", "Ósmio"],
+                correct: 2
+            },
+            {
+                question: "Quem escreveu 'Dom Quixote'?",
+                options: ["Miguel de Cervantes", "William Shakespeare", "Gabriel García Márquez", "Jorge Luis Borges"],
+                correct: 0
+            },
+            {
+                question: "Qual é o maior oceano do mundo?",
+                options: ["Atlântico", "Índico", "Ártico", "Pacífico"],
+                correct: 3
+            },
+            {
+                question: "Quantos continentes existem no mundo?",
+                options: ["5", "6", "7", "8"],
+                correct: 2
+            },
+            {
+                question: "Qual é o animal mais rápido do mundo?",
+                options: ["Guepardo", "Falcão-peregrino", "Leopardo", "Antílope"],
+                correct: 1
+            },
+            {
+                question: "Em que país foi inventada a pizza?",
+                options: ["França", "Espanha", "Itália", "Grécia"],
+                correct: 2
+            }
+        ];
+        
+        let currentAnswers = [];
+        
+        function generateQuiz() {
+            quizContainer.innerHTML = '';
+            currentAnswers = Array(questions.length).fill(null);
+            
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-container';
+                
+                const questionTitle = document.createElement('div');
+                questionTitle.className = 'question';
+                questionTitle.textContent = `${index + 1}. ${q.question}`;
+                
+                const optionsDiv = document.createElement('div');
+                optionsDiv.className = 'options';
+                
+                q.options.forEach((option, optionIndex) => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'option';
+                    optionDiv.textContent = option;
+                    optionDiv.dataset.question = index;
+                    optionDiv.dataset.option = optionIndex;
+                    
+                    optionDiv.addEventListener('click', () => {
+                        // Remove selected class from all options in this question
+                        document.querySelectorAll(`.option[data-question="${index}"]`).forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+                        
+                        // Add selected class to clicked option
+                        optionDiv.classList.add('selected');
+                        currentAnswers[index] = optionIndex;
+                    });
+                    
+                    optionsDiv.appendChild(optionDiv);
+                });
+                
+                questionDiv.appendChild(questionTitle);
+                questionDiv.appendChild(optionsDiv);
+                quizContainer.appendChild(questionDiv);
+            });
+            
+            const submitBtn = document.createElement('button');
+            submitBtn.textContent = 'Enviar Respostas';
+            submitBtn.style.marginTop = '20px';
+            submitBtn.addEventListener('click', checkAnswers);
+            quizContainer.appendChild(submitBtn);
+        }
+        
+        function checkAnswers() {
+            let correctCount = 0;
+            
+            questions.forEach((q, index) => {
+                const options = document.querySelectorAll(`.option[data-question="${index}"]`);
+                options.forEach((option, optionIndex) => {
+                    option.classList.remove('correct', 'incorrect');
+                    if (optionIndex === q.correct) {
+                        option.classList.add('correct');
+                    }
+                    if (currentAnswers[index] !== null && currentAnswers[index] !== q.correct && optionIndex === currentAnswers[index]) {
+                        option.classList.add('incorrect');
+                    }
+                });
+                
+                if (currentAnswers[index] === q.correct) {
+                    correctCount++;
+                }
+            });
+            
+            scoreCount.textContent = correctCount;
+            resultContainer.style.display = 'block';
+        }
+        
+        restartQuizBtn.addEventListener('click', () => {
+            resultContainer.style.display = 'none';
+            generateQuiz();
+        });
+        
+        // Generate quiz on load
+        generateQuiz();
+        
+        // WhatsApp
+        document.querySelectorAll('.chat').forEach(chat => {
+            chat.addEventListener('click', () => {
+                document.querySelectorAll('.chat').forEach(c => c.classList.remove('active'));
+                chat.classList.add('active');
+                
+                const messages = document.getElementById('messages');
+                const chatName = chat.querySelector('.chat-name').textContent;
+                document.querySelector('.main .chat-header div:nth-child(2)').textContent = chatName;
+                
+                // Clear messages
+                messages.innerHTML = '';
+                
+                // Add some default messages based on chat
+                const chatData = {
+                    'ana': [
+                        { text: 'Olá! Tudo ótimo, e você?', received: true },
+                        { text: 'Oi Ana! Tudo bem sim, obrigado por perguntar. Como foi seu dia?', received: false },
+                        { text: 'Foi ótimo! Terminei aquele projeto que estava me deixando preocupada.', received: true },
+                        { text: 'Que ótimo! Parabéns! Você merece comemorar!', received: false }
+                    ],
+                    'pedro': [
+                        { text: 'E aí, bora ao cinema hoje?', received: true },
+                        { text: 'Claro! Que filme você quer ver?', received: false },
+                        { text: 'Estava pensando em ver aquele novo filme de ação.', received: true },
+                        { text: 'Perfeito! Que horas?', received: false }
+                    ],
+                    'grupo-familia': [
+                        { text: 'Mãe: Almoço às 13h hoje', received: true },
+                        { text: 'Pode deixar, estarei lá!', received: false },
+                        { text: 'Pai: Vou trazer a sobremesa', received: true },
+                        { text: 'Ótimo! Adoro sua sobremesa, pai!', received: false }
+                    ],
+                    'joao': [
+                        { text: 'Conseguiu terminar o trabalho?', received: true },
+                        { text: 'Quase lá! Devo terminar até amanhã.', received: false },
+                        { text: 'Show! Preciso disso para a reunião.', received: true },
+                        { text: 'Pode deixar, envio assim que terminar.', received: false }
+                    ],
+                    'maria': [
+                        { text: 'Obrigada pelo presente! ❤️', received: true },
+                        { text: 'Fico feliz que gostou! Era para comemorar sua promoção.', received: false },
+                        { text: 'Foi muito gentil da sua parte. Você é um ótimo amigo!', received: true },
+                        { text: 'Obrigado! Sempre estarei aqui para comemorar suas conquistas.', received: false }
+                    ]
+                };
+                
+                const messagesToShow = chatData[chat.dataset.chat] || chatData['ana'];
+                
+                messagesToShow.forEach(msg => {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = `message ${msg.received ? 'received' : 'sent'}`;
+                    messageDiv.textContent = msg.text;
+                    messages.appendChild(messageDiv);
+                });
+                
+                // Scroll to bottom
+                messages.scrollTop = messages.scrollHeight;
+            });
+        });
+        
+        // Send message functionality
+        const messageInput = document.querySelector('.input-area input');
+        const sendButton = document.querySelector('.input-area button');
+        
+        function sendMessage() {
+            const text = messageInput.value.trim();
+            if (text) {
+                const messages = document.getElementById('messages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message sent';
+                messageDiv.textContent = text;
+                messages.appendChild(messageDiv);
+                
+                messageInput.value = '';
+                
+                // Scroll to bottom
+                messages.scrollTop = messages.scrollHeight;
+                
+                // Simulate reply after a short delay
+                setTimeout(() => {
+                    const replies = [
+                        "Entendido!",
+                        "Ok, obrigado pela informação.",
+                        "Vou verificar isso.",
+                        "Perfeito!",
+                        "Concordo totalmente.",
+                        "Vamos fazer isso.",
+                        "Aguardo seu retorno.",
+                        "Boa ideia!",
+                        "Combinado!",
+                        "Excelente!"
+                    ];
+                    const randomReply = replies[Math.floor(Math.random() * replies.length)];
+                    
+                    const replyDiv = document.createElement('div');
+                    replyDiv.className = 'message received';
+                    replyDiv.textContent = randomReply;
+                    messages.appendChild(replyDiv);
+                    
+                    // Update chat list
+                    const activeChat = document.querySelector('.chat.active');
+                    if (activeChat) {
+                        activeChat.querySelector('.chat-message').textContent = `Você: ${randomReply}`;
+                        const now = new Date();
+                        const timeString = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+                        activeChat.querySelector('.chat-time').textContent = timeString;
+                    }
+                    
+                    // Scroll to bottom
+                    messages.scrollTop = messages.scrollHeight;
+                }, 1000);
+            }
+        }
+        
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
