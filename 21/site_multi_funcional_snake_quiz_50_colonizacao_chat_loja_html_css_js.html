@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Melhor Jogo da Cobrinha — Versão Avançada</title>
+  <meta name="description" content="Cobrinha responsiva com som, partículas, modo letal de borda e física em Web Worker." />
+  <style>
+    :root{--bg:#041022;--panel:#0c1420;--accent:#6c7bff;--accent2:#54e1c8;--muted:#9aa3c8}
+    *{box-sizing:border-box} html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),#02101a);color:#eaf0ff}
+    .wrap{max-width:1000px;margin:20px auto;padding:16px}
+    header{display:flex;justify-content:space-between;align-items:center}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2))}
+    h1{margin:0;font-size:18px}
+    .controls{display:flex;gap:8px;align-items:center}
+    .btn{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);padding:8px 12px;border-radius:10px;color:var(--muted);cursor:pointer}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#041022;border:1px solid transparent}
+    main{display:grid;grid-template-columns:1fr 320px;gap:16px;margin-top:16px}
+    @media(max-width:880px){main{grid-template-columns:1fr} .mobile-pad{display:flex}}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+    canvas{display:block;width:100%;height:auto;border-radius:10px;background:#02030a}
+    .stat{font-weight:700}
+    .pad{display:none;justify-content:center;gap:8px;margin-top:12px}
+    .pad button{width:64px;height:64px;border-radius:12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);font-size:20px;color:var(--muted)}
+    .mobile-pad{display:none}
+    @media(max-width:880px){.pad{display:flex} .mobile-pad{display:block}}
+    .skin{width:48px;height:48px;border-radius:8px;cursor:pointer;border:2px solid transparent}
+    .skin.active{outline:3px solid rgba(108,123,255,0.18)}
+    .footer{margin-top:16px;color:var(--muted);font-size:13px;text-align:center}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Melhor Jogo da Cobrinha — Avançado</h1>
+          <div style="color:var(--muted)">Modo letal de borda (você morre ao bater). Física em Web Worker para melhor performance.</div>
+        </div>
+      </div>
+      <div class="controls">
+        <button id="start" class="btn primary">Iniciar</button>
+        <button id="pause" class="btn">Pausar</button>
+        <button id="restart" class="btn">Reiniciar</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="card">
+        <canvas id="screen" width="720" height="720" aria-label="Jogo da cobrinha"></canvas>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+          <div class="stat">Pontos: <span id="score">0</span></div>
+          <div class="stat">Recorde: <span id="best">0</span></div>
+          <div class="stat">Nível: <span id="level">1</span></div>
+        </div>
+        <div class="pad mobile-pad" id="mobilePad">
+          <button data-dir="up">↑</button>
+          <button data-dir="left">←</button>
+          <button data-dir="right">→</button>
+          <button data-dir="down">↓</button>
+        </div>
+      </section>
+
+      <aside class="card">
+        <h3>Configurações</h3>
+        <div style="margin:8px 0">
+          <label>Grade: <span id="gridVal">20</span></label>
+          <input id="grid" type="range" min="10" max="40" value="20" style="width:100%" />
+        </div>
+        <div style="margin:8px 0">
+          <label>Velocidade: <span id="speedVal">5</span></label>
+          <input id="speed" type="range" min="1" max="10" value="5" style="width:100%" />
+        </div>
+        <div style="margin:8px 0">
+          <label>Skin</label>
+          <div style="display:flex;gap:8px;margin-top:8px" id="skins">
+            <div class="skin" data-skin="classic" title="Clássica" style="background:linear-gradient(90deg,#6c7bff,#54e1c8)"></div>
+            <div class="skin" data-skin="neon" title="Neon" style="background:linear-gradient(90deg,#ff5a8b,#ffd166)"></div>
+            <div class="skin" data-skin="forest" title="Floresta" style="background:linear-gradient(90deg,#2ecc71,#005f2f)"></div>
+            <div class="skin" data-skin="mono" title="Mono" style="background:linear-gradient(90deg,#9aa3c8,#6b7280)"></div>
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <button id="toggleSound" class="btn">Som: ON</button>
+          <button id="resetBest" class="btn" style="margin-left:8px">Resetar recorde</button>
+        </div>
+        <hr style="margin-top:12px;border:none;border-top:1px solid rgba(255,255,255,0.03)" />
+        <div style="color:var(--muted);font-size:13px;margin-top:8px">Bateu a pontuação? O recorde é salvo no navegador.</div>
+      </aside>
+    </main>
+
+    <div class="footer">Use teclado (↑↓←→ / WASD), toque ou swipe. Boa sorte!</div>
+  </div>
+
+  <script>
+  (function(){
+    // ----- Setup -----
+    const canvas = document.getElementById('screen');
+    const ctx = canvas.getContext('2d');
+    const startBtn = document.getElementById('start');
+    const pauseBtn = document.getElementById('pause');
+    const restartBtn = document.getElementById('restart');
+    const gridInput = document.getElementById('grid');
+    const speedInput = document.getElementById('speed');
+    const gridVal = document.getElementById('gridVal');
+    const speedVal = document.getElementById('speedVal');
+    const scoreEl = document.getElementById('score');
+    const bestEl = document.getElementById('best');
+    const levelEl = document.getElementById('level');
+    const skinsWrap = document.getElementById('skins');
+    const toggleSoundBtn = document.getElementById('toggleSound');
+    const resetBestBtn = document.getElementById('resetBest');
+    const mobilePad = document.getElementById('mobilePad');
+
+    // Game settings
+    let GRID = parseInt(gridInput.value,10);
+    let SPEED = parseInt(speedInput.value,10);
+    let skin = localStorage.getItem('snake-skin') || 'classic';
+    let soundOn = (localStorage.getItem('snake-sound')||'1')==='1';
+    let best = Number(localStorage.getItem('snake-best')||0); bestEl.textContent = best;
+
+    // Particle pool
+    const particles = [];
+
+    // Use Web Worker for physics & game logic
+    // We'll create worker from a blob to keep single file.
+    const workerCode = `
+      let cols=20, rows=20; let snake=[]; let dir={x:1,y:0}; let apple={x:5,y:5}; let running=false; let points=0; let level=1; let wrap=false;
+      function init(c){ cols=c; rows=c; snake=[]; const cx=Math.floor(cols/2), cy=Math.floor(rows/2); snake.push({x:cx-1,y:cy}); snake.push({x:cx,y:cy}); snake.push({x:cx+1,y:cy}); dir={x:1,y:0}; placeApple(); points=0; level=1; }
+      function placeApple(){ let tries=0; do{ apple={x:Math.floor(Math.random()*cols), y:Math.floor(Math.random()*rows)}; tries++; if(tries>500) break; }while(snake.some(s=>s.x===apple.x&&s.y===apple.y)); }
+      function step(){ if(!running) return postState(); const head={x:snake[snake.length-1].x+dir.x, y:snake[snake.length-1].y+dir.y};
+        // lethal walls: if out of bounds -> gameover
+        if(head.x<0||head.y<0||head.x>=cols||head.y>=rows){ running=false; return postMessage({type:'gameover', points}); }
+        // self collision
+        if(snake.some(s=>s.x===head.x&&s.y===head.y)){ running=false; return postMessage({type:'gameover', points}); }
+        snake.push(head);
+        if(head.x===apple.x && head.y===apple.y){ points+=10; if((points/10)%5===0) level++; placeApple(); postMessage({type:'eat', apple}); }
+        else snake.shift();
+        postState(); }
+      function postState(){ postMessage({type:'state', snake, apple, points, level}); }
+      onmessage = function(e){ const d=e.data;
+        if(d.type==='init'){ init(d.cols); running=false; postState(); }
+        if(d.type==='start'){ running=true; }
+        if(d.type==='stop'){ running=false; }
+        if(d.type==='step'){ step(); }
+        if(d.type==='dir'){ dir=d.dir; }
+        if(d.type==='setCols'){ cols=d.cols; init(cols); }
+        if(d.type==='restart'){ init(cols); running=true; }
+      }
+    `;
+
+    const blob = new Blob([workerCode], {type:'application/javascript'});
+    const worker = new Worker(URL.createObjectURL(blob));
+
+    // State mirror on main thread
+    let mirror = { snake:[], apple:{x:0,y:0}, points:0, level:1 };
+    let running = false; let paused = false;
+
+    worker.onmessage = function(e){ const d=e.data;
+      if(d.type==='state'){ mirror.snake = d.snake; mirror.apple=d.apple; mirror.points=d.points; mirror.level=d.level; updateHUD(); }
+      if(d.type==='eat'){ // spawn particles at apple location
+        spawnParticles(d.apple.x,d.apple.y);
+        if(soundOn) playBeep(900,0.06,'square');
+      }
+      if(d.type==='gameover'){ running=false; paused=false; startBtn.textContent='Iniciar'; if(soundOn) playBeep(200,0.4,'sine'); setTimeout(()=>{ alert('Fim de jogo! Pontos: '+d.points); },50); }
+    };
+
+    // init worker
+    function initWorker(){ worker.postMessage({type:'init', cols:GRID}); }
+
+    // Rendering
+    function resize(){ const size = Math.min(window.innerWidth - 40, 720); canvas.width = size; canvas.height = size; render(); }
+    window.addEventListener('resize', resize);
+
+    function render(){ const w = canvas.width; const h = canvas.height; const cell = Math.floor(w / GRID); const pad = (w - (cell*GRID))/2;
+      ctx.clearRect(0,0,w,h);
+      // background
+      ctx.fillStyle='#030414'; ctx.fillRect(0,0,w,h);
+      // draw apple
+      if(mirror.apple){ drawCell(mirror.apple.x, mirror.apple.y, cell, '#ff5a8b'); }
+      // draw snake
+      for(let i=0;i<mirror.snake.length;i++){ const s=mirror.snake[i]; const head = i===mirror.snake.length-1; drawSegment(s.x,s.y,cell,head,i); }
+      // particles
+      updateParticles(cell);
+    }
+    function drawCell(cx,cy,cell,color){ const x = cx*cell; const y = cy*cell; ctx.fillStyle = color; roundRect(ctx,x+cell*0.12,y+cell*0.12,cell*0.76,cell*0.76,cell*0.18); ctx.fill(); }
+    function drawSegment(cx,cy,cell,isHead,index){ const x=cx*cell,y=cy*cell; // skin applied
+      if(skin==='classic'){ const g=ctx.createLinearGradient(x,y,x+cell,y+cell); g.addColorStop(0,'#6c7bff'); g.addColorStop(1,'#54e1c8'); ctx.fillStyle=g; }
+      else if(skin==='neon'){ const g=ctx.createLinearGradient(x,y,x+cell,y+cell); g.addColorStop(0,'#ff5a8b'); g.addColorStop(1,'#ffd166'); ctx.fillStyle=g; }
+      else if(skin==='forest'){ const g=ctx.createLinearGradient(x,y,x+cell,y+cell); g.addColorStop(0,'#2ecc71'); g.addColorStop(1,'#005f2f'); ctx.fillStyle=g; }
+      else ctx.fillStyle='#9aa3c8';
+      roundRect(ctx,x+cell*0.08,y+cell*0.08,cell*0.84,cell*0.84,cell*0.18); ctx.fill();
+      if(isHead){ ctx.fillStyle='#041022'; ctx.beginPath(); ctx.arc(x+cell*0.62,y+cell*0.28,Math.max(1,cell*0.06),0,Math.PI*2); ctx.fill(); }
+    }
+    function roundRect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+
+    // Particles
+    function spawnParticles(cellX,cellY){ const cellSize = Math.floor(canvas.width/GRID); for(let i=0;i<14;i++){ particles.push({x: (cellX+0.5)*cellSize, y:(cellY+0.5)*cellSize, vx:(Math.random()-0.5)*4, vy:(Math.random()-0.9)*4, life: 45+Math.random()*30, alpha:1}); } }
+    function updateParticles(cell){ for(let i=particles.length-1;i>=0;i--){ const p=particles[i]; p.x+=p.vx; p.y+=p.vy; p.vy+=0.12; p.life--; p.alpha = p.life/80; if(p.life<=0) particles.splice(i,1); else{ ctx.fillStyle = `rgba(255,255,255,${Math.max(0,p.alpha)})`; ctx.beginPath(); ctx.arc(p.x,p.y,Math.max(1,cell*0.07),0,Math.PI*2); ctx.fill(); } } }
+
+    // Audio helper
+    const AudioCtx = window.AudioContext || window.webkitAudioContext; const audioCtx = AudioCtx? new AudioCtx():null;
+    function playBeep(freq,dur,type){ if(!audioCtx||!soundOn) return; const o=audioCtx.createOscillator(); const g=audioCtx.createGain(); o.type=type; o.frequency.value=freq; g.gain.value=0.12; o.connect(g); g.connect(audioCtx.destination); o.start(); setTimeout(()=>o.stop(), dur*1000); }
+
+    // Controls -> send direction to worker
+    let lastDir = {x:1,y:0};
+    function setDir(d){ lastDir = d; worker.postMessage({type:'dir', dir:d}); }
+
+    window.addEventListener('keydown', (e)=>{
+      const k = e.key.toLowerCase(); if(['arrowup','w'].includes(k)) setDir({x:0,y:-1}); if(['arrowdown','s'].includes(k)) setDir({x:0,y:1}); if(['arrowleft','a'].includes(k)) setDir({x:-1,y:0}); if(['arrowright','d'].includes(k)) setDir({x:1,y:0}); if(k==='p'){ togglePause(); }
+    });
+
+    // mobile pad
+    mobilePad.addEventListener('click', (e)=>{ const d=e.target.dataset.dir; if(!d) return; if(d==='up') setDir({x:0,y:-1}); if(d==='down') setDir({x:0,y:1}); if(d==='left') setDir({x:-1,y:0}); if(d==='right') setDir({x:1,y:0}); });
+    // swipe on canvas
+    let touchStart=null;
+    canvas.addEventListener('touchstart', (e)=>{ const t=e.touches[0]; touchStart={x:t.clientX,y:t.clientY}; });
+    canvas.addEventListener('touchend', (e)=>{ if(!touchStart) return; const t=e.changedTouches[0]; const dx=t.clientX-touchStart.x, dy=t.clientY-touchStart.y; if(Math.abs(dx)>Math.abs(dy)){ if(dx>20) setDir({x:1,y:0}); else if(dx<-20) setDir({x:-1,y:0}); } else { if(dy>20) setDir({x:0,y:1}); else if(dy<-20) setDir({x:0,y:-1}); } touchStart=null; });
+
+    // UI events
+    startBtn.addEventListener('click', ()=>{ if(!running){ running=true; paused=false; worker.postMessage({type:'start'}); startLoop(); startBtn.textContent='Rodando'; } else { // restart
+        worker.postMessage({type:'restart'}); }});
+    pauseBtn.addEventListener('click', ()=>{ togglePause(); });
+    restartBtn.addEventListener('click', ()=>{ worker.postMessage({type:'restart'}); running=true; paused=false; startLoop(); });
+
+    gridInput.addEventListener('input', ()=>{ GRID = parseInt(gridInput.value,10); gridVal.textContent = GRID; worker.postMessage({type:'setCols', cols:GRID}); resize(); });
+    speedInput.addEventListener('input', ()=>{ SPEED = parseInt(speedInput.value,10); speedVal.textContent = SPEED; });
+
+    skinsWrap.addEventListener('click', (e)=>{ const s = e.target.dataset.skin; if(!s) return; skin=s; localStorage.setItem('snake-skin',skin); Array.from(skinsWrap.children).forEach(c=>c.classList.toggle('active', c.dataset.skin===skin)); render(); });
+    Array.from(skinsWrap.children).forEach(c=>c.classList.toggle('active', c.dataset.skin===skin));
+
+    toggleSoundBtn.addEventListener('click', ()=>{ soundOn = !soundOn; localStorage.setItem('snake-sound', soundOn? '1':'0'); toggleSoundBtn.textContent = soundOn? 'Som: ON' : 'Som: OFF'; });
+    resetBestBtn.addEventListener('click', ()=>{ if(confirm('Resetar recorde?')){ best=0; localStorage.setItem('snake-best','0'); bestEl.textContent='0'; }});
+
+    // pause
+    function togglePause(){ if(!running) return; paused = !paused; if(paused){ worker.postMessage({type:'stop'}); pauseBtn.textContent='Continuar'; } else { worker.postMessage({type:'start'}); pauseBtn.textContent='Pausar'; startLoop(); } }
+
+    // main loop: requestAnimationFrame for rendering; call worker.step() based on SPEED
+    let last = 0; function startLoop(){ last=0; requestAnimationFrame(tick); }
+    function tick(ts){ if(!running) return; if(paused){ requestAnimationFrame(tick); return; } if(!last) last=ts; const elapsed = ts-last; const interval = Math.max(40, 380 - SPEED*30 - (mirror.level-1)*6); if(elapsed >= interval){ worker.postMessage({type:'step'}); last = ts; }
+      render(); requestAnimationFrame(tick);
+    }
+
+    function updateHUD(){ scoreEl.textContent = mirror.points; levelEl.textContent = mirror.level; if(mirror.points>best){ best = mirror.points; localStorage.setItem('snake-best', String(best)); bestEl.textContent = best; } }
+
+    // initial resize & init
+    function resize(){ const s = Math.min(window.innerWidth - 40, 720); canvas.width = s; canvas.height = s; render(); }
+    resize(); window.addEventListener('resize', resize);
+    initWorker();
+
+    // initial worker start paused
+    function initWorker(){ worker.postMessage({type:'init', cols:GRID}); }
+
+    // particles already included
+
+    // warm audio on gesture
+    window.addEventListener('pointerdown', ()=>{ if(audioCtx && audioCtx.state==='suspended') audioCtx.resume(); }, {once:true});
+
+    // start rendering continuously (even if not running to show initial state)
+    (function animate(){ render(); requestAnimationFrame(animate); })();
+
+  })();
+  </script>
+</body>
+</html>

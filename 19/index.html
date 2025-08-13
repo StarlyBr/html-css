@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Super Site — Snake, Quiz, Colonização, Chat e Loja</title>
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Site completo com jogo da cobrinha, quiz de 50 perguntas, explicação da colonização do Brasil, chat local e loja por categorias." />
+</head>
+<body>
+  <header class="container header">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>Super Site — Tudo em 1</h1>
+        <p class="muted">HTML • CSS • JavaScript — compatível com celular e PC</p>
+      </div>
+    </div>
+    <nav id="tabs" class="tabs" aria-label="Seções">
+      <button data-tab="snake" class="active">Jogo da Cobrinha</button>
+      <button data-tab="quiz">Quiz — 50 Perguntas</button>
+      <button data-tab="historia">Colonização do Brasil</button>
+      <button data-tab="chat">Chat</button>
+      <button data-tab="loja">Loja por Categorias</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- SNAKE -->
+    <section data-section="snake" class="active">
+      <div class="grid">
+        <article class="card">
+          <h2>Jogo da Cobrinha</h2>
+          <p class="muted">PC: W/A/S/D ou setas • Celular: direcional na tela • Pausa: P</p>
+          <div class="snakeHUD">
+            <span class="badge">Pontos: <b id="score">0</b></span>
+            <span class="badge">Recorde: <b id="best">0</b></span>
+            <span class="badge">Velocidade: <b id="spd">Normal</b></span>
+            <button id="btnStart" class="btn primary">Iniciar/Reiniciar</button>
+            <button id="btnSpeed" class="btn">Alternar Velocidade</button>
+          </div>
+          <canvas id="snakeBoard" width="560" height="560" role="img" aria-label="Tabuleiro do jogo da cobrinha"></canvas>
+          <div class="pad" id="pad" aria-label="Controles de toque">
+            <button class="ghost" aria-hidden="true">x</button>
+            <button data-dy="-1" aria-label="Cima">↑</button>
+            <button class="ghost" aria-hidden="true">x</button>
+            <button data-dx="-1" aria-label="Esquerda">←</button>
+            <button class="ghost" aria-hidden="true">x</button>
+            <button data-dx="1" aria-label="Direita">→</button>
+            <button class="ghost" aria-hidden="true">x</button>
+            <button data-dy="1" aria-label="Baixo">↓</button>
+            <button class="ghost" aria-hidden="true">x</button>
+          </div>
+        </article>
+        <aside class="card">
+          <h3>Dicas</h3>
+          <ul>
+            <li>Evite bater nas paredes e no próprio corpo.</li>
+            <li>Coma as maçãs para crescer e marcar pontos.</li>
+            <li>Toque leve no celular para movimentos precisos.</li>
+          </ul>
+          <p class="note">Funciona offline. Pontuações ficam salvas no seu navegador.</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section data-section="quiz">
+      <article class="card">
+        <h2>Quiz — 50 Perguntas</h2>
+        <div class="row"><span class="badge">Pergunta <b id="qNum">1</b>/50</span><span class="badge">Acertos: <b id="qHits">0</b></span></div>
+        <div class="space"></div>
+        <div class="quizQ" id="qText"></div>
+        <div id="qOpts"></div>
+        <div class="row">
+          <button id="btnPrev" class="btn">Voltar</button>
+          <button id="btnNext" class="btn primary">Próxima</button>
+          <button id="btnFinish" class="btn" title="Finalizar">Finalizar</button>
+        </div>
+        <p id="quizDone" class="muted"></p>
+      </article>
+    </section>
+
+    <!-- HISTÓRIA -->
+    <section data-section="historia">
+      <article class="card">
+        <h2>Colonização do Brasil — Linha do Tempo</h2>
+        <p class="muted">Resumo com marcos essenciais e contexto.</p>
+        <div class="timeline" id="tl"></div>
+      </article>
+    </section>
+
+    <!-- CHAT -->
+    <section data-section="chat">
+      <article class="card">
+        <h2>Chat Local</h2>
+        <p class="muted">Respostas simples no próprio navegador (sem servidor).</p>
+        <div class="chatWrap">
+          <div class="chatBox" id="chatBox"></div>
+          <div class="row">
+            <input id="chatInput" class="search" placeholder="Digite sua mensagem..." />
+            <button id="chatSend" class="btn primary">Enviar</button>
+            <button id="chatClear" class="btn">Limpar</button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- LOJA -->
+    <section data-section="loja">
+      <article class="card">
+        <h2>Loja — Categorias e Carrinho</h2>
+        <div class="shopToolbar">
+          <input id="shopSearch" class="search" placeholder="Buscar produto..." />
+          <select id="shopCat" class="btn">
+            <option value="">Todas as categorias</option>
+            <option>Eletrônicos</option>
+            <option>Moda</option>
+            <option>Casa</option>
+            <option>Jogos</option>
+            <option>Livros</option>
+          </select>
+          <select id="shopSort" class="btn">
+            <option value="">Ordenar</option>
+            <option value="price-asc">Preço: menor → maior</option>
+            <option value="price-desc">Preço: maior → menor</option>
+            <option value="az">Nome A → Z</option>
+          </select>
+        </div>
+        <div class="shopGrid" id="shopGrid"></div>
+        <div class="cart" id="cartBtn">🛒 Carrinho (<span id="cartCount">0</span>)</div>
+        <aside class="drawer" id="drawer" aria-label="Carrinho">
+          <h3>Seu carrinho</h3>
+          <div class="list" id="cartList"></div>
+          <div class="row" style="padding:12px 16px; border-top:1px solid var(--border)">
+            <div>
+              <div>Total: <b id="cartTotal">R$ 0,00</b></div>
+              <div class="note">Impostos e frete calculados na finalização.</div>
+            </div>
+            <button class="btn primary" id="checkout">Finalizar</button>
+          </div>
+        </aside>
+      </article>
+    </section>
+  </main>
+
+  <footer class="container footer">
+    <p class="note">© 2025 Super Site. Construído com HTML, CSS e JavaScript puros.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

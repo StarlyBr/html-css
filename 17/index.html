@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Super Site: Jogo, Quiz, História, Chat e Loja</title>
+  <style>
+    :root{
+      --bg:#0f1220; --panel:#161a2e; --muted:#8a91b4; --text:#e9ecff; --brand:#6c7bff; --brand-2:#54e1c8; --danger:#ff6b6b; --ok:#2ecc71; --warning:#f7b500;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Inter,"Helvetica Neue",Arial,sans-serif;
+      background:linear-gradient(120deg, #0b0f1a, #181b2e 60%, #0f1220); color:var(--text);
+    }
+    a{color:var(--brand)}
+    .container{max-width:1200px; margin:0 auto; padding:16px}
+    header{
+      position:sticky; top:0; z-index:20;
+      background:rgba(15,18,32,.7); backdrop-filter:saturate(160%) blur(10px);
+      border-bottom:1px solid #232746;
+    }
+    .brand{display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.3px}
+    .brand .logo{width:36px;height:36px;border-radius:12px; background:conic-gradient(from 210deg,var(--brand),var(--brand-2)); box-shadow:0 0 0 3px rgba(108,123,255,.15)}
+    nav{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px}
+    nav button{
+      background:var(--panel); border:1px solid #2a2f55; color:var(--text); padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600;
+    }
+    nav button.active{background:linear-gradient(90deg, var(--brand), var(--brand-2)); color:#0b0f1a; border-color:transparent}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:900px){.grid{grid-template-columns:1.2fr 1fr}}
+
+    .card{background:var(--panel); border:1px solid #2a2f55; border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h2{margin:0 0 8px 0}
+    .muted{color:var(--muted)}
+    .row{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+    .space{height:8px}
+    .badge{padding:4px 10px; border-radius:999px; background:#232746; border:1px solid #2a2f55; font-size:12px}
+
+    /* Tabs/sections */
+    section[data-section]{display:none}
+    section[data-section].active{display:block; animation:fade .35s ease}
+    @keyframes fade{from{opacity:.5; transform:translateY(4px)} to{opacity:1; transform:translateY(0)}}
+
+    /* SNAKE */
+    #snakeBoard{width:100%; max-width:560px; aspect-ratio:1; background:#0b0f1a; border:2px solid #2a2f55; border-radius:12px}
+    .snakeHUD{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+    .pad{display:grid; grid-template-columns:repeat(3,64px); grid-template-rows:repeat(3,64px); gap:12px; justify-content:center; margin-top:10px}
+    .pad button{width:64px; height:64px; border-radius:14px; border:1px solid #2a2f55; background:#171b30; font-size:22px; font-weight:700; cursor:pointer}
+    .pad .ghost{visibility:hidden}
+
+    /* QUIZ */
+    .quizQ{font-size:18px; font-weight:700}
+    .quizOpt{display:block; padding:12px; margin:8px 0; border-radius:12px; border:1px solid #2a2f55; background:#171b30; cursor:pointer; text-align:left}
+    .quizOpt.correct{outline:2px solid var(--ok)}
+    .quizOpt.wrong{outline:2px solid var(--danger)}
+
+    /* HISTÓRIA */
+    .timeline{display:grid; gap:12px}
+    .timeline .item{padding:12px; border-left:4px solid var(--brand); background:#151935; border-radius:8px}
+
+    /* CHAT */
+    .chatWrap{display:grid; gap:12px}
+    .chatBox{height:360px; overflow:auto; background:#0b0f1a; border:1px solid #2a2f55; border-radius:12px; padding:12px}
+    .msg{max-width:80%; padding:10px 12px; margin:8px 0; border-radius:14px}
+    .me{background:#1e2448; margin-left:auto}
+    .bot{background:#132238}
+
+    /* LOJA */
+    .shopToolbar{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+    .shopGrid{display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); margin-top:12px}
+    .prod{background:#12162d; border:1px solid #2a2f55; border-radius:16px; padding:12px; display:flex; flex-direction:column; gap:8px}
+    .prod img{width:100%; aspect-ratio:1; object-fit:cover; border-radius:12px; background:#0b0f1a}
+    .cart{position:fixed; right:16px; bottom:16px; background:linear-gradient(120deg,var(--brand),var(--brand-2)); color:#0b0f1a; padding:12px 14px; border-radius:999px; font-weight:800; cursor:pointer; box-shadow:0 12px 30px rgba(0,0,0,.35)}
+    .drawer{position:fixed; right:0; top:0; bottom:0; width:360px; max-width:95vw; background:#0b0f1a; border-left:1px solid #2a2f55; transform:translateX(100%); transition:.25s ease; z-index:50; display:flex; flex-direction:column}
+    .drawer.open{transform:translateX(0)}
+    .drawer h3{margin:16px}
+    .drawer .list{flex:1; overflow:auto; padding:0 16px}
+    .drawer .row{justify-content:space-between}
+    .pill{border:1px solid #2a2f55; padding:6px 10px; border-radius:999px; background:#151a33}
+    .search{flex:1; min-width:160px; padding:10px 12px; border-radius:12px; border:1px solid #2a2f55; background:#0b0f1a; color:var(--text)}
+    .btn{padding:10px 12px; border-radius:12px; border:1px solid #2a2f55; background:#151a33; color:var(--text); cursor:pointer}
+    .btn.primary{background:linear-gradient(90deg,var(--brand),var(--brand-2)); color:#0b0f1a; border-color:transparent}
+    .note{font-size:12px; color:var(--muted)}
+  </style>
+</head>
+<body>
+<header class="container">
+  <div class="row" style="justify-content:space-between">
+    <div class="brand"><div class="logo"></div> Super Site — Tudo em 1</div>
+    <div class="row"><span class="badge">HTML</span><span class="badge">CSS</span><span class="badge">JavaScript</span></div>
+  </div>
+  <nav id="tabs">
+    <button data-tab="snake" class="active">Jogo da Cobrinha</button>
+    <button data-tab="quiz">Quiz — 50 Perguntas</button>
+    <button data-tab="historia">Colonização do Brasil</button>
+    <button data-tab="chat">Chat</button>
+    <button data-tab="loja">Loja por Categorias</button>
+  </nav>
+</header>
+
+<main class="container">
+  <!-- SNAKE -->
+  <section data-section="snake" class="active">
+    <div class="grid">
+      <div class="card">
+        <h2>Jogo da Cobrinha</h2>
+        <p class="muted">Teclas: W/A/S/D ou Setas. No celular: use o direcional. ✅ Pausa: P</p>
+        <div class="snakeHUD">
+          <span class="badge">Pontos: <b id="score">0</b></span>
+          <span class="badge">Recorde: <b id="best">0</b></span>
+          <span class="badge">Velocidade: <b id="spd">Normal</b></span>
+          <button id="btnStart" class="btn primary">Iniciar/Reiniciar</button>
+          <button id="btnSpeed" class="btn">Alternar Velocidade</button>
+        </div>
+        <canvas id="snakeBoard" width="560" height="560"></canvas>
+        <div class="pad" id="pad">
+          <button class="ghost">x</button>
+          <button data-dy="-1" aria-label="Cima">↑</button>
+          <button class="ghost">x</button>
+          <button data-dx="-1" aria-label="Esquerda">←</button>
+          <button class="ghost">x</button>
+          <button data-dx="1" aria-label="Direita">→</button>
+          <button class="ghost">x</button>
+          <button data-dy="1" aria-label="Baixo">↓</button>
+          <button class="ghost">x</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Dicas</h3>
+        <ul>
+          <li>Evite bater nas paredes e no próprio corpo.</li>
+          <li>Tocar a maçã aumenta sua pontuação e o tamanho da cobra.</li>
+          <li>Use toques ou o direcional no celular; no PC use o teclado.</li>
+        </ul>
+        <p class="note">Funciona offline, progresso salvo no navegador (localStorage).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section data-section="quiz">
+    <div class="card">
+      <h2>Quiz de Conhecimentos (50 Perguntas)</h2>
+      <p class="muted">Responda e veja sua pontuação. Você pode refazer depois.</p>
+      <div id="quizBox">
+        <div class="row"><span class="badge">Pergunta <b id="qNum">1</b>/50</span><span class="badge">Acertos: <b id="qHits">0</b></span></div>
+        <div class="space"></div>
+        <div class="quizQ" id="qText"></div>
+        <div id="qOpts"></div>
+        <div class="row">
+          <button id="btnPrev" class="btn">Voltar</button>
+          <button id="btnNext" class="btn primary">Próxima</button>
+          <button id="btnFinish" class="btn" title="Finalizar">Finalizar</button>
+        </div>
+        <p id="quizDone" class="muted"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HISTÓRIA -->
+  <section data-section="historia">
+    <div class="card">
+      <h2>Colonização do Brasil — resumo em tópicos</h2>
+      <p class="muted">Linha do tempo simplificada com os principais marcos.</p>
+      <div class="timeline" id="tl"></div>
+    </div>
+  </section>
+
+  <!-- CHAT -->
+  <section data-section="chat">
+    <div class="card">
+      <h2>Chat Local</h2>
+      <p class="muted">Um chat simples que responde com regras no próprio navegador (sem servidor).</p>
+      <div class="chatWrap">
+        <div class="chatBox" id="chatBox"></div>
+        <div class="row">
+          <input id="chatInput" class="search" placeholder="Digite sua mensagem..." />
+          <button id="chatSend" class="btn primary">Enviar</button>
+          <button id="chatClear" class="btn">Limpar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOJA -->
+  <section data-section="loja">
+    <div class="card">
+      <h2>Loja — Categorias e Carrinho</h2>
+      <div class="shopToolbar">
+        <input id="shopSearch" class="search" placeholder="Buscar produto..." />
+        <select id="shopCat" class="btn">
+          <option value="">Todas as categorias</option>
+          <option>Eletrônicos</option>
+          <option>Moda</option>
+          <option>Casa</option>
+          <option>Jogos</option>
+          <option>Livros</option>
+        </select>
+        <select id="shopSort" class="btn">
+          <option value="">Ordenar</option>
+          <option value="price-asc">Preço: menor → maior</option>
+          <option value="price-desc">Preço: maior → menor</option>
+          <option value="az">Nome A → Z</option>
+        </select>
+      </div>
+      <div class="shopGrid" id="shopGrid"></div>
+      <div class="cart" id="cartBtn">🛒 Carrinho (<span id="cartCount">0</span>)</div>
+      <aside class="drawer" id="drawer">
+        <h3>Seu carrinho</h3>
+        <div class="list" id="cartList"></div>
+        <div class="row" style="padding:12px 16px; border-top:1px solid #2a2f55">
+          <div>
+            <div>Total: <b id="cartTotal">R$ 0,00</b></div>
+            <div class="note">Impostos e frete calculados na finalização.</div>
+          </div>
+          <button class="btn primary" id="checkout">Finalizar</button>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<script>
+// ------------------ Tabs ------------------
+const tabs = document.querySelectorAll('#tabs button');
+const sections = document.querySelectorAll('section[data-section]');
+function activate(tab){
+  tabs.forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
+  sections.forEach(s=>s.classList.toggle('active', s.dataset.section===tab));
+  localStorage.setItem('tab', tab);
+}
+for(const b of tabs){ b.addEventListener('click', ()=>activate(b.dataset.tab)); }
+activate(localStorage.getItem('tab')||'snake');
+
+// ------------------ Snake Game ------------------
+const canvas = document.getElementById('snakeBoard');
+const ctx = canvas.getContext('2d');
+const scoreEl = document.getElementById('score');
+const bestEl = document.getElementById('best');
+const spdEl = document.getElementById('spd');
+const btnStart = document.getElementById('btnStart');
+const btnSpeed = document.getElementById('btnSpeed');
+const pad = document.getElementById('pad');
+let grid = 20; // 28x28
+let snake, apple, dx, dy, running=false, loopId, speedIdx=1; // 0 slow,1 normal,2 fast
+const speeds=[130,90,60];
+function reset(){
+  snake=[{x:10,y:14},{x:9,y:14},{x:8,y:14}]; dx=1; dy=0; score=0; placeApple(); draw();
+}
+function placeApple(){
+  apple={x:Math.floor(Math.random()* (canvas.width/grid)), y:Math.floor(Math.random()* (canvas.height/grid))};
+}
+function drawCell(x,y,color){
+  ctx.fillStyle=color; ctx.fillRect(x*grid+1,y*grid+1, grid-2, grid-2);
+}
+function draw(){
+  ctx.fillStyle = '#0b0f1a'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  // apple
+  drawCell(apple.x,apple.y,'#ff5a8b');
+  // snake
+  snake.forEach((p,i)=>drawCell(p.x,p.y,i? '#58d5ff' : '#6c7bff'));
+}
+function tick(){
+  const head={x:snake[0].x+dx, y:snake[0].y+dy};
+  // walls
+  if(head.x<0||head.y<0||head.x>=canvas.width/grid||head.y>=canvas.height/grid){ gameOver(); return; }
+  // self-hit
+  if(snake.some((s,i)=>i>0 && s.x===head.x && s.y===head.y)){ gameOver(); return; }
+  snake.unshift(head);
+  if(head.x===apple.x && head.y===apple.y){
+    score++; scoreEl.textContent=score; if(score>Number(localStorage.getItem('best')||0)){localStorage.setItem('best',score);} bestEl.textContent=localStorage.getItem('best')||0; placeApple();
+    // speed up a bit every 5
+    if(score%5===0 && speedIdx<2){ speedIdx++; spdEl.textContent=['Lento','Normal','Rápido'][speedIdx]; }
+  } else {
+    snake.pop();
+  }
+  draw();
+}
+function loop(){ if(!running) return; tick(); loopId=setTimeout(loop, speeds[speedIdx]); }
+function gameOver(){ running=false; alert('Fim de jogo! Pontos: '+score); }
+let score=0; bestEl.textContent=localStorage.getItem('best')||0; spdEl.textContent=['Lento','Normal','Rápido'][speedIdx];
+btnStart.onclick=()=>{ running=false; clearTimeout(loopId); reset(); running=true; loop(); };
+btnSpeed.onclick=()=>{ speedIdx=(speedIdx+1)%3; spdEl.textContent=['Lento','Normal','Rápido'][speedIdx]; };
+
+// Controls teclado
+window.addEventListener('keydown', e=>{
+  const k=e.key.toLowerCase();
+  if(k==='p'){ running=!running; if(running) loop(); return; }
+  if(['arrowup','w'].includes(k) && dy!==1){dx=0;dy=-1}
+  if(['arrowdown','s'].includes(k) && dy!==-1){dx=0;dy=1}
+  if(['arrowleft','a'].includes(k) && dx!==1){dx=-1;dy=0}
+  if(['arrowright','d'].includes(k) && dx!==-1){dx=1;dy=0}
+});
+// Touch pad
+pad.addEventListener('click', (e)=>{
+  const b=e.target; if(!b.dataset) return;
+  const ndx=Number(b.dataset.dx||0), ndy=Number(b.dataset.dy||0);
+  if(ndx===0 && ndy===-1 && dy!==1){dx=0;dy=-1}
+  if(ndx===0 && ndy===1 && dy!==-1){dx=0;dy=1}
+  if(ndx===-1 && ndy===0 && dx!==1){dx=-1;dy=0}
+  if(ndx===1 && ndy===0 && dx!==-1){dx=1;dy=0}
+});
+reset();
+
+// ------------------ Quiz (50 perguntas) ------------------
+const quiz = [
+  {q:'Qual é a capital do Brasil?', a:['Rio de Janeiro','Brasília','São Paulo','Salvador'], c:1},
+  {q:'2 + 2 × 3 = ?', a:['12','10','8','6'], c:2},
+  {q:'Quem "descobriu" o Brasil em 1500?', a:['Pedro Álvares Cabral','Dom Pedro I','Vasco da Gama','Cristóvão Colombo'], c:0},
+  {q:'Maior planeta do Sistema Solar?', a:['Terra','Júpiter','Saturno','Netuno'], c:1},
+  {q:'Língua oficial do Brasil:', a:['Espanhol','Inglês','Português','Francês'], c:2},
+  {q:'Metal líquido à temp. ambiente:', a:['Mercúrio','Ferro','Cobre','Chumbo'], c:0},
+  {q:'Continente do Egito:', a:['África','Ásia','Europa','Oceania'], c:0},
+  {q:'Resultado de 9×9:', a:['72','81','99','79'], c:1},
+  {q:'Primeiro presidente do Brasil?', a:['Deodoro da Fonseca','Getúlio Vargas','Juscelino Kubitschek','Lula'], c:0},
+  {q:'Estado com sigla "SP":', a:['Santa Catarina','Sergipe','São Paulo','Pará'], c:2},
+  {q:'Oceano a leste do Brasil:', a:['Pacífico','Índico','Atlântico','Ártico'], c:2},
+  {q:'H2O é:', a:['Sal','Oxigênio','Água','Hidrogênio'], c:2},
+  {q:'Principal bioma do Norte do Brasil:', a:['Cerrado','Pampa','Amazônia','Caatinga'], c:2},
+  {q:'Ano da Independência do Brasil:', a:['1500','1822','1889','1964'], c:1},
+  {q:'Autor de "Dom Casmurro":', a:['Machado de Assis','José de Alencar','Drummond','Clarice Lispector'], c:0},
+  {q:'Velocidade da luz aprox.:', a:['3×10^8 m/s','3×10^6 m/s','3×10^5 km/s','3000 km/s'], c:0},
+  {q:'Maior país em área:', a:['China','Rússia','Canadá','Brasil'], c:1},
+  {q:'Processo de plantas produzirem alimento:', a:['Respiração','Fotossíntese','Fermentação','Digestão'], c:1},
+  {q:'Instrumento com teclas:', a:['Violino','Flauta','Piano','Bateria'], c:2},
+  {q:'Cidade conhecida como “Cidade Maravilhosa”:', a:['São Paulo','Rio de Janeiro','Recife','BH'], c:1},
+  {q:'Sigla da moeda brasileira:', a:['BRL','REA','R$','BR$'], c:2},
+  {q:'Planeta vermelho:', a:['Marte','Vênus','Mercúrio','Urano'], c:0},
+  {q:'Maior órgão do corpo humano:', a:['Coração','Pele','Fígado','Pulmão'], c:1},
+  {q:'Autor de "Os Lusíadas":', a:['Camões','Pessoa','Saramago','Eça'], c:0},
+  {q:'Sinônimo de “rápido”:', a:['Lento','Ágil','Parado','Pesado'], c:1},
+  {q:'Cor primária:', a:['Vermelho','Verde','Rosa','Preto'], c:0},
+  {q:'País da Torre Eiffel:', a:['Itália','Reino Unido','França','Alemanha'], c:2},
+  {q:'Índice que mede massa corporal:', a:['IMC','IPC','IBC','ICM'], c:0},
+  {q:'Maior oceano:', a:['Atlântico','Pacífico','Índico','Glacial'], c:1},
+  {q:'Capital de Portugal:', a:['Porto','Lisboa','Braga','Coimbra'], c:1},
+  {q:'5! (fatorial) =', a:['60','120','24','20'], c:1},
+  {q:'Autor de "Memórias Póstumas de Brás Cubas":', a:['Machado de Assis','Lima Barreto','Graciliano','Alencar'], c:0},
+  {q:'Camada de gás que protege a Terra:', a:['Ozônio','Hélio','Nitrogênio','CO₂'], c:0},
+  {q:'Animal símbolo do Brasil:', a:['Arara-azul','Tatu-bola','Onça-pintada','Lobo-guará'], c:3},
+  {q:'Amazônia é principalmente uma:', a:['Floresta','Deserto','Tundra','Estepe'], c:0},
+  {q:'Região mais populosa do Brasil:', a:['Sul','Sudeste','Nordeste','Centro-Oeste'], c:1},
+  {q:'País sede da ONU:', a:['EUA','Suíça','França','Reino Unido'], c:0},
+  {q:'Elemento químico O:', a:['Ouro','Oxigênio','Ósmio','Óxido'], c:1},
+  {q:'Autor de "Vidas Secas":', a:['Graciliano Ramos','Guimarães Rosa','Jorge Amado','Drummond'], c:0},
+  {q:'Maior montanha do mundo:', a:['Everest','K2','Kilimanjaro','Aconcágua'], c:0},
+  {q:'Dispositivo de saída:', a:['Teclado','Monitor','Mouse','Scanner'], c:1},
+  {q:'Sistema operacional móvel popular:', a:['Android','Photoshop','Chrome','Word'], c:0},
+  {q:'Símbolo químico do Sódio:', a:['Na','So','Sd','Sn'], c:0},
+  {q:'Regra de três resolve:', a:['Proporções','Logaritmos','Geometrias','Derivadas'], c:0},
+  {q:'Autor de "Grande Sertão: Veredas":', a:['J. Amado','G. Rosa','L. Barreto','C. Meireles'], c:1},
+  {q:'Planeta mais próximo do Sol:', a:['Vênus','Mercúrio','Terra','Marte'], c:1},
+  {q:'Data da Proclamação da República:', a:['07/09/1822','15/11/1889','12/10/1492','25/04/1974'], c:1},
+  {q:'Instrumento de sopro:', a:['Guitarra','Trompete','Violoncelo','Pandeiro'], c:1},
+  {q:'CPU significa:', a:['Unidade Central de Processamento','Placa-mãe','Memória','Placa de vídeo'], c:0},
+  {q:'Cidade sede de Brasília fica em qual UF?', a:['GO','DF','MG','MT'], c:1}
+];
+let qi=0, hits=0, answered=Array(quiz.length).fill(null);
+const qNum=document.getElementById('qNum');
+const qHits=document.getElementById('qHits');
+const qText=document.getElementById('qText');
+const qOpts=document.getElementById('qOpts');
+const btnPrev=document.getElementById('btnPrev');
+const btnNext=document.getElementById('btnNext');
+const btnFinish=document.getElementById('btnFinish');
+const quizDone=document.getElementById('quizDone');
+function renderQ(){
+  const it=quiz[qi]; qNum.textContent=qi+1; qText.textContent=it.q; qOpts.innerHTML='';
+  it.a.forEach((opt,idx)=>{
+    const b=document.createElement('button'); b.className='quizOpt'; b.textContent=opt; b.onclick=()=>choose(idx);
+    if(answered[qi]!==null){
+      b.disabled=true; b.classList.add(idx===it.c?'correct':'');
+      if(idx===answered[qi] && answered[qi]!==it.c) b.classList.add('wrong');
+    }
+    qOpts.appendChild(b);
+  });
+  qHits.textContent=hits; quizDone.textContent='';
+}
+function choose(idx){
+  if(answered[qi]!==null) return; answered[qi]=idx; if(idx===quiz[qi].c){hits++;}
+  renderQ();
+}
+btnPrev.onclick=()=>{ if(qi>0){qi--; renderQ();} };
+btnNext.onclick=()=>{ if(qi<quiz.length-1){qi++; renderQ();} };
+btnFinish.onclick=()=>{
+  const total=quiz.length; const pct=Math.round(100*hits/total);
+  quizDone.textContent=`Você acertou ${hits} de ${total} (${pct}%).`;
+  localStorage.setItem('quizScore', JSON.stringify({hits,total,date:Date.now()}));
+};
+renderQ();
+
+// ------------------ História: Colonização do Brasil ------------------
+const timeline=[
+  {ano:'1500', txt:'Expedição de Pedro Álvares Cabral chega ao litoral sul-baiano; início do contato europeu.'},
+  {ano:'1501–1530', txt:'Período Pré-colonial: exploração do pau-brasil, escambo com povos indígenas; ausência de povoamento amplo.'},
+  {ano:'1530–1534', txt:'Início da colonização efetiva: expedição de Martim Afonso de Sousa e fundação de São Vicente.'},
+  {ano:'1534', txt:'Criação das Capitanias Hereditárias para dividir e administrar o território.'},
+  {ano:'1549', txt:'Governo-Geral em Salvador: centralização administrativa; chegada dos jesuítas.'},
+  {ano:'Séculos XVI–XVII', txt:'Economia açucareira no Nordeste, latifúndio e escravização de africanos; conflitos luso-indígenas.'},
+  {ano:'1580–1640', txt:'União Ibérica: ataques holandeses; ocupação de parte do Nordeste (Pernambuco).'},
+  {ano:'Século XVII', txt:'Entradas e bandeiras expandem o interior, captura de indígenas e busca de metais.'},
+  {ano:'1690–1750', txt:'Ciclo do ouro em Minas Gerais; crescimento urbano e fiscal da Coroa.'},
+  {ano:'1750–1808', txt:'Reformas pombalinas; expulsão dos jesuítas; reorganização econômica e educacional.'},
+  {ano:'1808', txt:'Chegada da Corte portuguesa ao Rio de Janeiro; abertura dos portos e elevação a Reino Unido (1815).'},
+  {ano:'1822', txt:'Independência proclamada por D. Pedro: ruptura política com Portugal.'},
+  {ano:'1822–1889', txt:'Período imperial: café no Sudeste, imigração europeia, fim do tráfico (1850) e abolição (1888).'},
+  {ano:'1889', txt:'Proclamação da República: fim da monarquia e início do regime republicano.'}
+];
+const tl=document.getElementById('tl');
+for(const i of timeline){
+  const el=document.createElement('div'); el.className='item'; el.innerHTML=`<b>${i.ano}</b> — ${i.txt}`; tl.appendChild(el);
+}
+
+// ------------------ Chat Local ------------------
+const chatBox=document.getElementById('chatBox');
+const chatInput=document.getElementById('chatInput');
+const chatSend=document.getElementById('chatSend');
+const chatClear=document.getElementById('chatClear');
+const BOT='Bot';
+function addMsg(txt, cls){
+  const d=document.createElement('div'); d.className='msg '+cls; d.textContent=txt; chatBox.appendChild(d); chatBox.scrollTop=chatBox.scrollHeight;
+}
+function botReply(msg){
+  const m=msg.toLowerCase();
+  if(m.includes('oi')||m.includes('ola')||m.includes('olá')) return 'Oi! Como posso ajudar?';
+  if(m.includes('loja')||m.includes('preço')) return 'Use a aba LOJA para ver produtos e adicionar ao carrinho.';
+  if(m.includes('quiz')) return 'O quiz tem 50 perguntas. Clique em Próxima para avançar.';
+  if(m.includes('cobra')||m.includes('jogo')) return 'Na cobrinha, use as setas/WASD ou o direcional na tela.';
+  if(m.includes('hist')) return 'A seção HISTÓRIA tem uma linha do tempo com marcos principais.';
+  if(m.includes('limpar')) return 'Clique em "Limpar" para apagar o histórico local.';
+  return 'Não entendi. Tente perguntar sobre: loja, quiz, jogo, história ou limpar.';
+}
+chatSend.onclick=()=>{
+  const v=chatInput.value.trim(); if(!v) return; addMsg(v,'me'); chatInput.value='';
+  setTimeout(()=>addMsg(botReply(v),'bot'), 300);
+};
+chatInput.addEventListener('keydown', e=>{ if(e.key==='Enter') chatSend.click(); });
+chatClear.onclick=()=>{ chatBox.innerHTML=''; };
+
+// ------------------ Loja ------------------
+const products=[
+  {id:1,name:'Fone Bluetooth X100',price:149.9,cat:'Eletrônicos',img:'https://picsum.photos/seed/fone/400/400'},
+  {id:2,name:'Camisa Tech Dry',price:69.9,cat:'Moda',img:'https://picsum.photos/seed/camisa/400/400'},
+  {id:3,name:'Jogo Aventura Pro',price:199.9,cat:'Jogos',img:'https://picsum.photos/seed/jogo/400/400'},
+  {id:4,name:'Luminária LED Desk',price:89.9,cat:'Casa',img:'https://picsum.photos/seed/luz/400/400'},
+  {id:5,name:'Livro História do Brasil',price:54.9,cat:'Livros',img:'https://picsum.photos/seed/livro/400/400'},
+  {id:6,name:'Mouse Gamer GX',price:129.9,cat:'Eletrônicos',img:'https://picsum.photos/seed/mouse/400/400'},
+  {id:7,name:'Moletom Minimal',price:149.0,cat:'Moda',img:'https://picsum.photos/seed/moletom/400/400'},
+  {id:8,name:'Cafeteira Inox',price:239.0,cat:'Casa',img:'https://picsum.photos/seed/cafe/400/400'},
+  {id:9,name:'Controle Pro Wireless',price:279.0,cat:'Jogos',img:'https://picsum.photos/seed/controle/400/400'},
+  {id:10,name:'Teclado Mecânico 60%',price:299.9,cat:'Eletrônicos',img:'https://picsum.photos/seed/teclado/400/400'}
+];
+const shopGrid=document.getElementById('shopGrid');
+const shopSearch=document.getElementById('shopSearch');
+const shopCat=document.getElementById('shopCat');
+const shopSort=document.getElementById('shopSort');
+const cartBtn=document.getElementById('cartBtn');
+const drawer=document.getElementById('drawer');
+const cartList=document.getElementById('cartList');
+const cartTotal=document.getElementById('cartTotal');
+const cartCount=document.getElementById('cartCount');
+const checkout=document.getElementById('checkout');
+let cart=JSON.parse(localStorage.getItem('cart')||'[]');
+
+function fmt(n){ return n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+function renderShop(){
+  shopGrid.innerHTML='';
+  let list=[...products];
+  const q=shopSearch.value.toLowerCase(); if(q) list=list.filter(p=>p.name.toLowerCase().includes(q));
+  const c=shopCat.value; if(c) list=list.filter(p=>p.cat===c);
+  const s=shopSort.value;
+  if(s==='price-asc') list.sort((a,b)=>a.price-b.price);
+  if(s==='price-desc') list.sort((a,b)=>b.price-a.price);
+  if(s==='az') list.sort((a,b)=>a.name.localeCompare(b.name));
+  for(const p of list){
+    const el=document.createElement('div'); el.className='prod';
+    el.innerHTML=`<img alt="${p.name}" src="${p.img}"/><div class="row" style="justify-content:space-between"><b>${p.name}</b><span class="pill">${p.cat}</span></div><div class="row" style="justify-content:space-between"><span>${fmt(p.price)}</span><button class="btn" data-add="${p.id}">Adicionar</button></div>`;
+    shopGrid.appendChild(el);
+  }
+}
+function renderCart(){
+  cartList.innerHTML=''; let total=0; let count=0;
+  for(const it of cart){ total+=it.price*it.qty; count+=it.qty;
+    const row=document.createElement('div'); row.className='row'; row.style.margin='8px 0';
+    row.innerHTML=`<div><b>${it.name}</b><div class="note">${fmt(it.price)} × ${it.qty}</div></div>
+    <div class="row"><button class="btn" data-dec="${it.id}">−</button><span class="pill">${it.qty}</span><button class="btn" data-inc="${it.id}">+</button><button class="btn" data-rm="${it.id}">Remover</button></div>`;
+    cartList.appendChild(row);
+  }
+  cartTotal.textContent=fmt(total); cartCount.textContent=count;
+  localStorage.setItem('cart', JSON.stringify(cart));
+}
+shopGrid.addEventListener('click', (e)=>{
+  const id=e.target.getAttribute('data-add'); if(!id) return; const p=products.find(x=>x.id==id);
+  const found=cart.find(x=>x.id==p.id); if(found) found.qty++; else cart.push({...p,qty:1}); renderCart();
+});
+cartList.addEventListener('click', (e)=>{
+  const dec=e.target.getAttribute('data-dec'); const inc=e.target.getAttribute('data-inc'); const rm=e.target.getAttribute('data-rm');
+  if(dec){ const it=cart.find(x=>x.id==dec); if(it){ it.qty=Math.max(1,it.qty-1); renderCart(); } }
+  if(inc){ const it=cart.find(x=>x.id==inc); if(it){ it.qty++; renderCart(); } }
+  if(rm){ cart=cart.filter(x=>x.id!=rm); renderCart(); }
+});
+shopSearch.oninput=renderShop; shopCat.onchange=renderShop; shopSort.onchange=renderShop;
+cartBtn.onclick=()=>drawer.classList.toggle('open');
+checkout.onclick=()=>{ alert('Pedido recebido! (simulação)'); cart=[]; renderCart(); drawer.classList.remove('open'); };
+renderShop(); renderCart();
+
+</script>
+</body>
+</html>

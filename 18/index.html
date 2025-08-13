@@ -1,0 +1,2272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EducaBrasil - Aprendizado Completo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #1a252f;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --info-color: #1abc9c;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), url('https://placehold.co/1920x600/2c3e50/ffffff?text=EducaBrasil') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid white;
+        }
+
+        .btn-outline:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent-color);
+        }
+
+        .section-title p {
+            color: #666;
+            max-width: 700px;
+            margin: 20px auto 0;
+        }
+
+        /* Snake Game Styles */
+        .snake-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .game-board {
+            width: 400px;
+            height: 400px;
+            border: 2px solid var(--primary-color);
+            margin: 20px auto;
+            position: relative;
+            background-color: #f8f9fa;
+        }
+
+        .snake-part {
+            width: 20px;
+            height: 20px;
+            background-color: var(--success-color);
+            position: absolute;
+            border-radius: 3px;
+        }
+
+        .food {
+            width: 20px;
+            height: 20px;
+            background-color: var(--accent-color);
+            position: absolute;
+            border-radius: 50%;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .controls {
+            margin: 20px 0;
+        }
+
+        .controls p {
+            margin: 10px 0;
+            color: #666;
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option {
+            padding: 12px 15px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background-color: #e3f2fd;
+            border-color: var(--secondary-color);
+        }
+
+        .option.selected {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        .option.correct {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .option.incorrect {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .quiz-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .quiz-progress {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .quiz-result {
+            text-align: center;
+            padding: 30px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .quiz-result h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin: 15px 0;
+        }
+
+        /* Colonization Styles */
+        .colonization-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--secondary-color);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background-color: white;
+            border: 4px solid var(--accent-color);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .left {
+            left: 0;
+        }
+
+        .right {
+            left: 50%;
+        }
+
+        .left::after {
+            right: -12px;
+        }
+
+        .right::after {
+            left: -12px;
+        }
+
+        .timeline-content {
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #eee;
+        }
+
+        .timeline-content h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .timeline-content .date {
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Chat Styles */
+        .chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            max-width: 70%;
+        }
+
+        .message.user {
+            margin-left: auto;
+        }
+
+        .message-content {
+            padding: 10px 15px;
+            border-radius: 18px;
+            display: inline-block;
+        }
+
+        .message.user .message-content {
+            background-color: var(--secondary-color);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.other .message-content {
+            background-color: #e9ecef;
+            color: var(--dark-color);
+            border-bottom-left-radius: 5px;
+        }
+
+        .message .sender {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            background-color: white;
+            border-top: 1px solid #eee;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+        }
+
+        .chat-input button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        .chat-input button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Store Styles */
+        .store-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .categories {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px 0;
+            margin-bottom: 30px;
+            gap: 15px;
+        }
+
+        .category {
+            min-width: 150px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .category.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .product {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product:hover .product-image img {
+            transform: scale(1.1);
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+
+        .product-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .cart-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quantity {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity button {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .quantity input {
+            width: 50px;
+            height: 30px;
+            border: 1px solid #ddd;
+            text-align: center;
+            margin: 0 5px;
+        }
+
+        .add-to-cart {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-to-cart:hover {
+            background-color: #219a52;
+        }
+
+        /* Cart Styles */
+        .cart-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .cart-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .cart-items {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-right: 15px;
+        }
+
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        .cart-item-price {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .cart-item-controls .quantity {
+            margin-right: 15px;
+        }
+
+        .remove-item {
+            color: var(--accent-color);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .cart-total {
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            background-color: #219a52;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab {
+            padding: 15px 30px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+            color: var(--primary-color);
+        }
+
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--secondary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+
+            nav ul {
+                margin-top: 15px;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .game-board {
+                width: 300px;
+                height: 300px;
+            }
+
+            .timeline::after {
+                left: 31px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+
+            .timeline-item::after {
+                left: 15px;
+            }
+
+            .left, .right {
+                left: 0;
+            }
+
+            .products {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: var(--primary-color);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--secondary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--secondary-color);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--secondary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: var(--accent-color);
+        }
+
+        .modal-title {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i>📚</i>
+                EducaBrasil
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home" class="active">Início</a></li>
+                    <li><a href="#snake">Cobrinha</a></li>
+                    <li><a href="#quiz">Quiz</a></li>
+                    <li><a href="#colonization">Colonização</a></li>
+                    <li><a href="#chat">Chat</a></li>
+                    <li><a href="#store">Loja</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>Bem-vindo ao EducaBrasil</h1>
+            <p>Aprenda de forma divertida e interativa sobre a história do Brasil, teste seus conhecimentos, jogue jogos educativos e compre materiais didáticos de qualidade.</p>
+            <div>
+                <a href="#snake" class="btn">Jogar Cobrinha</a>
+                <a href="#quiz" class="btn btn-outline">Fazer Quiz</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" data-tab="snake">🐍 Cobrinha</div>
+            <div class="tab" data-tab="quiz">📝 Quiz</div>
+            <div class="tab" data-tab="colonization">🇧🇷 Colonização</div>
+            <div class="tab" data-tab="chat">💬 Chat</div>
+            <div class="tab" data-tab="store">🛒 Loja</div>
+        </div>
+
+        <!-- Snake Game Tab -->
+        <div id="snake" class="tab-content active">
+            <section>
+                <div class="section-title">
+                    <h2>Jogo da Cobrinha</h2>
+                    <p>Teste suas habilidades com este clássico jogo educativo</p>
+                </div>
+                <div class="snake-container fade-in">
+                    <div class="game-info">
+                        <div>Pontuação: <span id="score">0</span></div>
+                        <div>Recorde: <span id="highScore">0</span></div>
+                    </div>
+                    <div class="game-board" id="gameBoard"></div>
+                    <div class="controls">
+                        <p>Use as setas do teclado para mover a cobra</p>
+                        <p>Coma a comida vermelha para crescer e aumentar sua pontuação</p>
+                        <button id="startGame" class="btn">Iniciar Jogo</button>
+                        <button id="resetGame" class="btn btn-outline">Reiniciar</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Quiz Tab -->
+        <div id="quiz" class="tab-content">
+            <section>
+                <div class="section-title">
+                    <h2>Quiz sobre o Brasil</h2>
+                    <p>Teste seus conhecimentos sobre a história, geografia e cultura brasileira</p>
+                </div>
+                <div class="quiz-container fade-in">
+                    <div class="quiz-progress">Pergunta <span id="currentQuestion">1</span> de 50</div>
+                    <div id="quizContent">
+                        <!-- Quiz content will be generated by JavaScript -->
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <p>Carregando quiz...</p>
+                        </div>
+                    </div>
+                    <div class="quiz-controls">
+                        <button id="prevQuestion" class="btn btn-outline">Anterior</button>
+                        <button id="nextQuestion" class="btn">Próxima</button>
+                        <button id="submitQuiz" class="btn" style="display: none;">Enviar</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Colonization Tab -->
+        <div id="colonization" class="tab-content">
+            <section>
+                <div class="section-title">
+                    <h2>A Colonização do Brasil</h2>
+                    <p>Entenda o processo histórico de colonização portuguesa no Brasil</p>
+                </div>
+                <div class="colonization-container fade-in">
+                    <p>O processo de colonização do Brasil pelos portugueses foi um dos mais importantes eventos da história brasileira, marcando o início da formação do país como conhecemos hoje. Este processo ocorreu ao longo de mais de três séculos e envolveu transformações profundas na sociedade, economia e cultura do território.</p>
+                    
+                    <h3 style="color: var(--primary-color); margin: 30px 0 15px;">Fases da Colonização</h3>
+                    
+                    <div class="timeline">
+                        <div class="timeline-item left">
+                            <div class="timeline-content">
+                                <span class="date">1500-1530</span>
+                                <h3>Período Pré-Colonial</h3>
+                                <p>Após o descobrimento do Brasil por Pedro Álvares Cabral em 1500, Portugal não demonstrou grande interesse imediato em colonizar o território. Durante este período, a principal atividade econômica foi a extração do pau-brasil, explorado através do escambo com os povos indígenas.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item right">
+                            <div class="timeline-content">
+                                <span class="date">1530-1549</span>
+                                <h3>Capitanias Hereditárias</h3>
+                                <p>Diante da ameaça de invasão de outras potências europeias, Portugal criou o sistema de capitanias hereditárias em 1530. O território brasileiro foi dividido em 15 faixas de terra, concedidas a capitães donatários que tinham o direito de explorar economicamente suas terras e administrar a justiça local.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item left">
+                            <div class="timeline-content">
+                                <span class="date">1549-1808</span>
+                                <h3>Governo-Geral</h3>
+                                <p>Devido ao fracasso da maioria das capitanias, Portugal estabeleceu o Governo-Geral em 1549, com Tomé de Souza como primeiro governador-geral. Este sistema centralizou a administração colonial e estabeleceu Salvador como capital do Brasil.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item right">
+                            <div class="timeline-content">
+                                <span class="date">Século XVI</span>
+                                <h3>Ciclo da Cana-de-Açúcar</h3>
+                                <p>A economia colonial foi baseada principalmente na produção de açúcar, cultivado em grandes engenhos nas regiões do Nordeste. Este ciclo trouxe grande prosperidade para a colônia, mas também foi responsável pela introdução da escravidão africana em larga escala.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item left">
+                            <div class="timeline-content">
+                                <span class="date">Século XVIII</span>
+                                <h3>Ciclo do Ouro</h3>
+                                <p>Com a descoberta de ouro e pedras preciosas em Minas Gerais, Mato Grosso e Goiás, houve um deslocamento do eixo econômico para a região Sudeste. Este período trouxe grande enriquecimento para Portugal, mas também intensificou a exploração dos recursos naturais e humanos.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item right">
+                            <div class="timeline-content">
+                                <span class="date">1808-1822</span>
+                                <h3>Período Joanino</h3>
+                                <p>Com a chegada da família real portuguesa ao Brasil em 1808, fugindo das tropas napoleônicas, o Brasil passou por transformações significativas. O país foi elevado à categoria de Reino Unido a Portugal e Algarves, e várias medidas foram tomadas para modernizar a colônia.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 style="color: var(--primary-color); margin: 30px 0 15px;">Impactos da Colonização</h3>
+                    
+                    <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                        <h4 style="color: var(--primary-color); margin-bottom: 10px;">Demográficos</h4>
+                        <p>A colonização provocou uma drástica redução da população indígena devido às doenças trazidas pelos europeus, à escravidão e aos conflitos. Paralelamente, houve um grande influxo de população africana trazida à força para trabalhar como escrava nas plantações e minas.</p>
+                    </div>
+
+                    <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                        <h4 style="color: var(--primary-color); margin-bottom: 10px;">Econômicos</h4>
+                        <p>A economia colonial foi estruturada para atender aos interesses de Portugal, baseada na exploração de recursos naturais e na produção de gêneros tropicais para exportação. Este modelo criou uma dependência econômica que perdurou por muito tempo após a independência.</p>
+                    </div>
+
+                    <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                        <h4 style="color: var(--primary-color); margin-bottom: 10px;">Culturais</h4>
+                        <p>A colonização resultou em um intenso processo de miscigenação entre europeus, indígenas e africanos, formando a base da identidade cultural brasileira. A língua portuguesa foi imposta como língua oficial, e a religião católica tornou-se predominante.</p>
+                    </div>
+
+                    <h3 style="color: var(--primary-color); margin: 30px 0 15px;">Consequências a Longo Prazo</h3>
+                    
+                    <p>A colonização do Brasil deixou marcas profundas que ainda são sentidas na sociedade brasileira contemporânea. A estrutura fundiária concentrada, as desigualdades sociais, os problemas de integração nacional e as relações étnico-raciais são heranças diretas desse período histórico.</p>
+                    
+                    <p>Além disso, a colonização moldou o território brasileiro, definindo as fronteiras atuais e estabelecendo centros urbanos que ainda são importantes economicamente. O legado da exploração de recursos naturais continua presente na matriz energética e na política ambiental do país.</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Chat Tab -->
+        <div id="chat" class="tab-content">
+            <section>
+                <div class="section-title">
+                    <h2>Chat Educacional</h2>
+                    <p>Converse com outros estudantes e professores sobre temas educacionais</p>
+                </div>
+                <div class="chat-container fade-in">
+                    <div class="chat-header">
+                        <div>Chat EducaBrasil</div>
+                        <div id="onlineCount">0 usuários online</div>
+                    </div>
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message other">
+                            <div class="sender">Sistema</div>
+                            <div class="message-content">Bem-vindo ao chat educacional! Conecte-se com outros estudantes e professores para discutir temas de história, geografia e cultura brasileira.</div>
+                        </div>
+                        <div class="message other">
+                            <div class="sender">Prof. Silva</div>
+                            <div class="message-content">Olá a todos! Estou disponível para tirar dúvidas sobre a colonização do Brasil. Quem tiver perguntas, pode fazer!</div>
+                        </div>
+                        <div class="message user">
+                            <div class="sender">Aluno123</div>
+                            <div class="message-content">Professor, qual foi o principal motivo para Portugal colonizar o Brasil?</div>
+                        </div>
+                        <div class="message other">
+                            <div class="sender">Prof. Silva</div>
+                            <div class="message-content">Excelente pergunta! Inicialmente, o interesse era o pau-brasil, mas com o tempo, a produção de açúcar se tornou a principal atividade econômica, tornando a colonização economicamente viável para Portugal.</div>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="messageInput" placeholder="Digite sua mensagem...">
+                        <button id="sendButton">Enviar</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Store Tab -->
+        <div id="store" class="tab-content">
+            <section>
+                <div class="section-title">
+                    <h2>Loja Educativa</h2>
+                    <p>Compre materiais didáticos, livros e produtos educacionais</p>
+                </div>
+                <div class="store-container fade-in">
+                    <div class="categories">
+                        <div class="category active" data-category="all">Todos</div>
+                        <div class="category" data-category="books">Livros</div>
+                        <div class="category" data-category="maps">Mapas</div>
+                        <div class="category" data-category="games">Jogos</div>
+                        <div class="category" data-category="supplies">Materiais</div>
+                    </div>
+                    
+                    <div class="products" id="productsList">
+                        <!-- Products will be generated by JavaScript -->
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <p>Carregando produtos...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 class="modal-title">Seu Carrinho</h2>
+            <div class="cart-items" id="cartItems">
+                <!-- Cart items will be generated by JavaScript -->
+                <p id="emptyCartMessage">Seu carrinho está vazio.</p>
+            </div>
+            <div class="cart-total">
+                <div>Total:</div>
+                <div id="cartTotal">R$ 0,00</div>
+            </div>
+            <button id="checkoutBtn" class="checkout-btn">Finalizar Compra</button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Item adicionado ao carrinho!</div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>EducaBrasil</h3>
+                    <p>Plataforma educacional completa para o aprendizado sobre a história, geografia e cultura brasileira de forma interativa e divertida.</p>
+                    <div class="social-links">
+                        <a href="#"><i>📱</i></a>
+                        <a href="#"><i>📘</i></a>
+                        <a href="#"><i>📷</i></a>
+                        <a href="#"><i>🐦</i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Links Rápidos</h3>
+                    <ul>
+                        <li><a href="#snake">Jogo da Cobrinha</a></li>
+                        <li><a href="#quiz">Quiz</a></li>
+                        <li><a href="#colonization">Colonização</a></li>
+                        <li><a href="#chat">Chat</a></li>
+                        <li><a href="#store">Loja</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Recursos Educacionais</h3>
+                    <ul>
+                        <li><a href="#">Materiais para Professores</a></li>
+                        <li><a href="#">Planos de Aula</a></li>
+                        <li><a href="#">Webinars Gratuitos</a></li>
+                        <li><a href="#">Blog Educacional</a></li>
+                        <li><a href="#">Fórum de Discussão</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contato</h3>
+                    <ul>
+                        <li>📧 contato@educabrasil.com.br</li>
+                        <li>📞 (11) 99999-9999</li>
+                        <li>📍 São Paulo, SP - Brasil</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 EducaBrasil. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tab System
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    tab.classList.add('active');
+                    const tabId = tab.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                    
+                    // Update URL hash
+                    window.location.hash = tabId;
+                });
+            });
+            
+            // Check URL hash on load
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                const tab = document.querySelector(`.tab[data-tab="${hash}"]`);
+                if (tab) {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    document.getElementById(hash).classList.add('active');
+                }
+            }
+            
+            // Snake Game
+            let snake = [];
+            let food = {};
+            let direction = 'right';
+            let score = 0;
+            let highScore = localStorage.getItem('snakeHighScore') || 0;
+            let gameInterval;
+            let gameStarted = false;
+            let gameBoard = document.getElementById('gameBoard');
+            let scoreElement = document.getElementById('score');
+            let highScoreElement = document.getElementById('highScore');
+            let startButton = document.getElementById('startGame');
+            let resetButton = document.getElementById('resetGame');
+            
+            highScoreElement.textContent = highScore;
+            
+            function createSnake() {
+                snake = [
+                    {x: 10, y: 10},
+                    {x: 9, y: 10},
+                    {x: 8, y: 10}
+                ];
+            }
+            
+            function createFood() {
+                const x = Math.floor(Math.random() * 20);
+                const y = Math.floor(Math.random() * 20);
+                
+                // Check if food spawns on snake
+                for (let part of snake) {
+                    if (part.x === x && part.y === y) {
+                        return createFood();
+                    }
+                }
+                
+                food = {x, y};
+            }
+            
+            function draw() {
+                // Clear board
+                gameBoard.innerHTML = '';
+                
+                // Draw snake
+                snake.forEach(part => {
+                    const snakeElement = document.createElement('div');
+                    snakeElement.classList.add('snake-part');
+                    snakeElement.style.left = part.x * 20 + 'px';
+                    snakeElement.style.top = part.y * 20 + 'px';
+                    gameBoard.appendChild(snakeElement);
+                });
+                
+                // Draw food
+                const foodElement = document.createElement('div');
+                foodElement.classList.add('food');
+                foodElement.style.left = food.x * 20 + 'px';
+                foodElement.style.top = food.y * 20 + 'px';
+                gameBoard.appendChild(foodElement);
+            }
+            
+            function move() {
+                const head = {...snake[0]};
+                
+                switch(direction) {
+                    case 'up':
+                        head.y--;
+                        break;
+                    case 'down':
+                        head.y++;
+                        break;
+                    case 'left':
+                        head.x--;
+                        break;
+                    case 'right':
+                        head.x++;
+                        break;
+                }
+                
+                // Check wall collision
+                if (head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20) {
+                    gameOver();
+                    return;
+                }
+                
+                // Check self collision
+                for (let i = 0; i < snake.length; i++) {
+                    if (head.x === snake[i].x && head.y === snake[i].y) {
+                        gameOver();
+                        return;
+                    }
+                }
+                
+                snake.unshift(head);
+                
+                // Check food collision
+                if (head.x === food.x && head.y === food.y) {
+                    score++;
+                    scoreElement.textContent = score;
+                    createFood();
+                } else {
+                    snake.pop();
+                }
+                
+                draw();
+            }
+            
+            function gameOver() {
+                clearInterval(gameInterval);
+                gameStarted = false;
+                startButton.textContent = 'Iniciar Jogo';
+                
+                if (score > highScore) {
+                    highScore = score;
+                    highScoreElement.textContent = highScore;
+                    localStorage.setItem('snakeHighScore', highScore);
+                }
+                
+                alert(`Fim de jogo! Sua pontuação: ${score}`);
+            }
+            
+            function startGame() {
+                if (gameStarted) {
+                    clearInterval(gameInterval);
+                    gameStarted = false;
+                    startButton.textContent = 'Iniciar Jogo';
+                    return;
+                }
+                
+                createSnake();
+                createFood();
+                score = 0;
+                scoreElement.textContent = score;
+                direction = 'right';
+                draw();
+                
+                gameInterval = setInterval(move, 150);
+                gameStarted = true;
+                startButton.textContent = 'Pausar Jogo';
+            }
+            
+            function resetGame() {
+                clearInterval(gameInterval);
+                gameStarted = false;
+                startButton.textContent = 'Iniciar Jogo';
+                score = 0;
+                scoreElement.textContent = score;
+                createSnake();
+                createFood();
+                draw();
+            }
+            
+            startButton.addEventListener('click', startGame);
+            resetButton.addEventListener('click', resetGame);
+            
+            // Keyboard controls
+            document.addEventListener('keydown', (e) => {
+                if (!gameStarted) return;
+                
+                switch(e.key) {
+                    case 'ArrowUp':
+                        if (direction !== 'down') direction = 'up';
+                        break;
+                    case 'ArrowDown':
+                        if (direction !== 'up') direction = 'down';
+                        break;
+                    case 'ArrowLeft':
+                        if (direction !== 'right') direction = 'left';
+                        break;
+                    case 'ArrowRight':
+                        if (direction !== 'left') direction = 'right';
+                        break;
+                }
+            });
+            
+            // Quiz System
+            const quizContainer = document.getElementById('quizContent');
+            const prevButton = document.getElementById('prevQuestion');
+            const nextButton = document.getElementById('nextQuestion');
+            const submitButton = document.getElementById('submitQuiz');
+            const currentQuestionElement = document.getElementById('currentQuestion');
+            
+            // Quiz questions (50 questions about Brazil)
+            const quizQuestions = [
+                {
+                    question: "Em que ano Pedro Álvares Cabral chegou ao Brasil?",
+                    options: ["1492", "1500", "1530", "1808"],
+                    correct: 1
+                },
+                {
+                    question: "Qual era a principal riqueza explorada no Brasil durante o período pré-colonial?",
+                    options: ["Ouro", "Açúcar", "Pau-brasil", "Diamantes"],
+                    correct: 2
+                },
+                {
+                    question: "Qual sistema de colonização foi implementado em 1530 no Brasil?",
+                    options: ["Governo-Geral", "Capitanias Hereditárias", "Colônia de Exploração", "Feitorias"],
+                    correct: 1
+                },
+                {
+                    question: "Quem foi o primeiro governador-geral do Brasil?",
+                    options: ["Martim Afonso de Sousa", "Tomé de Souza", "Mem de Sá", "Salvador Correia de Sá"],
+                    correct: 1
+                },
+                {
+                    question: "Qual foi a primeira capital do Brasil?",
+                    options: ["Rio de Janeiro", "São Paulo", "Brasília", "Salvador"],
+                    correct: 3
+                },
+                {
+                    question: "Qual era a principal atividade econômica durante o ciclo do açúcar?",
+                    options: ["Mineração", "Café", "Criação de gado", "Produção de açúcar"],
+                    correct: 3
+                },
+                {
+                    question: "De onde foram trazidos os escravos para trabalhar nos engenhos de açúcar?",
+                    options: ["Europa", "Ásia", "África", "Oceania"],
+                    correct: 2
+                },
+                {
+                    question: "Em que região do Brasil se concentrou a produção de açúcar?",
+                    options: ["Sul", "Centro-Oeste", "Norte", "Nordeste"],
+                    correct: 3
+                },
+                {
+                    question: "Qual foi o principal porto de exportação do açúcar no Brasil colonial?",
+                    options: ["Rio de Janeiro", "Salvador", "Recife", "Santos"],
+                    correct: 2
+                },
+                {
+                    question: "Qual religião foi imposta aos indígenas e escravos africanos no Brasil colonial?",
+                    options: ["Protestantismo", "Islamismo", "Catolicismo", "Budismo"],
+                    correct: 2
+                },
+                {
+                    question: "Qual foi o movimento que tentou expulsar os holandeses do Nordeste brasileiro?",
+                    options: ["Inconfidência Mineira", "Guerra dos Mascates", "Insurreição Pernambucana", "Revolta de Beckman"],
+                    correct: 2
+                },
+                {
+                    question: "Em que século foi descoberto ouro no Brasil?",
+                    options: ["XV", "XVI", "XVII", "XVIII"],
+                    correct: 3
+                },
+                {
+                    question: "Em que região foi descoberto o ouro no Brasil?",
+                    options: ["Nordeste", "Sul", "Sudeste", "Norte"],
+                    correct: 2
+                },
+                {
+                    question: "Qual cidade se tornou importante centro minerador no século XVIII?",
+                    options: ["Salvador", "Rio de Janeiro", "Ouro Preto", "São Paulo"],
+                    correct: 2
+                },
+                {
+                    question: "Qual era a taxa cobrada pelo governo português sobre o ouro extraído?",
+                    options: ["Dízimo", "Quinto", "Imposto de renda", "Alvará"],
+                    correct: 1
+                },
+                {
+                    question: "Qual foi o movimento que pregava a independência do Brasil no século XVIII?",
+                    options: ["Revolução Pernambucana", "Inconfidência Mineira", "Confederação do Equador", "Farroupilha"],
+                    correct: 1
+                },
+                {
+                    question: "Quem foi o líder da Inconfidência Mineira?",
+                    options: ["Tiradentes", "Cláudio Manuel da Costa", "Tomás Antônio Gonzaga", "Padre Toledo"],
+                    correct: 0
+                },
+                {
+                    question: "Por que o movimento inconfidente foi chamado assim?",
+                    options: ["Porque os participantes eram desconfiados", "Porque era uma conspiração secreta", "Porque os participantes não confiavam no governo", "Porque era uma confederação de desconfiados"],
+                    correct: 1
+                },
+                {
+                    question: "Qual foi a consequência para Tiradentes após a Inconfidência Mineira?",
+                    options: ["Exílio", "Prisão perpétua", "Execução", "Amnistia"],
+                    correct: 2
+                },
+                {
+                    question: "Por que Tiradentes foi executado e não exilado como os outros inconfidentes?",
+                    options: ["Porque era o líder", "Porque era um simples soldado", "Porque traiu os companheiros", "Porque era rico"],
+                    correct: 1
+                },
+                {
+                    question: "Por que a família real portuguesa veio para o Brasil em 1808?",
+                    options: ["Para férias", "Fugindo das tropas napoleônicas", "Para explorar novas terras", "Para expandir o império"],
+                    correct: 1
+                },
+                {
+                    question: "Quem era o rei de Portugal quando a corte chegou ao Brasil?",
+                    options: ["D. João VI", "D. Pedro I", "D. Pedro II", "D. José I"],
+                    correct: 0
+                },
+                {
+                    question: "Qual foi uma das primeiras medidas tomadas pela corte portuguesa no Brasil?",
+                    options: ["Abertura dos portos às nações amigas", "Abolição da escravidão", "Independência do Brasil", "Criação de uma constituição"],
+                    correct: 0
+                },
+                {
+                    question: "O que mudou no status do Brasil com a chegada da corte?",
+                    options: ["Tornou-se uma colônia", "Tornou-se um reino unido a Portugal", "Tornou-se independente", "Tornou-se uma república"],
+                    correct: 1
+                },
+                {
+                    question: "Qual cidade se tornou capital do Reino Unido de Portugal, Brasil e Algarves?",
+                    options: ["Lisboa", "Salvador", "Rio de Janeiro", "Brasília"],
+                    correct: 2
+                },
+                {
+                    question: "Quem foi o príncipe regente que ficou no Brasil quando o rei retornou a Portugal?",
+                    options: ["D. João VI", "D. Pedro I", "D. Miguel", "D. Pedro II"],
+                    correct: 1
+                },
+                {
+                    question: "Qual foi o grito que D. Pedro I deu quando proclamou a independência?",
+                    options: ["Independência ou morte!", "Viva o Brasil!", "Pátria livre!", "Chega de colonização!"],
+                    correct: 0
+                },
+                {
+                    question: "Em que data foi proclamada a independência do Brasil?",
+                    options: ["7 de setembro de 1822", "25 de março de 1824", "15 de novembro de 1889", "13 de maio de 1888"],
+                    correct: 0
+                },
+                {
+                    question: "Qual foi a forma de governo após a independência?",
+                    options: ["República", "Monarquia Constitucional", "Império", "Ditadura"],
+                    correct: 2
+                },
+                {
+                    question: "Quem foi o primeiro imperador do Brasil?",
+                    options: ["D. João VI", "D. Pedro I", "D. Pedro II", "Marechal Deodoro"],
+                    correct: 1
+                },
+                {
+                    question: "Qual foi o primeiro código penal do Brasil?",
+                    options: ["Código de Hamurabi", "Código de D. Pedro I", "Código Criminal do Império", "Código Penal de 1830"],
+                    correct: 3
+                },
+                {
+                    question: "Qual foi o movimento que ocorreu em Pernambuco em 1817?",
+                    options: ["Inconfidência Mineira", "Revolução Pernambucana", "Confederação do Equador", "Guerra dos Farrapos"],
+                    correct: 1
+                },
+                {
+                    question: "Qual foi o movimento separatista que ocorreu no Nordeste em 1824?",
+                    options: ["Inconfidência Mineira", "Revolução Pernambucana", "Confederação do Equador", "Guerra dos Farrapos"],
+                    correct: 2
+                },
+                {
+                    question: "Qual foi o movimento que ocorreu no Rio Grande do Sul entre 1835 e 1845?",
+                    options: ["Inconfidência Mineira", "Revolução Pernambucana", "Confederação do Equador", "Guerra dos Farrapos"],
+                    correct: 3
+                },
+                {
+                    question: "Quem foi o líder da Guerra dos Farrapos?",
+                    options: ["Bento Gonçalves", "Antônio Conselheiro", "Canudos", "Tiradentes"],
+                    correct: 0
+                },
+                {
+                    question: "Qual foi o movimento religioso que ocorreu na Bahia no final do século XIX?",
+                    options: ["Inconfidência Mineira", "Guerra de Canudos", "Confederação do Equador", "Guerra dos Farrapos"],
+                    correct: 1
+                },
+                {
+                    question: "Quem foi o líder de Canudos?",
+                    options: ["Bento Gonçalves", "Antônio Conselheiro", "Tiradentes", "Zumbi dos Palmares"],
+                    correct: 1
+                },
+                {
+                    question: "Qual foi o movimento que resultou na abolição da escravidão no Brasil?",
+                    options: ["Inconfidência Mineira", "Guerra de Canudos", "Movimento Abolicionista", "Guerra dos Farrapos"],
+                    correct: 2
+                },
+                {
+                    question: "Em que data foi assinada a Lei Áurea?",
+                    options: ["7 de setembro de 1822", "25 de março de 1824", "15 de novembro de 1889", "13 de maio de 1888"],
+                    correct: 3
+                },
+                {
+                    question: "Quem assinou a Lei Áurea?",
+                    options: ["D. Pedro I", "D. Pedro II", "Princesa Isabel", "Marechal Deodoro"],
+                    correct: 2
+                },
+                {
+                    question: "Qual foi o movimento que resultou na proclamação da república no Brasil?",
+                    options: ["Inconfidência Mineira", "Guerra de Canudos", "Movimento Republicano", "Guerra dos Farrapos"],
+                    correct: 2
+                },
+                {
+                    question: "Em que data foi proclamada a república no Brasil?",
+                    options: ["7 de setembro de 1822", "25 de março de 1824", "15 de novembro de 1889", "13 de maio de 1888"],
+                    correct: 2
+                },
+                {
+                    question: "Quem foi o primeiro presidente do Brasil?",
+                    options: ["D. Pedro I", "D. Pedro II", "Princesa Isabel", "Marechal Deodoro da Fonseca"],
+                    correct: 3
+                },
+                {
+                    question: "Qual foi o primeiro período da história republicana do Brasil?",
+                    options: ["República Velha", "Era Vargas", "República Nova", "Nova República"],
+                    correct: 0
+                },
+                {
+                    question: "Qual era a característica principal da República Velha?",
+                    options: ["Democracia plena", "Política do café com leite", "Governos militares", "Populismo"],
+                    correct: 1
+                },
+                {
+                    question: "Quais estados dominavam a política na República Velha?",
+                    options: ["Bahia e Pernambuco", "São Paulo e Minas Gerais", "Rio de Janeiro e Rio Grande do Sul", "Pará e Maranhão"],
+                    correct: 1
+                },
+                {
+                    question: "Qual foi o movimento que depôs a monarquia e proclamou a república?",
+                    options: ["Revolução Praieira", "Proclamação da República", "Revolução de 1930", "Movimento Tenentista"],
+                    correct: 1
+                },
+                {
+                    question: "Qual foi o sistema eleitoral na República Velha?",
+                    options: ["Voto direto e secreto", "Voto censitário", "Voto de cabresto", "Voto universal"],
+                    correct: 2
+                },
+                {
+                    question: "Qual foi o movimento que ocorreu em 1930 e trouxe Getúlio Vargas ao poder?",
+                    options: ["Revolução Praieira", "Proclamação da República", "Revolução de 1930", "Movimento Tenentista"],
+                    correct: 2
+                },
+                {
+                    question: "Qual foi o período do governo de Getúlio Vargas entre 1930 e 1945?",
+                    options: ["Era Vargas", "República Velha", "Estado Novo", "Nova República"],
+                    correct: 0
+                }
+            ];
+            
+            let currentQuestionIndex = 0;
+            let userAnswers = Array(quizQuestions.length).fill(null);
+            let quizCompleted = false;
+            
+            function displayQuestion(index) {
+                const question = quizQuestions[index];
+                let optionsHtml = '';
+                
+                question.options.forEach((option, i) => {
+                    const isSelected = userAnswers[index] === i;
+                    const isCorrect = quizCompleted && i === question.correct;
+                    const isIncorrect = quizCompleted && userAnswers[index] === i && i !== question.correct;
+                    
+                    let optionClass = 'option';
+                    if (isSelected) optionClass += ' selected';
+                    if (isCorrect) optionClass += ' correct';
+                    if (isIncorrect) optionClass += ' incorrect';
+                    
+                    optionsHtml += `<div class="option ${optionClass}" data-index="${i}">${option}</div>`;
+                });
+                
+                quizContainer.innerHTML = `
+                    <div class="question-container">
+                        <div class="question-text">${index + 1}. ${question.question}</div>
+                        <div class="options">${optionsHtml}</div>
+                    </div>
+                `;
+                
+                currentQuestionElement.textContent = index + 1;
+                
+                // Update button states
+                prevButton.disabled = index === 0;
+                nextButton.disabled = index === quizQuestions.length - 1;
+                submitButton.style.display = index === quizQuestions.length - 1 ? 'inline-block' : 'none';
+                
+                // Add event listeners to options
+                if (!quizCompleted) {
+                    document.querySelectorAll('.option').forEach(option => {
+                        option.addEventListener('click', () => {
+                            document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+                            option.classList.add('selected');
+                            userAnswers[currentQuestionIndex] = parseInt(option.getAttribute('data-index'));
+                        });
+                    });
+                }
+            }
+            
+            // Initialize quiz
+            setTimeout(() => {
+                displayQuestion(currentQuestionIndex);
+            }, 1000);
+            
+            prevButton.addEventListener('click', () => {
+                if (currentQuestionIndex > 0) {
+                    currentQuestionIndex--;
+                    displayQuestion(currentQuestionIndex);
+                }
+            });
+            
+            nextButton.addEventListener('click', () => {
+                if (currentQuestionIndex < quizQuestions.length - 1) {
+                    currentQuestionIndex++;
+                    displayQuestion(currentQuestionIndex);
+                }
+            });
+            
+            submitButton.addEventListener('click', () => {
+                quizCompleted = true;
+                displayQuestion(currentQuestionIndex);
+                
+                // Calculate score
+                let score = 0;
+                userAnswers.forEach((answer, index) => {
+                    if (answer === quizQuestions[index].correct) {
+                        score++;
+                    }
+                });
+                
+                // Display results
+                const resultHtml = `
+                    <div class="quiz-result">
+                        <h3>Quiz Concluído!</h3>
+                        <p>Você respondeu todas as perguntas sobre a história do Brasil.</p>
+                        <div class="score">${score} de ${quizQuestions.length}</div>
+                        <p>Desempenho: ${Math.round((score / quizQuestions.length) * 100)}%</p>
+                        <button id="restartQuiz" class="btn">Refazer Quiz</button>
+                    </div>
+                `;
+                
+                quizContainer.innerHTML = resultHtml;
+                
+                document.getElementById('restartQuiz').addEventListener('click', () => {
+                    currentQuestionIndex = 0;
+                    userAnswers = Array(quizQuestions.length).fill(null);
+                    quizCompleted = false;
+                    displayQuestion(currentQuestionIndex);
+                });
+            });
+            
+            // Chat System
+            const chatMessages = document.getElementById('chatMessages');
+            const messageInput = document.getElementById('messageInput');
+            const sendButton = document.getElementById('sendButton');
+            const onlineCount = document.getElementById('onlineCount');
+            
+            // Simulate online users
+            let onlineUsers = 15;
+            onlineCount.textContent = `${onlineUsers} usuários online`;
+            
+            function addMessage(text, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${isUser ? 'user' : 'other'}`;
+                
+                const sender = document.createElement('div');
+                sender.className = 'sender';
+                sender.textContent = isUser ? 'Você' : 'Usuário Anônimo';
+                
+                const content = document.createElement('div');
+                content.className = 'message-content';
+                content.textContent = text;
+                
+                messageDiv.appendChild(sender);
+                messageDiv.appendChild(content);
+                
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            sendButton.addEventListener('click', sendMessage);
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            function sendMessage() {
+                const text = messageInput.value.trim();
+                if (text) {
+                    addMessage(text, true);
+                    messageInput.value = '';
+                    
+                    // Simulate response after random time
+                    setTimeout(() => {
+                        const responses = [
+                            "Ótima pergunta! Vou pesquisar isso.",
+                            "Interessante! Concordo com seu ponto de vista.",
+                            "Isso me lembra um fato histórico importante.",
+                            "Você tem razão, isso é um tema muito relevante.",
+                            "Excelente observação! Isso mostra como a história se conecta com o presente."
+                        ];
+                        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                        addMessage(randomResponse, false);
+                    }, 1000 + Math.random() * 2000);
+                }
+            }
+            
+            // Store System
+            const productsList = document.getElementById('productsList');
+            const categories = document.querySelectorAll('.category');
+            let currentCategory = 'all';
+            
+            // Store products
+            const products = [
+                {
+                    id: 1,
+                    name: "História do Brasil - Volume 1",
+                    price: 49.90,
+                    category: "books",
+                    image: "https://placehold.co/300x200/3498db/ffffff?text=Livro+1",
+                    description: "Compreensão completa da colonização portuguesa no Brasil"
+                },
+                {
+                    id: 2,
+                    name: "Mapa Histórico do Brasil Colonial",
+                    price: 35.50,
+                    category: "maps",
+                    image: "https://placehold.co/300x200/2ecc71/ffffff?text=Mapa+1",
+                    description: "Mapa detalhado das capitanias hereditárias e rotas de exploração"
+                },
+                {
+                    id: 3,
+                    name: "Jogo da Colonização",
+                    price: 59.90,
+                    category: "games",
+                    image: "https://placehold.co/300x200/e74c3c/ffffff?text=Jogo+1",
+                    description: "Jogo educativo sobre o processo de colonização"
+                },
+                {
+                    id: 4,
+                    name: "Kit Escolar do Historiador",
+                    price: 29.90,
+                    category: "supplies",
+                    image: "https://placehold.co/300x200/f39c12/ffffff?text=Materiais+1",
+                    description: "Caneta especial, bloco de notas e régua temática"
+                },
+                {
+                    id: 5,
+                    name: "Brasil: Do Descobrimento à Independência",
+                    price: 55.00,
+                    category: "books",
+                    image: "https://placehold.co/300x200/9b59b6/ffffff?text=Livro+2",
+                    description: "Análise profunda dos principais eventos históricos"
+                },
+                {
+                    id: 6,
+                    name: "Mapa Interativo da Exploração",
+                    price: 42.75,
+                    category: "maps",
+                    image: "https://placehold.co/300x200/1abc9c/ffffff?text=Mapa+2",
+                    description: "Mapa com QR codes para conteúdo digital adicional"
+                },
+                {
+                    id: 7,
+                    name: "Quebra-Cabeça do Brasil Colonial",
+                    price: 38.80,
+                    category: "games",
+                    image: "https://placehold.co/300x200/34495e/ffffff?text=Jogo+2",
+                    description: "Quebra-cabeça educativo com 100 peças"
+                },
+                {
+                    id: 8,
+                    name: "Caderno de Anotações Históricas",
+                    price: 18.90,
+                    category: "supplies",
+                    image: "https://placehold.co/300x200/e67e22/ffffff?text=Materiais+2",
+                    description: "Caderno com capa dura e páginas temáticas"
+                },
+                {
+                    id: 9,
+                    name: "A Era dos Descobrimentos",
+                    price: 47.50,
+                    category: "books",
+                    image: "https://placehold.co/300x200/16a085/ffffff?text=Livro+3",
+                    description: "Contexto global dos descobrimentos portugueses"
+                },
+                {
+                    id: 10,
+                    name: "Mapa dos Ciclos Econômicos",
+                    price: 39.90,
+                    category: "maps",
+                    image: "https://placehold.co/300x200/d35400/ffffff?text=Mapa+3",
+                    description: "Visualização dos ciclos do pau-brasil, açúcar, ouro e diamantes"
+                },
+                {
+                    id: 11,
+                    name: "Memória dos Povos Indígenas",
+                    price: 33.30,
+                    category: "games",
+                    image: "https://placehold.co/300x200/c0392b/ffffff?text=Jogo+3",
+                    description: "Jogo de memória com imagens de tribos indígenas"
+                },
+                {
+                    id: 12,
+                    name: "Kit de Pesquisa Escolar",
+                    price: 45.00,
+                    category: "supplies",
+                    image: "https://placehold.co/300x200/7f8c8d/ffffff?text=Materiais+3",
+                    description: "Organizador de pesquisas com divisórias temáticas"
+                }
+            ];
+            
+            // Shopping cart
+            let cart = [];
+            const cartModal = document.getElementById('cartModal');
+            const closeModal = document.querySelector('.close-modal');
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            const toast = document.getElementById('toast');
+            
+            function displayProducts(category = 'all') {
+                productsList.innerHTML = '';
+                
+                const filteredProducts = category === 'all' 
+                    ? products 
+                    : products.filter(p => p.category === category);
+                
+                if (filteredProducts.length === 0) {
+                    productsList.innerHTML = '<p>Nenhum produto encontrado nesta categoria.</p>';
+                    return;
+                }
+                
+                filteredProducts.forEach(product => {
+                    const productElement = document.createElement('div');
+                    productElement.className = 'product';
+                    productElement.innerHTML = `
+                        <div class="product-image">
+                            <img src="${product.image}" alt="${product.name}">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-title">${product.name}</div>
+                            <div class="product-price">R$ ${product.price.toFixed(2)}</div>
+                            <div class="product-description">${product.description}</div>
+                            <div class="cart-controls">
+                                <div class="quantity">
+                                    <button class="decrease" data-id="${product.id}">-</button>
+                                    <input type="text" value="1" min="1" class="quantity-input" data-id="${product.id}">
+                                    <button class="increase" data-id="${product.id}">+</button>
+                                </div>
+                                <button class="add-to-cart" data-id="${product.id}">Adicionar ao Carrinho</button>
+                            </div>
+                        </div>
+                    `;
+                    productsList.appendChild(productElement);
+                });
+                
+                // Add event listeners
+                document.querySelectorAll('.add-to-cart').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const productId = parseInt(e.target.getAttribute('data-id'));
+                        const quantityInput = document.querySelector(`.quantity-input[data-id="${productId}"]`);
+                        const quantity = parseInt(quantityInput.value) || 1;
+                        
+                        addToCart(productId, quantity);
+                    });
+                });
+                
+                document.querySelectorAll('.increase').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const input = document.querySelector(`.quantity-input[data-id="${e.target.getAttribute('data-id')}"]`);
+                        input.value = parseInt(input.value) + 1;
+                    });
+                });
+                
+                document.querySelectorAll('.decrease').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const input = document.querySelector(`.quantity-input[data-id="${e.target.getAttribute('data-id')}"]`);
+                        const value = parseInt(input.value) - 1;
+                        if (value > 0) {
+                            input.value = value;
+                        }
+                    });
+                });
+            }
+            
+            function addToCart(productId, quantity = 1) {
+                const product = products.find(p => p.id === productId);
+                if (!product) return;
+                
+                const existingItem = cart.find(item => item.product.id === productId);
+                
+                if (existingItem) {
+                    existingItem.quantity += quantity;
+                } else {
+                    cart.push({
+                        product,
+                        quantity
+                    });
+                }
+                
+                updateCart();
+                showToast('Item adicionado ao carrinho!');
+            }
+            
+            function updateCart() {
+                if (cart.length === 0) {
+                    cartItems.innerHTML = '<p id="emptyCartMessage">Seu carrinho está vazio.</p>';
+                    cartTotal.textContent = 'R$ 0,00';
+                    return;
+                }
+                
+                cartItems.innerHTML = '';
+                
+                cart.forEach((item, index) => {
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <div class="cart-item-image">
+                            <img src="${item.product.image}" alt="${item.product.name}">
+                        </div>
+                        <div class="cart-item-details">
+                            <div class="cart-item-title">${item.product.name}</div>
+                            <div class="cart-item-price">R$ ${item.product.price.toFixed(2)} cada</div>
+                            <div class="cart-item-controls">
+                                <div class="quantity">
+                                    <button class="cart-decrease" data-index="${index}">-</button>
+                                    <input type="text" value="${item.quantity}" min="1" class="cart-quantity" data-index="${index}">
+                                    <button class="cart-increase" data-index="${index}">+</button>
+                                </div>
+                                <button class="remove-item" data-index="${index}">Remover</button>
+                            </div>
+                        </div>
+                    `;
+                    cartItems.appendChild(cartItem);
+                });
+                
+                // Update total
+                const total = cart.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+                cartTotal.textContent = `R$ ${total.toFixed(2)}`;
+                
+                // Add event listeners
+                document.querySelectorAll('.cart-increase').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const index = parseInt(e.target.getAttribute('data-index'));
+                        cart[index].quantity++;
+                        updateCart();
+                    });
+                });
+                
+                document.querySelectorAll('.cart-decrease').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const index = parseInt(e.target.getAttribute('data-index'));
+                        if (cart[index].quantity > 1) {
+                            cart[index].quantity--;
+                            updateCart();
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('.remove-item').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const index = parseInt(e.target.getAttribute('data-index'));
+                        cart.splice(index, 1);
+                        updateCart();
+                    });
+                });
+            }
+            
+            function showToast(message) {
+                toast.textContent = message;
+                toast.classList.add('show');
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Event listeners for categories
+            categories.forEach(category => {
+                category.addEventListener('click', () => {
+                    categories.forEach(c => c.classList.remove('active'));
+                    category.classList.add('active');
+                    currentCategory = category.getAttribute('data-category');
+                    displayProducts(currentCategory);
+                });
+            });
+            
+            // Cart modal
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('add-to-cart')) {
+                    cartModal.style.display = 'block';
+                }
+            });
+            
+            closeModal.addEventListener('click', () => {
+                cartModal.style.display = 'none';
+            });
+            
+            window.addEventListener('click', (e) => {
+                if (e.target === cartModal) {
+                    cartModal.style.display = 'none';
+                }
+            });
+            
+            checkoutBtn.addEventListener('click', () => {
+                if (cart.length === 0) return;
+                
+                alert('Compra finalizada com sucesso! Em breve você receberá os produtos.');
+                cart = [];
+                updateCart();
+                cartModal.style.display = 'none';
+            });
+            
+            // Initialize store
+            setTimeout(() => {
+                displayProducts(currentCategory);
+            }, 1000);
+            
+            // Initialize cart
+            updateCart();
+            
+            // Smooth scrolling for navigation
+            document.querySelectorAll('nav a, .tab').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
