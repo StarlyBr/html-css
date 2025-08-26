@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurante Delícia</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Restaurante Delícia</h1>
+        <nav>
+            <a href="#sobre">Sobre</a>
+            <a href="#menu">Menu</a>
+            <a href="#contato">Contato</a>
+        </nav>
+    </header>
+
+    <section id="sobre">
+        <h2>Sobre Nós</h2>
+        <p>Bem-vindo ao Restaurante Delícia! Oferecemos pratos incríveis preparados com amor e ingredientes frescos.</p>
+        <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092" alt="Restaurante" />
+    </section>
+
+    <section id="menu">
+        <h2>Nosso Menu</h2>
+        <div class="card-container">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1551782450-a2132b4ba21d" alt="Prato 1">
+                <h3>Prato Especial 1</h3>
+                <p>Delicioso prato com ingredientes frescos e temperos especiais.</p>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1606755962770-9c3e7f52d5f2" alt="Prato 2">
+                <h3>Prato Especial 2</h3>
+                <p>Uma explosão de sabores que você não vai esquecer.</p>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe" alt="Prato 3">
+                <h3>Prato Especial 3</h3>
+                <p>Uma combinação perfeita de sabor e apresentação.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contato">
+        <h2>Contato</h2>
+        <p>Faça sua reserva ou tire suas dúvidas!</p>
+        <form id="contato-form">
+            <input type="text" placeholder="Seu nome" required>
+            <input type="email" placeholder="Seu email" required>
+            <textarea placeholder="Sua mensagem" required></textarea>
+            <button type="submit">Enviar</button>
+        </form>
+        <p id="mensagem"></p>
+    </section>
+
+    <footer>
+        <p>© 2025 Restaurante Delícia. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Space Shooter - Jogo de Nave</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            touch-action: none;
+            user-select: none;
+        }
+        
+        #game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(180deg, #000428 0%, #004e92 100%);
+        }
+        
+        #game-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            border-radius: 50%;
+        }
+        
+        .ui-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+        
+        .score {
+            color: #00ffff;
+        }
+        
+        .lives {
+            margin-left: 30px;
+            color: #ff3366;
+        }
+        
+        .level {
+            margin-left: 30px;
+            color: #ffff00;
+        }
+        
+        .game-over {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            display: none;
+        }
+        
+        .game-over h1 {
+            font-size: 48px;
+            color: #ff3366;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 51, 102, 0.8);
+        }
+        
+        .final-score {
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: #00ffff;
+        }
+        
+        .restart-button {
+            background: linear-gradient(45deg, #004e92, #000428);
+            color: white;
+            border: 2px solid #00ffff;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+        
+        .restart-button:hover {
+            background: linear-gradient(45deg, #000428, #004e92);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+        
+        .start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 300;
+        }
+        
+        .start-screen h1 {
+            font-size: 56px;
+            color: #00ffff;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+        }
+        
+        .start-screen p {
+            font-size: 18px;
+            color: #fff;
+            margin-bottom: 30px;
+            text-align: center;
+            max-width: 80%;
+            line-height: 1.6;
+        }
+        
+        .start-button {
+            background: linear-gradient(45deg, #004e92, #000428);
+            color: white;
+            border: 2px solid #00ffff;
+            padding: 15px 40px;
+            font-size: 20px;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+        
+        .start-button:hover {
+            background: linear-gradient(45deg, #000428, #004e92);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+        
+        .controls-info {
+            margin-top: 40px;
+            text-align: center;
+            color: #00ffff;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .power-up {
+            position: absolute;
+            pointer-events: none;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .touch-controls {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            z-index: 150;
+            display: none;
+        }
+        
+        .touch-button {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid #00ffff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            user-select: none;
+        }
+        
+        .touch-button:active {
+            background: rgba(0, 255, 255, 0.3);
+            transform: scale(0.95);
+        }
+        
+        .explosion {
+            position: absolute;
+            pointer-events: none;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff9900, #ff3366, transparent);
+            animation: explode 0.5s forwards;
+        }
+        
+        @keyframes explode {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+        
+        .laser {
+            position: absolute;
+            background: linear-gradient(to right, #00ffff, #0066ff);
+            height: 2px;
+            border-radius: 2px;
+            pointer-events: none;
+        }
+        
+        .enemy {
+            position: absolute;
+            pointer-events: none;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        @media (max-width: 768px) {
+            .touch-controls {
+                display: flex;
+            }
+            
+            .ui-container {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+        
+        <div class="ui-container">
+            <span class="score">SCORE: 0</span>
+            <span class="lives">VIDAS: 3</span>
+            <span class="level">NÍVEL: 1</span>
+        </div>
+        
+        <div class="touch-controls">
+            <div class="touch-button" id="left-button">←</div>
+            <div class="touch-button" id="right-button">→</div>
+            <div class="touch-button" id="shoot-button">⚡</div>
+        </div>
+        
+        <div class="game-over">
+            <h1>GAME OVER</h1>
+            <div class="final-score">PONTUAÇÃO FINAL: 0</div>
+            <button class="restart-button">JOGAR NOVAMENTE</button>
+        </div>
+        
+        <div class="start-screen">
+            <h1>SPACE SHOOTER</h1>
+            <p>Destrua os inimigos e sobreviva o máximo possível! Colete power-ups para aumentar seu poder de fogo.</p>
+            <div class="controls-info">
+                <p>PC: Use WASD ou setas para mover e ESPAÇO para atirar</p>
+                <p>CELULAR: Toque na tela para mover e nos botões para atirar</p>
+            </div>
+            <button class="start-button">INICIAR JOGO</button>
+        </div>
+    </div>
+
+    <script>
+        // Configuração do jogo
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Ajustar canvas para o tamanho da tela
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Estado do jogo
+        let gameActive = false;
+        let score = 0;
+        let lives = 3;
+        let level = 1;
+        let gameSpeed = 1;
+        
+        // Player
+        const player = {
+            x: canvas.width / 2,
+            y: canvas.height - 100,
+            width: 50,
+            height: 50,
+            speed: 8,
+            color: '#00ffff',
+            angle: 0,
+            health: 100,
+            powerLevel: 1,
+            lastShot: 0,
+            shotCooldown: 300
+        };
+        
+        // Arrays para objetos do jogo
+        let enemies = [];
+        let lasers = [];
+        let particles = [];
+        let powerUps = [];
+        let stars = [];
+        
+        // Controles
+        const keys = {
+            up: false,
+            down: false,
+            left: false,
+            right: false,
+            shoot: false
+        };
+        
+        let touchStartX = 0;
+        let touchMoveX = 0;
+        let isTouching = false;
+        
+        // Event Listeners
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'w' || e.key === 'W' || e.key === 'ArrowUp') keys.up = true;
+            if (e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') keys.down = true;
+            if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') keys.left = true;
+            if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') keys.right = true;
+            if (e.key === ' ') keys.shoot = true;
+        });
+        
+        window.addEventListener('keyup', (e) => {
+            if (e.key === 'w' || e.key === 'W' || e.key === 'ArrowUp') keys.up = false;
+            if (e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') keys.down = false;
+            if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') keys.left = false;
+            if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') keys.right = false;
+            if (e.key === ' ') keys.shoot = false;
+        });
+        
+        // Controles de toque
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchMoveX = touch.clientX;
+            isTouching = true;
+            
+            // Atirar ao tocar na tela (exceto nos controles)
+            if (touch.clientY > canvas.height - 100) return;
+            keys.shoot = true;
+        });
+        
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            touchMoveX = touch.clientX;
+        });
+        
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            isTouching = false;
+            keys.shoot = false;
+        });
+        
+        // Botões de toque
+        document.getElementById('left-button').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            keys.left = true;
+        });
+        
+        document.getElementById('left-button').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            keys.left = false;
+        });
+        
+        document.getElementById('right-button').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            keys.right = true;
+        });
+        
+        document.getElementById('right-button').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            keys.right = false;
+        });
+        
+        document.getElementById('shoot-button').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            keys.shoot = true;
+        });
+        
+        document.getElementById('shoot-button').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            keys.shoot = false;
+        });
+        
+        // Botões de interface
+        document.querySelector('.start-button').addEventListener('click', startGame);
+        document.querySelector('.restart-button').addEventListener('click', startGame);
+        
+        // Funções do jogo
+        function startGame() {
+            // Resetar estado
+            gameActive = true;
+            score = 0;
+            lives = 3;
+            level = 1;
+            gameSpeed = 1;
+            enemies = [];
+            lasers = [];
+            particles = [];
+            powerUps = [];
+            stars = [];
+            
+            // Posicionar estrelas
+            for (let i = 0; i < 100; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 3 + 1,
+                    speed: Math.random() * 2 + 1
+                });
+            }
+            
+            // Atualizar UI
+            updateUI()
+        }
