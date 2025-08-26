@@ -1,9 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Space Shooter - Jogo de Nave</title>
+    <title>Galactic Odyssey - Jogo de Nave Espacial</title>
     <style>
         * {
             margin: 0;
@@ -12,12 +13,19 @@
         }
         
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Orbitron', 'Arial', sans-serif;
             background: #000;
             color: #fff;
             overflow: hidden;
             touch-action: none;
             user-select: none;
+            cursor: none;
+            background-color: #000;
+        }
+        
+        @font-face {
+            font-family: 'Orbitron';
+            src: url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
         }
         
         #game-container {
@@ -36,20 +44,23 @@
             height: 100%;
         }
         
-        .particle {
-            position: absolute;
-            pointer-events: none;
-            border-radius: 50%;
-        }
-        
         .ui-container {
             position: absolute;
             top: 20px;
             left: 20px;
             z-index: 100;
-            font-size: 20px;
-            font-weight: bold;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
             text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .ui-row {
+            display: flex;
+            gap: 20px;
         }
         
         .score {
@@ -57,13 +68,19 @@
         }
         
         .lives {
-            margin-left: 30px;
             color: #ff3366;
         }
         
         .level {
-            margin-left: 30px;
             color: #ffff00;
+        }
+        
+        .energy {
+            color: #ff9900;
+        }
+        
+        .shield {
+            color: #00ff00;
         }
         
         .game-over {
@@ -82,10 +99,12 @@
         }
         
         .game-over h1 {
+            font-family: 'Orbitron', sans-serif;
             font-size: 48px;
             color: #ff3366;
             margin-bottom: 20px;
             text-shadow: 0 0 20px rgba(255, 51, 102, 0.8);
+            text-align: center;
         }
         
         .final-score {
@@ -99,6 +118,7 @@
             color: white;
             border: 2px solid #00ffff;
             padding: 15px 30px;
+            font-family: 'Orbitron', sans-serif;
             font-size: 18px;
             cursor: pointer;
             border-radius: 30px;
@@ -127,6 +147,7 @@
         }
         
         .start-screen h1 {
+            font-family: 'Orbitron', sans-serif;
             font-size: 56px;
             color: #00ffff;
             margin-bottom: 20px;
@@ -147,6 +168,7 @@
             color: white;
             border: 2px solid #00ffff;
             padding: 15px 40px;
+            font-family: 'Orbitron', sans-serif;
             font-size: 20px;
             cursor: pointer;
             border-radius: 30px;
@@ -166,19 +188,6 @@
             color: #00ffff;
             font-size: 16px;
             line-height: 1.6;
-        }
-        
-        .power-up {
-            position: absolute;
-            pointer-events: none;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.8; }
-            100% { transform: scale(1); opacity: 1; }
         }
         
         .touch-controls {
@@ -202,6 +211,7 @@
             align-items: center;
             font-size: 24px;
             user-select: none;
+            font-family: 'Orbitron', sans-serif;
         }
         
         .touch-button:active {
@@ -209,28 +219,354 @@
             transform: scale(0.95);
         }
         
+        .upgrade-menu {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 250;
+            display: none;
+        }
+        
+        .upgrade-menu h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            color: #00ffff;
+            margin-bottom: 30px;
+        }
+        
+        .upgrades-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1000px;
+        }
+        
+        .upgrade-item {
+            background: rgba(0, 255, 255, 0.1);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 20px;
+            width: 220px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .upgrade-item:hover {
+            background: rgba(0, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+        
+        .upgrade-item h3 {
+            color: #00ffff;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        
+        .upgrade-item p {
+            font-size: 14px;
+            margin-bottom: 15px;
+            color: #fff;
+            height: 60px;
+            overflow: hidden;
+        }
+        
+        .upgrade-cost {
+            font-weight: bold;
+            color: #ff9900;
+            font-size: 16px;
+        }
+        
+        .upgrade-button {
+            background: #00ffff;
+            color: #000;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+        }
+        
+        .upgrade-button:disabled {
+            background: #666;
+            color: #999;
+            cursor: not-allowed;
+        }
+        
+        .boss-health {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #ff3366;
+            border-radius: 10px;
+            z-index: 100;
+            display: none;
+        }
+        
+        .boss-health-bar {
+            height: 100%;
+            width: 100%;
+            background: #ff3366;
+            border-radius: 8px;
+            transition: width 0.3s ease;
+        }
+        
+        .phase-indicator {
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ff3366;
+            font-size: 18px;
+            font-weight: bold;
+            z-index: 100;
+            display: none;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .minimap {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 150px;
+            height: 150px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            z-index: 100;
+            overflow: hidden;
+        }
+        
+        .minimap-canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .radar-sweep {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            box-sizing: border-box;
+        }
+        
+        .player-indicator {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #00ffff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .enemy-indicator {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ff3366;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .boss-indicator {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ff0000;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .powerup-indicator {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: #00ff00;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .achievement-popup {
+            position: absolute;
+            top: 150px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 15px 25px;
+            z-index: 150;
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px);
+            transition: all 0.5s ease;
+            font-family: 'Orbitron', sans-serif;
+            display: none;
+        }
+        
+        .achievement-title {
+            color: #00ffff;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .achievement-desc {
+            color: #fff;
+            font-size: 14px;
+        }
+        
+        .skill-tree {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 250;
+            display: none;
+        }
+        
+        .skill-tree h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            color: #00ffff;
+            margin-bottom: 30px;
+        }
+        
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 1000px;
+        }
+        
+        .skill-item {
+            background: rgba(0, 255, 255, 0.1);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .skill-item h3 {
+            color: #00ffff;
+            margin-bottom: 10px;
+        }
+        
+        .skill-item p {
+            font-size: 12px;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+        
+        .skill-cost {
+            font-weight: bold;
+            color: #ff9900;
+            font-size: 14px;
+        }
+        
+        .skill-button {
+            background: #00ffff;
+            color: #000;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .skill-button:disabled {
+            background: #666;
+            color: #999;
+            cursor: not-allowed;
+        }
+        
+        .active-skill {
+            border-color: #ffff00;
+            background: rgba(255, 255, 0, 0.1);
+        }
+        
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        .black-hole {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            background: radial-gradient(circle, #000 0%, #333 50%, #000 100%);
+        }
+        
+        .wormhole {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            background: radial-gradient(circle, #ff00ff 0%, #800080 50%, #000 100%);
+        }
+        
+        .trails {
+            position: absolute;
+            pointer-events: none;
+        }
+        
+        .trail-particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        .laser-trail {
+            position: absolute;
+            pointer-events: none;
+            background: rgba(0, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+        
         .explosion {
             position: absolute;
             pointer-events: none;
             border-radius: 50%;
-            background: radial-gradient(circle, #ff9900, #ff3366, transparent);
-            animation: explode 0.5s forwards;
         }
         
-        @keyframes explode {
-            0% { transform: scale(0); opacity: 1; }
-            100% { transform: scale(3); opacity: 0; }
-        }
-        
-        .laser {
+        .power-up {
             position: absolute;
-            background: linear-gradient(to right, #00ffff, #0066ff);
-            height: 2px;
-            border-radius: 2px;
             pointer-events: none;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
         }
         
-        .enemy {
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .asteroid {
             position: absolute;
             pointer-events: none;
         }
@@ -242,13 +578,308 @@
             pointer-events: none;
         }
         
+        .nebula {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+        
+        .achievement {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 15px;
+            z-index: 150;
+            display: none;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .achievement h3 {
+            color: #00ffff;
+            margin-bottom: 5px;
+        }
+        
+        .achievement p {
+            color: #fff;
+            font-size: 14px;
+        }
+        
+        .achievement-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background: #00ffff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+        }
+        
+        .loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 400;
+        }
+        
+        .loading-bar {
+            width: 300px;
+            height: 20px;
+            background: #333;
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        
+        .loading-progress {
+            height: 100%;
+            width: 0%;
+            background: #00ffff;
+            transition: width 0.3s ease;
+        }
+        
+        .loading-text {
+            margin-top: 10px;
+            color: #00ffff;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .cosmic-ray {
+            position: absolute;
+            pointer-events: none;
+            background: linear-gradient(to right, transparent, rgba(0, 255, 255, 0.8), transparent);
+            height: 2px;
+            transform: rotate(45deg);
+        }
+        
+        .black-hole-effect {
+            position: absolute;
+            pointer-events: none;
+            border-radius: 50%;
+            border: 2px dashed #ff00ff;
+            opacity: 0.5;
+        }
+        
+        .wormhole-effect {
+            position: absolute;
+            pointer-events: none;
+            border-radius: 50%;
+            border: 2px solid #ff00ff;
+            opacity: 0.7;
+            animation: wormhole-pulse 2s infinite;
+        }
+        
+        @keyframes wormhole-pulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.7; }
+        }
+        
+        .skill-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 255, 255, 0.2);
+            border: 2px solid #00ffff;
+            border-radius: 8px;
+            margin: 0 auto 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+        }
+        
+        .quest-log {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 15px;
+            z-index: 150;
+            display: none;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .quest-title {
+            color: #00ffff;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .quest-desc {
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .quest-progress {
+            color: #ffff00;
+            font-size: 14px;
+        }
+        
+        .quest-reward {
+            color: #00ff00;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .close-quest {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #00ffff;
+        }
+        
+        .special-ability {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 0, 0, 0.3);
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        .ability-cooldown {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .ability-active {
+            background: rgba(0, 255, 0, 0.3);
+            border-color: #00ff00;
+        }
+        
+        .ability-icon {
+            font-size: 24px;
+        }
+        
+        .level-up {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #ffff00;
+            border-radius: 10px;
+            padding: 30px;
+            z-index: 350;
+            text-align: center;
+            display: none;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .level-up h2 {
+            color: #ffff00;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        
+        .level-up p {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .level-up-button {
+            background: #ffff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+        }
+        
         @media (max-width: 768px) {
             .touch-controls {
                 display: flex;
             }
             
             .ui-container {
-                font-size: 16px;
+                font-size: 14px;
+            }
+            
+            .upgrades-container {
+                grid-template-columns: 1fr;
+                width: 90%;
+            }
+            
+            .upgrade-item {
+                width: 100%;
+            }
+            
+            .skills-container {
+                grid-template-columns: 1fr;
+                width: 90%;
+            }
+            
+            .minimap {
+                width: 100px;
+                height: 100px;
+                bottom: 10px;
+                right: 10px;
+            }
+            
+            .achievement {
+                width: 250px;
+                right: 10px;
+                bottom: 70px;
+            }
+            
+            .quest-log {
+                width: 250px;
+                right: 10px;
+                top: 70px;
+            }
+            
+            .special-ability {
+                width: 40px;
+                height: 40px;
+                bottom: 70px;
+                left: 10px;
             }
         }
     </style>
@@ -258,15 +889,60 @@
         <canvas id="game-canvas"></canvas>
         
         <div class="ui-container">
-            <span class="score">SCORE: 0</span>
-            <span class="lives">VIDAS: 3</span>
-            <span class="level">NÍVEL: 1</span>
+            <div class="ui-row">
+                <span class="score">SCORE: 0</span>
+                <span class="lives">VIDAS: 3</span>
+            </div>
+            <div class="ui-row">
+                <span class="level">FASE: 1</span>
+                <span class="energy">ENERGIA: 100%</span>
+            </div>
+            <div class="ui-row">
+                <span class="shield">ESCUDO: 0%</span>
+                <span class="experience">EXP: 0/100</span>
+            </div>
+        </div>
+        
+        <div class="minimap">
+            <canvas class="minimap-canvas" width="150" height="150"></canvas>
+            <div class="radar-sweep"></div>
+        </div>
+        
+        <div class="boss-health">
+            <div class="boss-health-bar"></div>
+        </div>
+        
+        <div class="phase-indicator">BOSS FASE 1</div>
+        
+        <div class="achievement-popup">
+            <div class="achievement-title">CONQUISTA DESBLOQUEADA</div>
+            <div class="achievement-desc">Você conquistou uma nova conquista!</div>
+        </div>
+        
+        <div class="achievement">
+            <div class="achievement-icon">🏆</div>
+            <h3>Conquista</h3>
+            <p>Descrição da conquista</p>
+        </div>
+        
+        <div class="quest-log">
+            <div class="close-quest">×</div>
+            <h3 class="quest-title">Missão Atual</h3>
+            <p class="quest-desc">Descrição da missão</p>
+            <p class="quest-progress">Progresso: 0/10</p>
+            <p class="quest-reward">Recompensa: 500 pontos</p>
+        </div>
+        
+        <div class="special-ability">
+            <div class="ability-icon">⚡</div>
+            <div class="ability-cooldown">30</div>
         </div>
         
         <div class="touch-controls">
             <div class="touch-button" id="left-button">←</div>
             <div class="touch-button" id="right-button">→</div>
             <div class="touch-button" id="shoot-button">⚡</div>
+            <div class="touch-button" id="ability-button">S</div>
         </div>
         
         <div class="game-over">
@@ -276,20 +952,164 @@
         </div>
         
         <div class="start-screen">
-            <h1>SPACE SHOOTER</h1>
-            <p>Destrua os inimigos e sobreviva o máximo possível! Colete power-ups para aumentar seu poder de fogo.</p>
+            <h1>GALACTIC ODYSSEY</h1>
+            <p>Embarque em uma jornada épica pelo universo! Derrote inimigos, complete missões e desbloqueie habilidades poderosas.</p>
             <div class="controls-info">
-                <p>PC: Use WASD ou setas para mover e ESPAÇO para atirar</p>
+                <p>PC: Use WASD ou setas para mover, ESPAÇO para atirar, SHIFT para habilidade especial</p>
                 <p>CELULAR: Toque na tela para mover e nos botões para atirar</p>
             </div>
             <button class="start-button">INICIAR JOGO</button>
         </div>
+        
+        <div class="upgrade-menu">
+            <h2>UPGRADES</h2>
+            <div class="upgrades-container">
+                <div class="upgrade-item" id="upgrade-speed">
+                    <h3>Velocidade</h3>
+                    <p>Aumenta a velocidade de movimento da nave</p>
+                    <div class="upgrade-cost">Custo: 500 pontos</div>
+                    <button class="upgrade-button" onclick="upgradeSpeed()">UPGRADE</button>
+                </div>
+                
+                <div class="upgrade-item" id="upgrade-fire">
+                    <h3>Poder de Fogo</h3>
+                    <p>Aumenta o número de lasers simultâneos</p>
+                    <div class="upgrade-cost">Custo: 800 pontos</div>
+                    <button class="upgrade-button" onclick="upgradeFirePower()">UPGRADE</button>
+                </div>
+                
+                <div class="upgrade-item" id="upgrade-energy">
+                    <h3>Energia</h3>
+                    <p>Aumenta a capacidade de energia e recuperação</p>
+                    <div class="upgrade-cost">Custo: 600 pontos</div>
+                    <button class="upgrade-button" onclick="upgradeEnergy()">UPGRADE</button>
+                </div>
+                
+                <div class="upgrade-item" id="upgrade-shield">
+                    <h3>Escudo</h3>
+                    <p>Adiciona um escudo que absorve danos</p>
+                    <div class="upgrade-cost">Custo: 1000 pontos</div>
+                    <button class="upgrade-button" onclick="upgradeShield()">UPGRADE</button>
+                </div>
+                
+                <div class="upgrade-item" id="upgrade-homing">
+                    <h3>Mísseis Guiados</h3>
+                    <p>Adiciona mísseis que perseguem inimigos</p>
+                    <div class="upgrade-cost">Custo: 1200 pontos</div>
+                    <button class="upgrade-button" onclick="upgradeHoming()">UPGRADE</button>
+                </div>
+                
+                <div class="upgrade-item" id="upgrade-triple">
+                    <h3>Tiro Triplo</h3>
+                    <p>Adiciona tiros laterais para maior cobertura</p>
+                    <div class="upgrade-cost">Custo: 1500 pontos</div>
+                    <button class="upgrade-button" onclick="upgradeTriple()">UPGRADE</button>
+                </div>
+            </div>
+            <button class="restart-button" style="margin-top: 30px;" onclick="closeUpgradeMenu()">CONTINUAR</button>
+        </div>
+        
+        <div class="skill-tree">
+            <h2>ÁRVORE DE HABILIDADES</h2>
+            <div class="skills-container">
+                <div class="skill-item" id="skill-time-slow">
+                    <div class="skill-icon">⏱️</div>
+                    <h3>Slow Time</h3>
+                    <p>Desacelera o tempo por 3 segundos</p>
+                    <div class="skill-cost">Custo: 2 pontos</div>
+                    <button class="skill-button" onclick="learnSkill('time-slow')">APRENDER</button>
+                </div>
+                
+                <div class="skill-item" id="skill-black-hole">
+                    <div class="skill-icon">⚫</div>
+                    <h3>Black Hole</h3>
+                    <p>Cria um buraco negro que atrai inimigos</p>
+                    <div class="skill-cost">Custo: 3 pontos</div>
+                    <button class="skill-button" onclick="learnSkill('black-hole')">APRENDER</button>
+                </div>
+                
+                <div class="skill-item" id="skill-wormhole">
+                    <div class="skill-icon">🌀</div>
+                    <h3>Wormhole</h3>
+                    <p>Teletransporta para um local aleatório</p>
+                    <div class="skill-cost">Custo: 2 pontos</div>
+                    <button class="skill-button" onclick="learnSkill('wormhole')">APRENDER</button>
+                </div>
+                
+                <div class="skill-item" id="skill-combo">
+                    <div class="skill-icon">💥</div>
+                    <h3>Combo Master</h3>
+                    <p>Dobra o multiplicador de combo</p>
+                    <div class="skill-cost">Custo: 1 ponto</div>
+                    <button class="skill-button" onclick="learnSkill('combo')">APRENDER</button>
+                </div>
+                
+                <div class="skill-item" id="skill-lucky">
+                    <div class="skill-icon">🍀</div>
+                    <h3>Lucky Shot</h3>
+                    <p>10% de chance de dano crítico triplo</p>
+                    <div class="skill-cost">Custo: 2 pontos</div>
+                    <button class="skill-button" onclick="learnSkill('lucky')">APRENDER</button>
+                </div>
+                
+                <div class="skill-item" id="skill-repair">
+                    <div class="skill-icon">🔧</div>
+                    <h3>Auto Repair</h3>
+                    <p>Repara 20% da vida a cada 30 segundos</p>
+                    <div class="skill-cost">Custo: 3 pontos</div>
+                    <button class="skill-button" onclick="learnSkill('repair')">APRENDER</button>
+                </div>
+            </div>
+            <button class="restart-button" style="margin-top: 30px;" onclick="closeSkillTree()">VOLTAR</button>
+        </div>
+        
+        <div class="level-up">
+            <h2>NÍVEL UP!</h2>
+            <p>Você alcançou o próximo nível!</p>
+            <button class="level-up-button" onclick="closeLevelUp()">CONTINUAR</button>
+        </div>
+        
+        <div class="loading-screen">
+            <h1>LOADING GALACTIC ODYSSEY</h1>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <div class="loading-text">Carregando recursos... 0%</div>
+        </div>
     </div>
 
     <script>
+        // Sistema de carregamento
+        function simulateLoading() {
+            const loadingScreen = document.querySelector('.loading-screen');
+            const loadingProgress = document.querySelector('.loading-progress');
+            const loadingText = document.querySelector('.loading-text');
+            
+            let progress = 0;
+            const loadingInterval = setInterval(() => {
+                progress += Math.random() * 10;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(loadingInterval);
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                        document.querySelector('.start-screen').style.display = 'flex';
+                    }, 500);
+                }
+                
+                loadingProgress.style.width = `${progress}%`;
+                loadingText.textContent = `Carregando recursos... ${Math.floor(progress)}%`;
+            }, 200);
+        }
+        
+        // Iniciar carregamento quando a página carregar
+        window.addEventListener('load', simulateLoading);
+        
         // Configuração do jogo
         const canvas = document.getElementById('game-canvas');
         const ctx = canvas.getContext('2d');
+        const minimapCanvas = document.querySelector('.minimap-canvas');
+        const minimapCtx = minimapCanvas.getContext('2d');
         
         // Ajustar canvas para o tamanho da tela
         function resizeCanvas() {
@@ -304,8 +1124,27 @@
         let gameActive = false;
         let score = 0;
         let lives = 3;
-        let level = 1;
+        let currentLevel = 1;
         let gameSpeed = 1;
+        let bossActive = false;
+        let bossPhase = 1;
+        let showUpgradeMenu = false;
+        let showSkillTree = false;
+        let levelUpActive = false;
+        let combo = 0;
+        let maxCombo = 0;
+        let comboTimer = 0;
+        let achievements = [];
+        let unlockedAchievements = [];
+        let activeQuest = null;
+        let questProgress = 0;
+        let specialAbilityCooldown = 0;
+        let specialAbilityActive = false;
+        let specialAbilityDuration = 0;
+        let experience = 0;
+        let level = 1;
+        let skillPoints = 0;
+        let learnedSkills = [];
         
         // Player
         const player = {
@@ -314,20 +1153,75 @@
             width: 50,
             height: 50,
             speed: 8,
+            baseSpeed: 8,
             color: '#00ffff',
             angle: 0,
             health: 100,
+            maxHealth: 100,
+            energy: 100,
+            maxEnergy: 100,
+            energyRegen: 0.5,
             powerLevel: 1,
+            shield: 0,
+            maxShield: 0,
             lastShot: 0,
-            shotCooldown: 300
+            shotCooldown: 300,
+            homingMissiles: false,
+            tripleShot: false,
+            criticalChance: 0,
+            criticalMultiplier: 2,
+            repairRate: 0,
+            repairTimer: 0,
+            upgrades: {
+                speed: 0,
+                firePower: 0,
+                energy: 0,
+                shield: 0,
+                homing: 0,
+                triple: 0
+            }
+        };
+        
+        // Boss
+        const boss = {
+            x: canvas.width / 2,
+            y: 100,
+            width: 150,
+            height: 100,
+            health: 1000,
+            maxHealth: 1000,
+            speed: 3,
+            color: '#ff3366',
+            phase: 1,
+            lastAttack: 0,
+            attackCooldown: 1000,
+            pattern: 0,
+            phaseTimer: 0
+        };
+        
+        // Cosmic entities
+        const cosmicEntities = {
+            blackHoles: [],
+            wormholes: [],
+            planets: [],
+            asteroids: [],
+            nebulas: []
         };
         
         // Arrays para objetos do jogo
         let enemies = [];
         let lasers = [];
+        let enemyLasers = [];
+        let homingMissiles = [];
         let particles = [];
         let powerUps = [];
         let stars = [];
+        let explosions = [];
+        let trails = [];
+        let laserTrails = [];
+        let cosmicRays = [];
+        let blackHoleEffects = [];
+        let wormholeEffects = [];
         
         // Controles
         const keys = {
@@ -335,7 +1229,8 @@
             down: false,
             left: false,
             right: false,
-            shoot: false
+            shoot: false,
+            ability: false
         };
         
         let touchStartX = 0;
@@ -349,6 +1244,7 @@
             if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') keys.left = true;
             if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') keys.right = true;
             if (e.key === ' ') keys.shoot = true;
+            if (e.key === 'Shift') keys.ability = true;
         });
         
         window.addEventListener('keyup', (e) => {
@@ -357,6 +1253,7 @@
             if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') keys.left = false;
             if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') keys.right = false;
             if (e.key === ' ') keys.shoot = false;
+            if (e.key === 'Shift') keys.ability = false;
         });
         
         // Controles de toque
@@ -382,6 +1279,7 @@
             e.preventDefault();
             isTouching = false;
             keys.shoot = false;
+            keys.ability = false;
         });
         
         // Botões de toque
@@ -415,9 +1313,360 @@
             keys.shoot = false;
         });
         
+        document.getElementById('ability-button').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            keys.ability = true;
+        });
+        
+        document.getElementById('ability-button').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            keys.ability = false;
+        });
+        
         // Botões de interface
         document.querySelector('.start-button').addEventListener('click', startGame);
         document.querySelector('.restart-button').addEventListener('click', startGame);
+        
+        // Funções de upgrade
+        function upgradeSpeed() {
+            if (score >= 500 && player.upgrades.speed < 5) {
+                score -= 500;
+                player.upgrades.speed++;
+                player.speed = player.baseSpeed + player.upgrades.speed * 2;
+                updateUI();
+                checkUpgradeButtons();
+                showAchievement('Speed Demon', 'Aumente sua velocidade 3 vezes');
+            }
+        }
+        
+        function upgradeFirePower() {
+            if (score >= 800 && player.upgrades.firePower < 5) {
+                score -= 800;
+                player.upgrades.firePower++;
+                player.powerLevel = 1 + player.upgrades.firePower;
+                player.shotCooldown = Math.max(100, 300 - player.upgrades.firePower * 50);
+                updateUI();
+                checkUpgradeButtons();
+                showAchievement('Firepower Expert', 'Aumente seu poder de fogo 3 vezes');
+            }
+        }
+        
+        function upgradeEnergy() {
+            if (score >= 600 && player.upgrades.energy < 5) {
+                score -= 600;
+                player.upgrades.energy++;
+                player.maxEnergy = 100 + player.upgrades.energy * 40;
+                player.energyRegen = 0.5 + player.upgrades.energy * 0.4;
+                player.energy = player.maxEnergy;
+                updateUI();
+                checkUpgradeButtons();
+                showAchievement('Energy Master', 'Aumente sua energia 3 vezes');
+            }
+        }
+        
+        function upgradeShield() {
+            if (score >= 1000 && player.upgrades.shield < 3) {
+                score -= 1000;
+                player.upgrades.shield++;
+                player.maxShield = 50 + player.upgrades.shield * 75;
+                player.shield = player.maxShield;
+                updateUI();
+                checkUpgradeButtons();
+                showAchievement('Shield Warrior', 'Aumente seu escudo 2 vezes');
+            }
+        }
+        
+        function upgradeHoming() {
+            if (score >= 1200 && !player.homingMissiles) {
+                score -= 1200;
+                player.homingMissiles = true;
+                updateUI();
+                checkUpgradeButtons();
+                showAchievement('Homing Specialist', 'Desbloqueie mísseis guiados');
+            }
+        }
+        
+        function upgradeTriple() {
+            if (score >= 1500 && !player.tripleShot) {
+                score -= 1500;
+                player.tripleShot = true;
+                updateUI();
+                checkUpgradeButtons();
+                showAchievement('Triple Threat', 'Desbloqueie tiro triplo');
+            }
+        }
+        
+        function checkUpgradeButtons() {
+            document.getElementById('upgrade-speed').querySelector('.upgrade-button').disabled = 
+                score < 500 || player.upgrades.speed >= 5;
+            
+            document.getElementById('upgrade-fire').querySelector('.upgrade-button').disabled = 
+                score < 800 || player.upgrades.firePower >= 5;
+            
+            document.getElementById('upgrade-energy').querySelector('.upgrade-button').disabled = 
+                score < 600 || player.upgrades.energy >= 5;
+            
+            document.getElementById('upgrade-shield').querySelector('.upgrade-button').disabled = 
+                score < 1000 || player.upgrades.shield >= 3;
+            
+            document.getElementById('upgrade-homing').querySelector('.upgrade-button').disabled = 
+                score < 1200 || player.homingMissiles;
+            
+            document.getElementById('upgrade-triple').querySelector('.upgrade-button').disabled = 
+                score < 1500 || player.tripleShot;
+        }
+        
+        function openUpgradeMenu() {
+            showUpgradeMenu = true;
+            document.querySelector('.upgrade-menu').style.display = 'flex';
+            checkUpgradeButtons();
+        }
+        
+        function closeUpgradeMenu() {
+            showUpgradeMenu = false;
+            document.querySelector('.upgrade-menu').style.display = 'none';
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Funções de habilidades
+        function learnSkill(skill) {
+            if (skillPoints > 0 && !learnedSkills.includes(skill)) {
+                skillPoints--;
+                learnedSkills.push(skill);
+                document.getElementById(`skill-${skill}`).classList.add('active-skill');
+                document.getElementById(`skill-${skill}`).querySelector('.skill-button').disabled = true;
+                updateUI();
+                showAchievement('Skill Learner', 'Aprenda sua primeira habilidade');
+            }
+        }
+        
+        function openSkillTree() {
+            showSkillTree = true;
+            document.querySelector('.skill-tree').style.display = 'flex';
+            // Atualizar estado das habilidades
+            learnedSkills.forEach(skill => {
+                document.getElementById(`skill-${skill}`).classList.add('active-skill');
+                document.getElementById(`skill-${skill}`).querySelector('.skill-button').disabled = true;
+            });
+        }
+        
+        function closeSkillTree() {
+            showSkillTree = false;
+            document.querySelector('.skill-tree').style.display = 'none';
+            requestAnimationFrame(gameLoop);
+        }
+        
+        function useSpecialAbility() {
+            if (specialAbilityCooldown <= 0 && !specialAbilityActive) {
+                specialAbilityActive = true;
+                specialAbilityDuration = 5 * 60; // 5 segundos em frames
+                
+                // Efeitos baseados nas habilidades aprendidas
+                if (learnedSkills.includes('time-slow')) {
+                    gameSpeed = 0.5;
+                }
+                
+                if (learnedSkills.includes('black-hole')) {
+                    createBlackHole(player.x, player.y);
+                }
+                
+                if (learnedSkills.includes('wormhole')) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = 200;
+                    player.x = canvas.width / 2 + Math.cos(angle) * distance;
+                    player.y = canvas.height / 2 + Math.sin(angle) * distance;
+                    player.x = Math.max(25, Math.min(canvas.width - 25, player.x));
+                    player.y = Math.max(25, Math.min(canvas.height - 25, player.y));
+                }
+                
+                specialAbilityCooldown = 30 * 60; // 30 segundos em frames
+            }
+        }
+        
+        function createBlackHole(x, y) {
+            cosmicEntities.blackHoles.push({
+                x,
+                y,
+                radius: 30,
+                strength: 0.5,
+                duration: 300
+            });
+            
+            blackHoleEffects.push({
+                x,
+                y,
+                radius: 30,
+                maxRadius: 100,
+                duration: 300,
+                opacity: 1
+            });
+        }
+        
+        function createWormhole(x, y) {
+            cosmicEntities.wormholes.push({
+                x,
+                y,
+                radius: 40,
+                linked: false,
+                linkId: null
+            });
+            
+            wormholeEffects.push({
+                x,
+                y,
+                radius: 40,
+                duration: 600,
+                opacity: 1
+            });
+        }
+        
+        // Funções de conquistas
+        function showAchievement(title, description) {
+            if (unlockedAchievements.includes(title)) return;
+            
+            unlockedAchievements.push(title);
+            achievements.push({ title, description });
+            
+            const popup = document.querySelector('.achievement-popup');
+            popup.querySelector('.achievement-title').textContent = title;
+            popup.querySelector('.achievement-desc').textContent = description;
+            popup.style.display = 'block';
+            popup.style.opacity = '1';
+            
+            setTimeout(() => {
+                popup.style.opacity = '0';
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                }, 500);
+            }, 3000);
+            
+            // Mostrar na lista de conquistas
+            const achievement = document.querySelector('.achievement');
+            achievement.querySelector('h3').textContent = title;
+            achievement.querySelector('p').textContent = description;
+            achievement.style.display = 'block';
+            
+            setTimeout(() => {
+                achievement.style.display = 'none';
+            }, 5000);
+        }
+        
+        function checkAchievements() {
+            // Conquistas baseadas em pontuação
+            if (score >= 10000 && !unlockedAchievements.includes('Score Master')) {
+                showAchievement('Score Master', 'Alcance 10.000 pontos');
+            }
+            
+            if (score >= 50000 && !unlockedAchievements.includes('Galactic Legend')) {
+                showAchievement('Galactic Legend', 'Alcance 50.000 pontos');
+            }
+            
+            // Conquistas baseadas em combos
+            if (maxCombo >= 10 && !unlockedAchievements.includes('Combo King')) {
+                showAchievement('Combo King', 'Alcance um combo de 10 inimigos');
+            }
+            
+            if (maxCombo >= 25 && !unlockedAchievements.includes('Combo God')) {
+                showAchievement('Combo God', 'Alcance um combo de 25 inimigos');
+            }
+            
+            // Conquistas baseadas em níveis
+            if (currentLevel >= 5 && !unlockedAchievements.includes('Level Explorer')) {
+                showAchievement('Level Explorer', 'Complete 5 fases');
+            }
+            
+            if (currentLevel >= 10 && !unlockedAchievements.includes('Master of Levels')) {
+                showAchievement('Master of Levels', 'Complete 10 fases');
+            }
+            
+            // Conquistas baseadas em bosses
+            if (bossPhase >= 2 && !unlockedAchievements.includes('Boss Slayer')) {
+                showAchievement('Boss Slayer', 'Derrote o Boss Fase 2');
+            }
+            
+            if (bossPhase >= 3 && !unlockedAchievements.includes('Ultimate Champion')) {
+                showAchievement('Ultimate Champion', 'Derrote o Boss Fase 3');
+            }
+        }
+        
+        // Funções de missões
+        function startQuest() {
+            const quests = [
+                {
+                    title: 'Inimigos Derrotados',
+                    description: 'Derrote 10 inimigos',
+                    goal: 10,
+                    progress: 0,
+                    reward: 500
+                },
+                {
+                    title: 'Pontuação Alta',
+                    description: 'Alcance 5000 pontos',
+                    goal: 5000,
+                    progress: 0,
+                    reward: 1000
+                },
+                {
+                    title: 'Boss Slayer',
+                    description: 'Derrote um boss',
+                    goal: 1,
+                    progress: 0,
+                    reward: 2000
+                }
+            ];
+            
+            activeQuest = quests[Math.floor(Math.random() * quests.length)];
+            questProgress = 0;
+            updateQuestLog();
+        }
+        
+        function updateQuestLog() {
+            if (!activeQuest) return;
+            
+            const questLog = document.querySelector('.quest-log');
+            questLog.querySelector('.quest-title').textContent = activeQuest.title;
+            questLog.querySelector('.quest-desc').textContent = activeQuest.description;
+            questLog.querySelector('.quest-progress').textContent = `Progresso: ${questProgress}/${activeQuest.goal}`;
+            questLog.querySelector('.quest-reward').textContent = `Recompensa: ${activeQuest.reward} pontos`;
+            questLog.style.display = 'block';
+        }
+        
+        function completeQuest() {
+            if (!activeQuest || questProgress < activeQuest.goal) return;
+            
+            score += activeQuest.reward;
+            showAchievement('Quest Completed', `Complete uma missão e ganhe ${activeQuest.reward} pontos`);
+            activeQuest = null;
+            document.querySelector('.quest-log').style.display = 'none';
+            updateUI();
+        }
+        
+        // Funções de experiência e níveis
+        function gainExperience(amount) {
+            experience += amount;
+            const levelThreshold = level * 100;
+            
+            if (experience >= levelThreshold) {
+                level++;
+                experience -= levelThreshold;
+                skillPoints++;
+                showLevelUp();
+                showAchievement('Level Up', `Alcance o nível ${level}`);
+            }
+            
+            updateUI();
+        }
+        
+        function showLevelUp() {
+            levelUpActive = true;
+            document.querySelector('.level-up').style.display = 'block';
+        }
+        
+        function closeLevelUp() {
+            levelUpActive = false;
+            document.querySelector('.level-up').style.display = 'none';
+            openSkillTree();
+        }
         
         // Funções do jogo
         function startGame() {
@@ -425,24 +1674,1537 @@
             gameActive = true;
             score = 0;
             lives = 3;
-            level = 1;
+            currentLevel = 1;
             gameSpeed = 1;
+            bossActive = false;
+            bossPhase = 1;
+            showUpgradeMenu = false;
+            showSkillTree = false;
+            levelUpActive = false;
+            combo = 0;
+            maxCombo = 0;
+            comboTimer = 0;
+            achievements = [];
+            unlockedAchievements = [];
+            activeQuest = null;
+            questProgress = 0;
+            specialAbilityCooldown = 0;
+            specialAbilityActive = false;
+            specialAbilityDuration = 0;
+            experience = 0;
+            level = 1;
+            skillPoints = 0;
+            learnedSkills = [];
+            player.x = canvas.width / 2;
+            player.y = canvas.height - 100;
+            
+            // Resetar player
+            player.speed = player.baseSpeed;
+            player.powerLevel = 1;
+            player.shotCooldown = 300;
+            player.homingMissiles = false;
+            player.tripleShot = false;
+            player.criticalChance = 0;
+            player.criticalMultiplier = 2;
+            player.repairRate = 0;
+            player.repairTimer = 0;
+            player.upgrades = { speed: 0, firePower: 0, energy: 0, shield: 0, homing: 0, triple: 0 };
+            player.maxShield = 0;
+            player.shield = 0;
+            player.maxEnergy = 100;
+            player.energy = 100;
+            player.energyRegen = 0.5;
+            player.maxHealth = 100;
+            player.health = 100;
+            
+            // Resetar boss
+            boss.health = boss.maxHealth;
+            boss.phase = 1;
+            boss.x = canvas.width / 2;
+            boss.pattern = 0;
+            boss.phaseTimer = 0;
+            
+            // Limpar arrays
             enemies = [];
             lasers = [];
+            enemyLasers = [];
+            homingMissiles = [];
             particles = [];
             powerUps = [];
             stars = [];
+            explosions = [];
+            trails = [];
+            laserTrails = [];
+            cosmicRays = [];
+            blackHoleEffects = [];
+            wormholeEffects = [];
+            cosmicEntities.blackHoles = [];
+            cosmicEntities.wormholes = [];
+            cosmicEntities.planets = [];
+            cosmicEntities.asteroids = [];
+            cosmicEntities.nebulas = [];
             
             // Posicionar estrelas
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 200; i++) {
                 stars.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
                     size: Math.random() * 3 + 1,
-                    speed: Math.random() * 2 + 1
+                    speed: Math.random() * 2 + 1,
+                    brightness: Math.random()
                 });
             }
             
+            // Criar planetas
+            for (let i = 0; i < 5; i++) {
+                cosmicEntities.planets.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 50 + 30,
+                    color: `hsl(${Math.random() * 360}, 70%, 60%)`,
+                    orbitSpeed: (Math.random() - 0.5) * 0.02
+                });
+            }
+            
+            // Criar asteroides
+            for (let i = 0; i < 10; i++) {
+                cosmicEntities.asteroids.push({
+                    x: Math.random() * canvas.width,
+                    y: -50,
+                    radius: Math.random() * 30 + 20,
+                    color: `hsl(40, 20%, ${Math.random() * 30 + 40}%)`,
+                    speed: Math.random() * 2 + 1,
+                    rotation: 0,
+                    rotationSpeed: (Math.random() - 0.5) * 0.1
+                });
+            }
+            
+            // Criar nebulas
+            for (let i = 0; i < 3; i++) {
+                cosmicEntities.nebulas.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 200 + 100,
+                    color: `hsl(${Math.random() * 60 + 200}, 70%, 50%)`,
+                    pulsate: Math.random() * 0.02
+                });
+            }
+            
+            // Iniciar missão
+            startQuest();
+            
             // Atualizar UI
-            updateUI()
+            updateUI();
+            
+            // Esconder telas
+            document.querySelector('.start-screen').style.display = 'none';
+            document.querySelector('.game-over').style.display = 'none';
+            document.querySelector('.upgrade-menu').style.display = 'none';
+            document.querySelector('.skill-tree').style.display = 'none';
+            document.querySelector('.level-up').style.display = 'none';
+            document.querySelector('.boss-health').style.display = 'none';
+            document.querySelector('.phase-indicator').style.display = 'none';
+            document.querySelector('.achievement').style.display = 'none';
+            document.querySelector('.quest-log').style.display = 'none';
+            
+            // Iniciar loop do jogo
+            requestAnimationFrame(gameLoop);
         }
+        
+        function updateUI() {
+            document.querySelector('.score').textContent = `SCORE: ${score}`;
+            document.querySelector('.lives').textContent = `VIDAS: ${lives}`;
+            document.querySelector('.level').textContent = `FASE: ${currentLevel}`;
+            document.querySelector('.energy').textContent = `ENERGIA: ${Math.floor(player.energy)}%`;
+            document.querySelector('.shield').textContent = `ESCUDO: ${player.shield > 0 ? Math.floor((player.shield / player.maxShield) * 100) : 0}%`;
+            document.querySelector('.experience').textContent = `EXP: ${experience}/${level * 100}`;
+            
+            // Atualizar barra de vida do boss
+            if (bossActive) {
+                const healthPercent = (boss.health / boss.maxHealth) * 100;
+                document.querySelector('.boss-health-bar').style.width = `${healthPercent}%`;
+            }
+            
+            // Atualizar cooldown da habilidade especial
+            const abilityButton = document.querySelector('.special-ability');
+            const cooldownDisplay = abilityButton.querySelector('.ability-cooldown');
+            
+            if (specialAbilityActive) {
+                abilityButton.classList.add('ability-active');
+                cooldownDisplay.textContent = 'ATIVA';
+            } else if (specialAbilityCooldown > 0) {
+                abilityButton.classList.remove('ability-active');
+                const cooldownSeconds = Math.ceil(specialAbilityCooldown / 60);
+                cooldownDisplay.textContent = cooldownSeconds;
+            } else {
+                abilityButton.classList.remove('ability-active');
+                cooldownDisplay.textContent = '';
+            }
+        }
+        
+        function createParticle(x, y, color, speed = 3, size = 3, life = 30) {
+            particles.push({
+                x,
+                y,
+                radius: Math.random() * size + 2,
+                color,
+                speedX: (Math.random() - 0.5) * speed,
+                speedY: (Math.random() - 0.5) * speed,
+                life,
+                maxLife: life
+            });
+        }
+        
+        function createExplosion(x, y, size = 40, color = '#ff3366') {
+            explosions.push({
+                x,
+                y,
+                size: 10,
+                maxSize: size,
+                growthRate: 5,
+                opacity: 1,
+                color
+            });
+        }
+        
+        function createTrail(x, y, color) {
+            trails.push({
+                x,
+                y,
+                radius: 3,
+                color,
+                life: 20,
+                speedX: (Math.random() - 0.5) * 2,
+                speedY: Math.random() * 2 + 1
+            });
+        }
+        
+        function createLaserTrail(x, y, width, height) {
+            laserTrails.push({
+                x,
+                y,
+                width,
+                height,
+                life: 10,
+                color: 'rgba(0, 255, 255, 0.3)'
+            });
+        }
+        
+        function createEnemy() {
+            if (bossActive) return;
+            
+            const size = Math.random() * 30 + 30;
+            const enemyTypes = [
+                { name: 'normal', health: 1, color: 'hsl(0, 80%, 60%)', points: 10 },
+                { name: 'shooter', health: 2, color: 'hsl(30, 80%, 60%)', points: 15 },
+                { name: 'fast', health: 1, color: 'hsl(60, 80%, 60%)', points: 12 },
+                { name: 'tank', health: 3, color: 'hsl(0, 80%, 40%)', points: 20 }
+            ];
+            
+            const type = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
+            const speedMultiplier = type.name === 'fast' ? 1.5 : 1;
+            const healthMultiplier = type.name === 'tank' ? 2 : 1;
+            
+            const enemy = {
+                x: Math.random() * (canvas.width - size),
+                y: -size,
+                width: size,
+                height: size,
+                speed: (Math.random() * 2 + 2) * gameSpeed * speedMultiplier,
+                color: type.color,
+                health: type.health * healthMultiplier,
+                maxHealth: type.health * healthMultiplier,
+                type: type.name,
+                lastShot: 0,
+                shotCooldown: type.name === 'shooter' ? 2000 : 3000,
+                points: type.points,
+                rotation: 0,
+                rotationSpeed: (Math.random() - 0.5) * 0.1
+            };
+            
+            enemies.push(enemy);
+        }
+        
+        function createPowerUp(x, y) {
+            const types = ['speed', 'fire', 'energy', 'shield', 'triple', 'homing', 'repair'];
+            const weights = [0.2, 0.2, 0.2, 0.15, 0.1, 0.1, 0.05];
+            
+            // Escolher tipo com base nos pesos
+            const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
+            let random = Math.random() * totalWeight;
+            let chosenType;
+            
+            for (let i = 0; i < types.length; i++) {
+                if (random <= weights[i]) {
+                    chosenType = types[i];
+                    break;
+                }
+                random -= weights[i];
+            }
+            
+            const powerUp = {
+                x,
+                y,
+                width: 20,
+                height: 20,
+                speed: 2 * gameSpeed,
+                type: chosenType,
+                color: chosenType === 'speed' ? '#00ffff' : 
+                       chosenType === 'fire' ? '#ff9900' : 
+                       chosenType === 'energy' ? '#00ff00' : 
+                       chosenType === 'shield' ? '#0000ff' :
+                       chosenType === 'triple' ? '#ffff00' :
+                       chosenType === 'homing' ? '#ff00ff' : '#ffffff',
+                rotation: 0,
+                rotationSpeed: 0.1
+            };
+            
+            powerUps.push(powerUp);
+        }
+        
+        function shootLaser() {
+            const now = Date.now();
+            if (now - player.lastShot < player.shotCooldown || player.energy < 10) return;
+            
+            player.lastShot = now;
+            player.energy -= 10;
+            
+            // Verificar se é um acerto crítico
+            const isCritical = player.criticalChance > 0 && Math.random() < player.criticalChance;
+            const damageMultiplier = isCritical ? player.criticalMultiplier : 1;
+            
+            // Criar lasers baseado no nível de poder e configurações
+            if (player.tripleShot) {
+                // Tiro triplo
+                for (let i = -1; i <= 1; i++) {
+                    const angle = i * 0.2;
+                    lasers.push({
+                        x: player.x + player.width / 2 - 2,
+                        y: player.y,
+                        width: 4,
+                        height: 15,
+                        speed: 10,
+                        color: i === 0 ? '#00ffff' : '#0066ff',
+                        angle,
+                        damageMultiplier
+                    });
+                    
+                    createLaserTrail(player.x + player.width / 2 - 2, player.y, 4, 15);
+                }
+            } else {
+                // Tiro normal
+                lasers.push({
+                    x: player.x + player.width / 2 - 2,
+                    y: player.y,
+                    width: 4,
+                    height: 15,
+                    speed: 10,
+                    color: '#00ffff',
+                    angle: 0,
+                    damageMultiplier
+                });
+                
+                createLaserTrail(player.x + player.width / 2 - 2, player.y, 4, 15);
+            }
+            
+            // Criar partículas de disparo
+            createParticle(player.x + player.width / 2, player.y, '#00ffff', 2);
+            
+            // Aumentar combo
+            combo++;
+            comboTimer = 60 * 3; // 3 segundos para manter o combo
+            
+            if (combo > maxCombo) {
+                maxCombo = combo;
+            }
+        }
+        
+        function shootHomingMissile() {
+            // Encontrar o inimigo mais próximo
+            let closestEnemy = null;
+            let closestDistance = Infinity;
+            
+            for (const enemy of enemies) {
+                const dx = enemy.x - player.x;
+                const dy = enemy.y - player.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestEnemy = enemy;
+                }
+            }
+            
+            if (closestEnemy) {
+                homingMissiles.push({
+                    x: player.x + player.width / 2,
+                    y: player.y,
+                    width: 6,
+                    height: 12,
+                    speed: 8,
+                    target: closestEnemy,
+                    color: '#ff00ff',
+                    life: 300
+                });
+            }
+        }
+        
+        function shootEnemyLaser(enemy) {
+            enemyLasers.push({
+                x: enemy.x + enemy.width / 2 - 2,
+                y: enemy.y + enemy.height,
+                width: 4,
+                height: 15,
+                speed: 5,
+                color: '#ff3366'
+            });
+        }
+        
+        function spawnBoss() {
+            bossActive = true;
+            boss.health = boss.maxHealth;
+            boss.phase = 1;
+            boss.x = canvas.width / 2;
+            boss.y = 100;
+            boss.pattern = 0;
+            boss.phaseTimer = 0;
+            
+            document.querySelector('.boss-health').style.display = 'block';
+            document.querySelector('.phase-indicator').style.display = 'block';
+            document.querySelector('.phase-indicator').textContent = `BOSS FASE ${boss.phase}`;
+            
+            createParticle(boss.x, boss.y, '#ff3366', 5, 5);
+            showAchievement('Boss Encounter', 'Enfrente seu primeiro boss');
+        }
+        
+        function nextBossPhase() {
+            boss.phase++;
+            boss.health = boss.maxHealth;
+            boss.phaseTimer = 0;
+            
+            document.querySelector('.phase-indicator').textContent = `BOSS FASE ${boss.phase}`;
+            createParticle(boss.x, boss.y, '#ff3366', 8, 8);
+            
+            if (boss.phase === 2) {
+                showAchievement('Phase 2 Boss', 'Alcance a Fase 2 do boss');
+            } else if (boss.phase === 3) {
+                showAchievement('Final Phase', 'Alcance a Fase 3 do boss');
+            }
+        }
+        
+        function checkCollisions() {
+            // Verificar colisões entre lasers e inimigos
+            for (let i = lasers.length - 1; i >= 0; i--) {
+                const laser = lasers[i];
+                
+                // Com inimigos normais
+                for (let j = enemies.length - 1; j >= 0; j--) {
+                    const enemy = enemies[j];
+                    
+                    if (laser.x < enemy.x + enemy.width &&
+                        laser.x + laser.width > enemy.x &&
+                        laser.y < enemy.y + enemy.height &&
+                        laser.y + laser.height > enemy.y) {
+                        
+                        // Remover laser
+                        lasers.splice(i, 1);
+                        
+                        // Dano ao inimigo com multiplicador de critico
+                        const damage = 1 * laser.damageMultiplier;
+                        enemy.health -= damage;
+                        
+                        // Criar partículas
+                        createParticle(laser.x, laser.y, enemy.color, 4);
+                        
+                        // Explosão
+                        createExplosion(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, 40, enemy.color);
+                        
+                        // Remover inimigo se saúde <= 0
+                        if (enemy.health <= 0) {
+                            const points = enemy.points * Math.floor(laser.damageMultiplier) * (combo > 1 ? combo : 1);
+                            score += points;
+                            
+                            // Ganhar experiência
+                            gainExperience(enemy.maxHealth);
+                            
+                            // Atualizar UI
+                            updateUI();
+                            
+                            // Criar power-up com chance baseada no tipo de inimigo
+                            const dropChance = enemy.type === 'tank' ? 0.4 : 
+                                             enemy.type === 'shooter' ? 0.3 : 0.2;
+                            
+                            if (Math.random() < dropChance) {
+                                createPowerUp(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
+                            }
+                            
+                            enemies.splice(j, 1);
+                            
+                            // Atualizar missão
+                            if (activeQuest && activeQuest.title === 'Inimigos Derrotados') {
+                                questProgress++;
+                                if (questProgress >= activeQuest.goal) {
+                                    completeQuest();
+                                } else {
+                                    updateQuestLog();
+                                }
+                            }
+                            
+                            // Checar conquistas
+                            checkAchievements();
+                        }
+                        
+                        break;
+                    }
+                }
+                
+                // Com boss
+                if (bossActive && laser.x < boss.x + boss.width &&
+                    laser.x + laser.width > boss.x &&
+                    laser.y < boss.y + boss.height &&
+                    laser.y + laser.height > boss.y) {
+                    
+                    lasers.splice(i, 1);
+                    boss.health -= 1 * laser.damageMultiplier;
+                    createParticle(laser.x, laser.y, '#ff3366', 6);
+                    createExplosion(boss.x + boss.width / 2, boss.y + boss.height / 2, 60);
+                    
+                    // Atualizar missão
+                    if (activeQuest && activeQuest.title === 'Boss Slayer') {
+                        questProgress = 1;
+                        if (questProgress >= activeQuest.goal) {
+                            completeQuest();
+                        } else {
+                            updateQuestLog();
+                        }
+                    }
+                    
+                    // Checar se boss foi derrotado
+                    if (boss.health <= 0) {
+                        if (boss.phase < 3) {
+                            nextBossPhase();
+                        } else {
+                            score += 5000;
+                            gainExperience(50);
+                            bossActive = false;
+                            currentLevel++;
+                            gameSpeed *= 1.3;
+                            document.querySelector('.boss-health').style.display = 'none';
+                            document.querySelector('.phase-indicator').style.display = 'none';
+                            updateUI();
+                            
+                            // Iniciar nova missão
+                            startQuest();
+                            
+                            showLevelUp();
+                        }
+                    }
+                }
+            }
+            
+            // Verificar colisões entre mísseis guiados e inimigos
+            for (let i = homingMissiles.length - 1; i >= 0; i--) {
+                const missile = homingMissiles[i];
+                
+                for (let j = enemies.length - 1; j >= 0; j--) {
+                    const enemy = enemies[j];
+                    
+                    if (missile.x < enemy.x + enemy.width &&
+                        missile.x + missile.width > enemy.x &&
+                        missile.y < enemy.y + enemy.height &&
+                        missile.y + missile.height > enemy.y) {
+                        
+                        homingMissiles.splice(i, 1);
+                        enemy.health -= 3;
+                        createExplosion(missile.x, missile.y, 50, '#ff00ff');
+                        
+                        if (enemy.health <= 0) {
+                            score += enemy.points * 3;
+                            gainExperience(enemy.maxHealth * 2);
+                            updateUI();
+                            
+                            if (Math.random() < 0.3) {
+                                createPowerUp(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
+                            }
+                            
+                            enemies.splice(j, 1);
+                            
+                            // Atualizar missão
+                            if (activeQuest && activeQuest.title === 'Inimigos Derrotados') {
+                                questProgress++;
+                                if (questProgress >= activeQuest.goal) {
+                                    completeQuest();
+                                } else {
+                                    updateQuestLog();
+                                }
+                            }
+                            
+                            checkAchievements();
+                        }
+                        
+                        break;
+                    }
+                }
+            }
+            
+            // Verificar colisões entre jogador e inimigos
+            for (let i = enemies.length - 1; i >= 0; i--) {
+                const enemy = enemies[i];
+                
+                if (player.x < enemy.x + enemy.width &&
+                    player.x + player.width > enemy.x &&
+                    player.y < enemy.y + enemy.height &&
+                    player.y + player.height > enemy.y) {
+                    
+                    // Dano ao jogador
+                    takeDamage(30);
+                    
+                    // Criar explosão
+                    createExplosion(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
+                    createExplosion(player.x + player.width / 2, player.y + player.height / 2);
+                    
+                    // Remover inimigo
+                    enemies.splice(i, 1);
+                }
+            }
+            
+            // Verificar colisões entre jogador e tiros inimigos
+            for (let i = enemyLasers.length - 1; i >= 0; i--) {
+                const laser = enemyLasers[i];
+                
+                if (player.x < laser.x + laser.width &&
+                    player.x + player.width > laser.x &&
+                    player.y < laser.y + laser.height &&
+                    player.y + player.height > laser.y) {
+                    
+                    enemyLasers.splice(i, 1);
+                    takeDamage(15);
+                    createParticle(laser.x, laser.y, '#ff3366', 5);
+                }
+            }
+            
+            // Verificar colisões entre jogador e power-ups
+            for (let i = powerUps.length - 1; i >= 0; i--) {
+                const powerUp = powerUps[i];
+                
+                if (player.x < powerUp.x + powerUp.width &&
+                    player.x + player.width > powerUp.x &&
+                    player.y < powerUp.y + powerUp.height &&
+                    player.y + player.height > powerUp.y) {
+                    
+                    // Aplicar efeito do power-up
+                    switch (powerUp.powerUp.type) {
+                        case 'speed':
+                            player.speed += 4;
+                            setTimeout(() => player.speed -= 4, 15000);
+                            showAchievement('Speed Boost', 'Colete um power-up de velocidade');
+                            break;
+                        case 'fire':
+                            const tempPower = player.powerLevel;
+                            player.powerLevel += 2;
+                            setTimeout(() => player.powerLevel = tempPower, 15000);
+                            showAchievement('Fire Boost', 'Colete um power-up de fogo');
+                            break;
+                        case 'energy':
+                            player.energy = player.maxEnergy;
+                            showAchievement('Energy Boost', 'Colete um power-up de energia');
+                            break;
+                        case 'shield':
+                            player.shield = player.maxShield || 50;
+                            showAchievement('Shield Boost', 'Colete um power-up de escudo');
+                            break;
+                        case 'triple':
+                            if (!player.tripleShot) {
+                                player.tripleShot = true;
+                                setTimeout(() => player.tripleShot = false, 20000);
+                                showAchievement('Triple Shot', 'Colete um power-up de tiro triplo');
+                            }
+                            break;
+                        case 'homing':
+                            if (!player.homingMissiles) {
+                                player.homingMissiles = true;
+                                setTimeout(() => player.homingMissiles = false, 20000);
+                                showAchievement('Homing Missiles', 'Colete um power-up de mísseis guiados');
+                            }
+                            break;
+                        case 'repair':
+                            player.health = player.maxHealth;
+                            showAchievement('Repair', 'Colete um power-up de reparo');
+                            break;
+                    }
+                    
+                    powerUps.splice(i, 1);
+                }
+            }
+            
+            // Verificar colisões com boss
+            if (bossActive && player.x < boss.x + boss.width &&
+                player.x + player.width > boss.x &&
+                player.y < boss.y + boss.height &&
+                player.y + player.height > boss.y) {
+                
+                takeDamage(50);
+                createExplosion(player.x + player.width / 2, player.y + player.height / 2);
+            }
+            
+            // Verificar colisões com asteroides
+            for (let i = cosmicEntities.asteroids.length - 1; i >= 0; i--) {
+                const asteroid = cosmicEntities.asteroids[i];
+                
+                if (player.x < asteroid.x + asteroid.radius &&
+                    player.x + player.width > asteroid.x - asteroid.radius &&
+                    player.y < asteroid.y + asteroid.radius &&
+                    player.y + player.height > asteroid.y - asteroid.radius) {
+                    
+                    takeDamage(40);
+                    createExplosion(asteroid.x, asteroid.y, 60, '#8B4513');
+                    cosmicEntities.asteroids.splice(i, 1);
+                }
+            }
+            
+            // Verificar colisões com buracos negros
+            for (const blackHole of cosmicEntities.blackHoles) {
+                const dx = player.x - blackHole.x;
+                const dy = player.y - blackHole.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < blackHole.radius + player.width / 2) {
+                    // Força de atração
+                    const angle = Math.atan2(dy, dx);
+                    const force = blackHole.strength * (1 - distance / (blackHole.radius + player.width / 2));
+                    player.x -= Math.cos(angle) * force * 5;
+                    player.y -= Math.sin(angle) * force * 5;
+                    
+                    // Dano se muito próximo
+                    if (distance < blackHole.radius) {
+                        takeDamage(1);
+                    }
+                }
+            }
+        }
+        
+        function takeDamage(amount) {
+            if (player.shield > 0) {
+                player.shield -= amount;
+                if (player.shield < 0) {
+                    player.health += player.shield;
+                    player.shield = 0;
+                }
+            } else {
+                player.health -= amount;
+            }
+            
+            if (player.health <= 0) {
+                lives--;
+                if (lives <= 0) {
+                    gameOver();
+                } else {
+                    player.health = player.maxHealth;
+                    player.shield = 0;
+                    player.energy = player.maxEnergy;
+                    combo = 0;
+                }
+            }
+            
+            updateUI();
+        }
+        
+        function gameOver() {
+            gameActive = false;
+            document.querySelector('.game-over').style.display = 'flex';
+        }
+        
+        function drawMinimap() {
+            minimapCtx.clearRect(0, 0, 150, 150);
+            
+            // Desenhar fundo
+            minimapCtx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            minimapCtx.fillRect(0, 0, 150, 150);
+            
+            // Escala
+            const scaleX = 150 / canvas.width;
+            const scaleY = 150 / canvas.height;
+            
+            // Desenhar jogador
+            minimapCtx.fillStyle = '#00ffff';
+            minimapCtx.beginPath();
+            minimapCtx.arc(
+                player.x * scaleX, 
+                player.y * scaleY, 
+                3, 0, Math.PI * 2
+            );
+            minimapCtx.fill();
+            
+            // Desenhar inimigos
+            for (const enemy of enemies) {
+                minimapCtx.fillStyle = '#ff3366';
+                minimapCtx.beginPath();
+                minimapCtx.arc(
+                    (enemy.x + enemy.width / 2) * scaleX,
+                    (enemy.y + enemy.height / 2) * scaleY,
+                    2, 0, Math.PI * 2
+                );
+                minimapCtx.fill();
+            }
+            
+            // Desenhar boss
+            if (bossActive) {
+                minimapCtx.fillStyle = '#ff0000';
+                minimapCtx.beginPath();
+                minimapCtx.arc(
+                    (boss.x + boss.width / 2) * scaleX,
+                    (boss.y + boss.height / 2) * scaleY,
+                    4, 0, Math.PI * 2
+                );
+                minimapCtx.fill();
+            }
+            
+            // Desenhar power-ups
+            for (const powerUp of powerUps) {
+                minimapCtx.fillStyle = powerUp.color;
+                minimapCtx.beginPath();
+                minimapCtx.arc(
+                    (powerUp.x + powerUp.width / 2) * scaleX,
+                    (powerUp.y + powerUp.height / 2) * scaleY,
+                    2, 0, Math.PI * 2
+                );
+                minimapCtx.fill();
+            }
+            
+            // Desenhar asteroides
+            for (const asteroid of cosmicEntities.asteroids) {
+                minimapCtx.fillStyle = '#8B4513';
+                minimapCtx.beginPath();
+                minimapCtx.arc(
+                    asteroid.x * scaleX,
+                    asteroid.y * scaleY,
+                    asteroid.radius * scaleX,
+                    0, Math.PI * 2
+                );
+                minimapCtx.fill();
+            }
+            
+            // Desenhar buracos negros
+            for (const blackHole of cosmicEntities.blackHoles) {
+                minimapCtx.fillStyle = '#000000';
+                minimapCtx.beginPath();
+                minimapCtx.arc(
+                    blackHole.x * scaleX,
+                    blackHole.y * scaleY,
+                    blackHole.radius * scaleX,
+                    0, Math.PI * 2
+                );
+                minimapCtx.fill();
+            }
+            
+            // Desenhar wormholes
+            for (const wormhole of cosmicEntities.wormholes) {
+                minimapCtx.fillStyle = '#ff00ff';
+                minimapCtx.beginPath();
+                minimapCtx.arc(
+                    wormhole.x * scaleX,
+                    wormhole.y * scaleY,
+                    wormhole.radius * scaleX,
+                    0, Math.PI * 2
+                );
+                minimapCtx.fill();
+            }
+        }
+        
+        function gameLoop() {
+            if (!gameActive) return;
+            if (showUpgradeMenu || showSkillTree || levelUpActive) return;
+            
+            // Limpar canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Atualizar velocidade do jogo baseado nas habilidades
+            if (learnedSkills.includes('time-slow') && specialAbilityActive) {
+                gameSpeed = 0.5;
+            } else {
+                gameSpeed = 1;
+            }
+            
+            // Atualizar contador de combo
+            if (comboTimer > 0) {
+                comboTimer--;
+            } else if (combo > 0) {
+                combo = 0;
+            }
+            
+            // Atualizar reparo automático
+            if (player.repairRate > 0) {
+                player.repairTimer++;
+                if (player.repairTimer >= player.repairRate * 60) {
+                    player.repairTimer = 0;
+                    player.health = Math.min(player.maxHealth, player.health + 20);
+                    updateUI();
+                }
+            }
+            
+            // Atualizar habilidade especial
+            if (specialAbilityActive) {
+                specialAbilityDuration--;
+                if (specialAbilityDuration <= 0) {
+                    specialAbilityActive = false;
+                    gameSpeed = 1;
+                }
+            }
+            
+            if (specialAbilityCooldown > 0) {
+                specialAbilityCooldown--;
+            }
+            
+            // Atualizar boss phase timer
+            if (bossActive) {
+                boss.phaseTimer++;
+            }
+            
+            // Atualizar estrelas
+            ctx.fillStyle = 'white';
+            for (let i = 0; i < stars.length; i++) {
+                const star = stars[i];
+                star.y += star.speed * gameSpeed * 0.5;
+                star.brightness += Math.random() * 0.1 - 0.05;
+                star.brightness = Math.max(0.3, Math.min(1, star.brightness));
+                
+                if (star.y > canvas.height) {
+                    star.y = 0;
+                    star.x = Math.random() * canvas.width;
+                }
+                
+                ctx.globalAlpha = star.brightness;
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.globalAlpha = 1;
+            
+            // Atualizar nebulas
+            for (const nebula of cosmicEntities.nebulas) {
+                nebula.pulsate += 0.01;
+                const pulse = Math.sin(nebula.pulsate) * 0.2 + 0.8;
+                
+                ctx.fillStyle = nebula.color;
+                ctx.globalAlpha = 0.3 * pulse;
+                ctx.beginPath();
+                ctx.arc(nebula.x, nebula.y, nebula.radius * pulse, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.globalAlpha = 1;
+            
+            // Atualizar planetas
+            for (const planet of cosmicEntities.planets) {
+                planet.rotation += planet.orbitSpeed;
+                
+                // Desenhar órbita
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+                ctx.beginPath();
+                ctx.arc(planet.x, planet.y, planet.radius + 20, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                // Desenhar planeta
+                ctx.fillStyle = planet.color;
+                ctx.beginPath();
+                ctx.arc(
+                    planet.x + Math.cos(planet.rotation) * (planet.radius + 20),
+                    planet.y + Math.sin(planet.rotation) * (planet.radius + 20),
+                    planet.radius / 3,
+                    0, Math.PI * 2
+                );
+                ctx.fill();
+            }
+            
+            // Atualizar asteroides
+            for (let i = cosmicEntities.asteroids.length - 1; i >= 0; i--) {
+                const asteroid = cosmicEntities.asteroids[i];
+                asteroid.y += asteroid.speed * gameSpeed;
+                asteroid.rotation += asteroid.rotationSpeed;
+                
+                if (asteroid.y > canvas.height + asteroid.radius) {
+                    // Reposicionar no topo com nova posição x
+                    asteroid.y = -asteroid.radius;
+                    asteroid.x = Math.random() * canvas.width;
+                }
+                
+                // Desenhar asteroide
+                ctx.save();
+                ctx.translate(asteroid.x, asteroid.y);
+                ctx.rotate(asteroid.rotation);
+                
+                ctx.fillStyle = asteroid.color;
+                ctx.beginPath();
+                ctx.arc(0, 0, asteroid.radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Detalhes do asteroide
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+                ctx.beginPath();
+                ctx.arc(asteroid.radius * 0.3, -asteroid.radius * 0.3, asteroid.radius * 0.3, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.beginPath();
+                ctx.arc(-asteroid.radius * 0.4, asteroid.radius * 0.2, asteroid.radius * 0.2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.restore();
+            }
+            
+            // Atualizar buracos negros
+            for (let i = cosmicEntities.blackHoles.length - 1; i >= 0; i--) {
+                const blackHole = cosmicEntities.blackHoles[i];
+                blackHole.duration--;
+                
+                if (blackHole.duration <= 0) {
+                    cosmicEntities.blackHoles.splice(i, 1);
+                }
+                
+                // Desenhar buraco negro
+                ctx.save();
+                ctx.translate(blackHole.x, blackHole.y);
+                
+                // Efeito de distorção
+                ctx.globalAlpha = 0.7;
+                ctx.fillStyle = '#000000';
+                ctx.beginPath();
+                ctx.arc(0, 0, blackHole.radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Anel de acreção
+                ctx.strokeStyle = '#ff9900';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(0, 0, blackHole.radius + 10, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                ctx.strokeStyle = '#ff3366';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(0, 0, blackHole.radius + 20, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                ctx.restore();
+                ctx.globalAlpha = 1;
+            }
+            
+            // Atualizar efeitos de buraco negro
+            for (let i = blackHoleEffects.length - 1; i >= 0; i--) {
+                const effect = blackHoleEffects[i];
+                effect.radius += 0.5;
+                effect.opacity -= 0.005;
+                
+                if (effect.opacity <= 0) {
+                    blackHoleEffects.splice(i, 1);
+                    continue;
+                }
+                
+                ctx.strokeStyle = 'rgba(255, 0, 255, ' + effect.opacity + ')';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.arc(effect.x, effect.y, effect.radius, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+            
+            // Atualizar wormholes
+            for (let i = cosmicEntities.wormholes.length - 1; i >= 0; i--) {
+                const wormhole = cosmicEntities.wormholes[i];
+                
+                // Desenhar wormhole
+                ctx.save();
+                ctx.translate(wormhole.x, wormhole.y);
+                
+                // Efeito de vórtice
+                ctx.globalAlpha = 0.7;
+                ctx.strokeStyle = '#ff00ff';
+                ctx.lineWidth = 3;
+                ctx.setLineDash([10, 5]);
+                ctx.beginPath();
+                ctx.arc(0, 0, wormhole.radius, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                ctx.strokeStyle = '#800080';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 10]);
+                ctx.beginPath();
+                ctx.arc(0, 0, wormhole.radius * 0.7, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                ctx.restore();
+                ctx.globalAlpha = 1;
+                ctx.setLineDash([]);
+            }
+            
+            // Atualizar efeitos de wormhole
+            for (let i = wormholeEffects.length - 1; i >= 0; i--) {
+                const effect = wormholeEffects[i];
+                effect.duration--;
+                
+                if (effect.duration <= 0) {
+                    wormholeEffects.splice(i, 1);
+                    continue;
+                }
+                
+                const pulse = Math.sin(effect.duration * 0.1) * 0.2 + 0.8;
+                effect.opacity = pulse * 0.7;
+                
+                ctx.strokeStyle = 'rgba(255, 0, 255, ' + effect.opacity + ')';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(effect.x, effect.y, effect.radius * pulse, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+            
+            // Atualizar jogador
+            if (keys.left && player.x > 0) player.x -= player.speed * gameSpeed;
+            if (keys.right && player.x < canvas.width - player.width) player.x += player.speed * gameSpeed;
+            if (keys.up && player.y > 0) player.y -= player.speed * gameSpeed;
+            if (keys.down && player.y < canvas.height - player.height) player.y += player.speed * gameSpeed;
+            
+            // Atualizar com toque
+            if (isTouching) {
+                const diff = touchMoveX - touchStartX;
+                player.x += diff * 0.1;
+                player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
+                touchStartX = touchMoveX;
+            }
+            
+            // Recuperar energia
+            player.energy = Math.min(player.maxEnergy, player.energy + player.energyRegen * gameSpeed);
+            
+            // Atirar
+            if (keys.shoot) {
+                shootLaser();
+            }
+            
+            // Usar habilidade especial
+            if (keys.ability) {
+                useSpecialAbility();
+            }
+            
+            // Atirar mísseis guiados
+            if (player.homingMissiles && Date.now() - player.lastShot > 2000) {
+                shootHomingMissile();
+                player.lastShot = Date.now();
+            }
+            
+            // Desenhar jogador
+            ctx.save();
+            ctx.translate(player.x + player.width / 2, player.y + player.height / 2);
+            ctx.rotate(player.angle);
+            ctx.fillStyle = player.color;
+            
+            // Desenhar nave triangular
+            ctx.beginPath();
+            ctx.moveTo(0, -player.height / 2);
+            ctx.lineTo(-player.width / 2, player.height / 2);
+            ctx.lineTo(player.width / 2, player.height / 2);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Desenhar detalhes
+            ctx.fillStyle = '#0066ff';
+            ctx.beginPath();
+            ctx.arc(0, -5, 5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Desenhar escudo se ativo
+            if (player.shield > 0) {
+                ctx.strokeStyle = '#00ffff';
+                ctx.lineWidth = 3;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.arc(0, 0, player.width, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+            
+            // Efeito de afterburner
+            ctx.fillStyle = '#ff9900';
+            ctx.beginPath();
+            ctx.moveTo(-player.width / 4, player.height / 2);
+            ctx.lineTo(0, player.height / 2 + 15);
+            ctx.lineTo(player.width / 4, player.height / 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#ff3366';
+            ctx.beginPath();
+            ctx.moveTo(-player.width / 6, player.height / 2 + 5);
+            ctx.lineTo(0, player.height / 2 + 20);
+            ctx.lineTo(player.width / 6, player.height / 2 + 5);
+            ctx.fill();
+            
+            ctx.restore();
+            
+            // Criar inimigos aleatoriamente
+            if (!bossActive && Math.random() < 0.02 * gameSpeed) {
+                createEnemy();
+            }
+            
+            // Atualizar e desenhar inimigos
+            for (let i = enemies.length - 1; i >= 0; i--) {
+                const enemy = enemies[i];
+                enemy.y += enemy.speed * gameSpeed;
+                enemy.rotation += enemy.rotationSpeed;
+                
+                // Remover inimigos que saíram da tela
+                if (enemy.y > canvas.height) {
+                    enemies.splice(i, 1);
+                    continue;
+                }
+                
+                // Inimigo atirador
+                if (enemy.type === 'shooter') {
+                    const now = Date.now();
+                    if (now - enemy.lastShot > enemy.shotCooldown) {
+                        enemy.lastShot = now;
+                        shootEnemyLaser(enemy);
+                    }
+                }
+                
+                // Desenhar inimigo
+                ctx.save();
+                ctx.translate(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
+                ctx.rotate(enemy.rotation);
+                
+                ctx.fillStyle = enemy.color;
+                ctx.beginPath();
+                ctx.arc(0, 0, enemy.width / 2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Desenhar detalhes do inimigo
+                ctx.fillStyle = 'white';
+                ctx.beginPath();
+                ctx.arc(-8, -5, 3, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(8, -5, 3, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Desenhar arma
+                ctx.fillStyle = '#333';
+                ctx.fillRect(-3, 10, 6, 10);
+                
+                ctx.restore();
+            }
+            
+            // Atualizar e desenhar tiros inimigos
+            for (let i = enemyLasers.length - 1; i >= 0; i--) {
+                const laser = enemyLasers[i];
+                laser.y += laser.speed * gameSpeed;
+                
+                // Remover tiros que saíram da tela
+                if (laser.y > canvas.height) {
+                    enemyLasers.splice(i, 1);
+                    continue;
+                }
+                
+                // Desenhar tiro inimigo
+                ctx.fillStyle = laser.color;
+                ctx.fillRect(laser.x, laser.y, laser.width, laser.height);
+                
+                // Efeito de brilho
+                ctx.shadowColor = laser.color;
+                ctx.shadowBlur = 10;
+                ctx.fillRect(laser.x, laser.y, laser.width, laser.height);
+                ctx.shadowBlur = 0;
+            }
+            
+            // Atualizar e desenhar lasers
+            for (let i = lasers.length - 1; i >= 0; i--) {
+                const laser = lasers[i];
+                laser.y -= laser.speed * gameSpeed;
+                laser.x += Math.sin(laser.angle) * 2;
+                
+                // Remover lasers que saíram da tela
+                if (laser.y + laser.height < 0) {
+                    lasers.splice(i, 1);
+                    continue;
+                }
+                
+                // Desenhar laser
+                ctx.save();
+                ctx.translate(laser.x + laser.width / 2, laser.y + laser.height / 2);
+                ctx.rotate(laser.angle);
+                
+                ctx.fillStyle = laser.color;
+                ctx.fillRect(-laser.width / 2, -laser.height / 2, laser.width, laser.height);
+                
+                // Efeito de brilho
+                ctx.shadowColor = laser.color;
+                ctx.shadowBlur = 10;
+                ctx.fillRect(-laser.width / 2, -laser.height / 2, laser.width, laser.height);
+                ctx.shadowBlur = 0;
+                
+                ctx.restore();
+            }
+            
+            // Atualizar e desenhar mísseis guiados
+            for (let i = homingMissiles.length - 1; i >= 0; i--) {
+                const missile = homingMissiles[i];
+                missile.life--;
+                
+                if (missile.life <= 0) {
+                    homingMissiles.splice(i, 1);
+                    continue;
+                }
+                
+                // Atualizar direção para o alvo
+                if (missile.target) {
+                    const dx = missile.target.x - missile.x;
+                    const dy = missile.target.y - missile.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance > 0) {
+                        const angle = Math.atan2(dy, dx);
+                        missile.x += Math.cos(angle) * missile.speed;
+                        missile.y += Math.sin(angle) * missile.speed;
+                    }
+                }
+                
+                // Remover se sair da tela
+                if (missile.x < -50 || missile.x > canvas.width + 50 || 
+                    missile.y < -50 || missile.y > canvas.height + 50) {
+                    homingMissiles.splice(i, 1);
+                    continue;
+                }
+                
+                // Desenhar míssil
+                ctx.save();
+                ctx.translate(missile.x, missile.y);
+                
+                // Corpo do míssil
+                ctx.fillStyle = missile.color;
+                ctx.fillRect(-missile.width / 2, -missile.height / 2, missile.width, missile.height);
+                
+                // Propulsão
+                ctx.fillStyle = '#ff9900';
+                ctx.fillRect(-missile.width / 3, missile.height / 2, missile.width / 1.5, 8);
+                
+                ctx.restore();
+            }
+            
+            // Atualizar e desenhar power-ups
+            for (let i = powerUps.length - 1; i >= 0; i--) {
+                const powerUp = powerUps[i];
+                powerUp.y += powerUp.speed * gameSpeed;
+                powerUp.rotation += powerUp.rotationSpeed;
+                
+                // Remover power-ups que saíram da tela
+                if (powerUp.y > canvas.height) {
+                    powerUps.splice(i, 1);
+                    continue;
+                }
+                
+                // Desenhar power-up
+                ctx.save();
+                ctx.translate(powerUp.x + powerUp.width / 2, powerUp.y + powerUp.height / 2);
+                ctx.rotate(powerUp.rotation);
+                
+                ctx.fillStyle = powerUp.color;
+                ctx.beginPath();
+                ctx.arc(0, 0, powerUp.width / 2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Desenhar símbolo
+                ctx.fillStyle = 'white';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(
+                    powerUp.type === 'speed' ? '⚡' : 
+                    powerUp.type === 'fire' ? '🔥' : 
+                    powerUp.type === 'energy' ? '⚡' : 
+                    powerUp.type === 'shield' ? '🛡️' :
+                    powerUp.type === 'triple' ? '🎯' :
+                    powerUp.type === 'homing' ? '🚀' : '🔧',
+                    0, 0
+                );
+                
+                ctx.restore();
+            }
+            
+            // Atualizar partículas
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const particle = particles[i];
+                particle.x += particle.speedX * gameSpeed;
+                particle.y += particle.speedY * gameSpeed;
+                particle.life--;
+                
+                if (particle.life <= 0) {
+                    particles.splice(i, 1);
+                    continue;
+                }
+                
+                ctx.fillStyle = particle.color;
+                ctx.globalAlpha = particle.life / particle.maxLife;
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.globalAlpha = 1;
+            
+            // Atualizar trilhas
+            for (let i = trails.length - 1; i >= 0; i--) {
+                const trail = trails[i];
+                trail.x += trail.speedX * gameSpeed;
+                trail.y += trail.speedY * gameSpeed;
+                trail.life--;
+                
+                if (trail.life <= 0) {
+                    trails.splice(i, 1);
+                    continue;
+                }
+                
+                ctx.fillStyle = trail.color;
+                ctx.globalAlpha = trail.life / 20;
+                ctx.beginPath();
+                ctx.arc(trail.x, trail.y, trail.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.globalAlpha = 1;
+            
+            // Atualizar trilhas de laser
+            for (let i = laserTrails.length - 1; i >= 0; i--) {
+                const trail = laserTrails[i];
+                trail.life--;
+                
+                if (trail.life <= 0) {
+                    laserTrails.splice(i, 1);
+                    continue;
+                }
+                
+                ctx.fillStyle = trail.color;
+                ctx.globalAlpha = trail.life / 10;
+                ctx.fillRect(trail.x, trail.y, trail.width, trail.height);
+            }
+            ctx.globalAlpha = 1;
+            
+            // Atualizar explosões
+            for (let i = explosions.length - 1; i >= 0; i--) {
+                const explosion = explosions[i];
+                explosion.size += explosion.growthRate;
+                explosion.opacity -= 0.02;
+                
+                if (explosion.opacity <= 0) {
+                    explosions.splice(i, 1);
+                    continue;
+                }
+                
+                ctx.fillStyle = `rgba(255, 51, 102, ${explosion.opacity})`;
+                ctx.beginPath();
+                ctx.arc(explosion.x, explosion.y, explosion.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = `rgba(255, 153, 0, ${explosion.opacity})`;
+                ctx.beginPath();
+                ctx.arc(explosion.x, explosion.y, explosion.size * 0.6, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Atualizar boss
+            if (bossActive) {
+                // Movimento do boss
+                boss.x += boss.speed * gameSpeed;
+                if (boss.x <= 50 || boss.x >= canvas.width - boss.width - 50) {
+                    boss.speed = -boss.speed;
+                }
+                
+                // Mudar padrão de ataque baseado na fase
+                if (boss.phase === 1) {
+                    boss.pattern = 0;
+                } else if (boss.phase === 2) {
+                    boss.pattern = Math.floor(boss.phaseTimer / 300) % 2;
+                } else if (boss.phase === 3) {
+                    boss.pattern = Math.floor(boss.phaseTimer / 200) % 3;
+                }
+                
+                // Ataques do boss
+                const now = Date.now();
+                if (now - boss.lastAttack > boss.attackCooldown) {
+                    boss.lastAttack = now;
+                    
+                    switch (boss.pattern) {
+                        case 0:
+                            // Ataque simples
+                            shootEnemyLaser(boss);
+                            break;
+                        case 1:
+                            // Ataque triplo
+                            for (let i = -1; i <= 1; i++) {
+                                enemyLasers.push({
+                                    x: boss.x + boss.width / 2 - 2 + i * 20,
+                                    y: boss.y + boss.height,
+                                    width: 4,
+                                    height: 15,
+                                    speed: 5,
+                                    color: '#ff3366'
+                                });
+                            }
+                            break;
+                        case 2:
+                            // Ataque em leque
+                            for (let i = 0; i < 5; i++) {
+                                const angle = (i - 2) * 0.3;
+                                enemyLasers.push({
+                                    x: boss.x + boss.width / 2 - 2,
+                                    y: boss.y + boss.height,
+                                    width: 4,
+                                    height: 15,
+                                    speed: 5,
+                                    color: '#ff3366',
+                                    angle: angle
+                                });
+                            }
+                            break;
+                    }
+                }
+                
+                // Desenhar boss
+                ctx.save();
+                ctx.translate(boss.x + boss.width / 2, boss.y + boss.height / 2);
+                
+                // Corpo do boss
+                ctx.fillStyle = boss.color;
+                ctx.fillRect(-boss.width / 2, -boss.height / 2, boss.width, boss.height);
+                
+                // Detalhes do boss
+                ctx.fillStyle = 'white';
+                ctx.fillRect(-boss.width / 2 + 20, -boss.height / 2 + 20, 20, 20);
+                ctx.fillRect(boss.width / 2 - 40, -boss.height / 2 + 20, 20, 20);
+                ctx.fillRect(-10, boss.height / 2 - 30, 20, 20);
+                
+                // Olhos
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(-15, -10, 5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(15, -10, 5, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Efeito de energia
+                ctx.strokeStyle = '#ff3366';
+                ctx.lineWidth = 3;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.rect(-boss.width / 2 - 5, -boss.height / 2 - 5, boss.width + 10, boss.height + 10);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                
+                ctx.restore();
+            }
+            
+            // Atualizar minimap
+            drawMinimap();
+            
+            // Verificar colisões
+            checkCollisions();
+            
+            // Continuar loop
+            requestAnimationFrame(gameLoop);
+        }
+    </script>
+</body>
+</html>
