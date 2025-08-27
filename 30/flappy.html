@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Flappy Bird</title>
+  <style> canvas { border: 1px solid #000; background: #87CEEB; } </style>
+</head>
+<body>
+  <h2>Flappy Bird</h2>
+  <canvas id="gameCanvas" width="400" height="600"></canvas>
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    let birdY = 300;
+    let velocity = 0;
+    const gravity = 0.5;
+    let pipes = [];
+    let score = 0;
+
+    function drawBird() {
+      ctx.fillStyle = "yellow";
+      ctx.beginPath();
+      ctx.arc(100, birdY, 20, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function updatePipes() {
+      if (pipes.length === 0 || pipes[pipes.length - 1].x < 300) {
+        const gap = 200;
+        const height = Math.random() * 200 + 50;
+        pipes.push({ x: 400, top: height, bottom: height + gap });
+      }
+
+      for (let p of pipes) {
+        p.x -= 2;
+        ctx.fillStyle = "green";
+        ctx.fillRect(p.x, 0, 50, p.top);
+        ctx.fillRect(p.x, p.bottom, 50, canvas.height - p.bottom);
+      }
+
+      pipes = pipes.filter(p => p.x > -50);
+    }
+
+    function checkCollision() {
+      if (birdY < 0 || birdY > canvas.height) return true;
+      for (let p of pipes) {
+        if (p.x < 130 && p.x + 50 > 70) {
+          if (birdY < p.top || birdY > p.bottom) return true;
+        }
+      }
+      return false;
+    }
+
+    function gameLoop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      velocity += gravity;
+      birdY += velocity;
+
+      if (checkCollision()) {
+        alert("Fim de jogo! Pontuação: " + score);
+        location.reload();
+      }
+
+      drawBird();
+      updatePipes();
+      score++;
+      requestAnimationFrame(gameLoop);
+    }
+
+    document.addEventListener("click", () => velocity = -10);
+    gameLoop();
+  </script>
+</body>
+</html>

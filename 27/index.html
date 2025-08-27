@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fatos Históricos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f4f9;
+      color: #333;
+    }
+
+    header {
+      background: #1a1a40;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+    }
+
+    .search-box {
+      margin: 20px auto;
+      text-align: center;
+    }
+
+    .search-box input {
+      padding: 10px;
+      width: 60%;
+      border: 2px solid #1a1a40;
+      border-radius: 8px;
+      font-size: 1em;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 20px;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+    }
+
+    .year {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #1a1a40;
+    }
+
+    .category {
+      font-size: 0.9em;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .timeline {
+      margin: 40px auto;
+      max-width: 800px;
+      padding: 20px;
+      border-left: 4px solid #1a1a40;
+    }
+
+    .event {
+      margin: 20px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .event::before {
+      content: "";
+      position: absolute;
+      left: -10px;
+      top: 5px;
+      width: 15px;
+      height: 15px;
+      background: #1a1a40;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Fatos Históricos</h1>
+    <p>Descubra eventos que marcaram o mundo</p>
+  </header>
+
+  <div class="search-box">
+    <input type="text" id="search" placeholder="🔍 Pesquise por ano, evento ou categoria...">
+  </div>
+
+  <div class="container" id="facts-container">
+    <!-- Cards de fatos vão aqui -->
+  </div>
+
+  <section class="timeline" id="timeline">
+    <h2>Linha do Tempo</h2>
+  </section>
+
+  <script>
+    const fatos = [
+      { ano: "476", evento: "Queda do Império Romano do Ocidente", categoria: "Guerras" },
+      { ano: "1492", evento: "Cristóvão Colombo chega à América", categoria: "Descobertas" },
+      { ano: "1789", evento: "Revolução Francesa", categoria: "Política" },
+      { ano: "1804", evento: "Napoleão é coroado imperador da França", categoria: "Política" },
+      { ano: "1879", evento: "Thomas Edison inventa a lâmpada elétrica", categoria: "Ciência" },
+      { ano: "1914", evento: "Início da Primeira Guerra Mundial", categoria: "Guerras" },
+      { ano: "1939", evento: "Início da Segunda Guerra Mundial", categoria: "Guerras" },
+      { ano: "1969", evento: "O homem chega à Lua", categoria: "Ciência" },
+      { ano: "1989", evento: "Queda do Muro de Berlim", categoria: "Política" },
+      { ano: "2001", evento: "Atentados de 11 de Setembro nos EUA", categoria: "Política" }
+    ];
+
+    const container = document.getElementById("facts-container");
+    const timeline = document.getElementById("timeline");
+
+    function renderFatos(lista) {
+      container.innerHTML = "";
+      lista.forEach(fato => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="year">${fato.ano}</div>
+          <div class="category">${fato.categoria}</div>
+          <p>${fato.evento}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderTimeline(lista) {
+      timeline.innerHTML = "<h2>Linha do Tempo</h2>";
+      lista.sort((a,b) => a.ano - b.ano).forEach(fato => {
+        const event = document.createElement("div");
+        event.className = "event";
+        event.innerHTML = `<strong>${fato.ano}</strong> - ${fato.evento}`;
+        timeline.appendChild(event);
+      });
+    }
+
+    document.getElementById("search").addEventListener("input", (e) => {
+      const termo = e.target.value.toLowerCase();
+      const filtrados = fatos.filter(f => 
+        f.ano.includes(termo) || 
+        f.evento.toLowerCase().includes(termo) ||
+        f.categoria.toLowerCase().includes(termo)
+      );
+      renderFatos(filtrados);
+      renderTimeline(filtrados);
+    });
+
+    renderFatos(fatos);
+    renderTimeline(fatos);
+  </script>
+</body>
+</html>

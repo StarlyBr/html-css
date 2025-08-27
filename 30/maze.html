@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Labirinto</title>
+  <style>
+    canvas { border: 1px solid #000; }
+    body { text-align: center; }
+  </style>
+</head>
+<body>
+  <h2>Labirinto</h2>
+  <canvas id="mazeCanvas" width="400" height="400"></canvas>
+  <p>Use as setas para mover</p>
+  <script>
+    const canvas = document.getElementById("mazeCanvas");
+    const ctx = canvas.getContext("2d");
+    const size = 20;
+    const cols = canvas.width / size;
+    const rows = canvas.height / size;
+    let playerX = 1, playerY = 1;
+    let goalX = cols - 2, goalY = rows - 2;
+    let walls = [];
+
+    // Gerar paredes (labirinto simples)
+    for (let x = 0; x < cols; x++) {
+      for (let y = 0; y < rows; y++) {
+        if (Math.random() < 0.3 && !(x === 1 && y === 1) && !(x === goalX && y === goalY)) {
+          walls.push({x, y});
+        }
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Desenhar paredes
+      ctx.fillStyle = "black";
+      for (let wall of walls) {
+        ctx.fillRect(wall.x * size, wall.y * size, size, size);
+      }
+      // Desenhar jogador
+      ctx.fillStyle = "blue";
+      ctx.fillRect(playerX * size, playerY * size, size, size);
+      // Desenhar meta
+      ctx.fillStyle = "green";
+      ctx.fillRect(goalX * size, goalY * size, size, size);
+    }
+
+    function canMove(x, y) {
+      if (x < 0 || y < 0 || x >= cols || y >= rows) return false;
+      for (let wall of walls) {
+        if (wall.x === x && wall.y === y) return false;
+      }
+      return true;
+    }
+
+    document.addEventListener("keydown", (e) => {
+      let newX = playerX, newY = playerY;
+      if (e.key === "ArrowUp") newY--;
+      if (e.key === "ArrowDown") newY++;
+      if (e.key === "ArrowLeft") newX--;
+      if (e.key === "ArrowRight") newX++;
+
+      if (canMove(newX, newY)) {
+        playerX = newX;
+        playerY = newY;
+        if (playerX === goalX && playerY === goalY) {
+          alert("Você venceu!");
+          location.reload();
+        }
+      }
+      draw();
+    });
+
+    draw();
+  </script>
+</body>
+</html>

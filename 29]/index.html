@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Diário Digital</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      padding: 20px;
+      background: #f7f9fc;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    textarea {
+      width: 100%;
+      height: 120px;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    .options {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+      align-items: center;
+    }
+    button {
+      padding: 10px 20px;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .entry {
+      background: white;
+      margin: 15px 0;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .entry.private {
+      background: #fff8e1;
+      border-left: 5px solid #ffb300;
+    }
+    .entry h3 {
+      margin: 0 0 5px 0;
+      color: #1a73e8;
+    }
+    .entry p {
+      margin: 5px 0;
+    }
+    .lock-icon {
+      font-weight: bold;
+      color: #e65100;
+    }
+    .password-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 20px;
+      width: 300px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .modal-content input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📝 Diário Digital</h1>
+
+  <!-- Nova Entrada -->
+  <textarea id="diaryInput" placeholder="Escreva aqui seu pensamento..."></textarea>
+  <div class="options">
+    <label><input type="radio" name="privacy" value="public" checked> Público</label>
+    <label><input type="radio" name="privacy" value="private"> Privado</label>
+  </div>
+  <button onclick="saveEntry()">Salvar Entrada</button>
+
+  <!-- Lista de entradas -->
+  <div id="entries"></div>
+
+  <!-- Modal de Senha -->
+  <div class="password-modal" id="passwordModal">
+    <div class="modal-content">
+      <h3>🔒 Entrada Privada</h3>
+      <p>Digite a senha para visualizar:</p>
+      <input type="password" id="entryPassword" />
+      <div class="error" id="passwordError"></div>
+      <button onclick="checkPassword()">Acessar</button>
+    </div>
+  </div>
+
+  <script>
+    // Senha mestra para desbloquear entradas privadas (pode ser única para todas)
+    const MASTER_PASSWORD = "1234"; // ⚠️ Altere isso! Pode virar config depois
+    localStorage.setItem("diaryMasterPassword", MASTER_PASSWORD); // salva uma vez
+
+    function saveEntry() {
+      const text = document.getElementById('diaryInput').value.trim();
+      if (!text) return alert("Escreva algo antes de salvar!");
+
+      const privacy = document.querySelector('input[name="privacy"]:checked').value;
+      const entry = {
+        text,
+        date: new Date().toLocaleString(),
+        privacy: privacy,
+        id: Date.now() // ID único
+      };
+
+      const entries = JSON.parse(localStorage.getItem('diaryEntries') || '[]');
+      entries.unshift(entry);
+      localStorage.setItem('diaryEntries', JSON.stringify(entries));
+
+      document.getElementById('diaryInput').value = '';
+      loadEntries();
+    }
+
+    function loadEntries() {
+      const entries = JSON.parse(localStorage.getItem('diaryEntries') || '[]');
+      const container = document.getElementById('entries');
+      container.innerHTML = '';
+
+      entries.forEach(entry => {
+        const div = document.createElement('div');
+        div.className = `entry ${entry.privacy === 'private' ? 'private' : ''}`;
+
+        const title = document.createElement('h3');
+        title.textContent = entry.date;
+
+        const content = document.createElement('p');
+        if (entry.privacy === 'public') {
+          content.textContent = entry.text;
+        } else {
+          content.innerHTML = '<span class="lock-icon">🔒 Conteúdo Privado - Clique para ler</span>';
+          content.style.cursor = 'pointer';
+          content.onclick = (e) => {
+            e.stopPropagation();
+            openPasswordPrompt(entry.text);
+          };
+        }
+
+        div.appendChild(title);
+        div.appendChild(content);
+        container.appendChild(div);
+      });
+    }
+
+    // Modal de senha
+    const modal = document.getElementById('passwordModal');
+    let currentText = '';
+
+    function openPasswordPrompt(text) {
+      currentText = text;
+      document.getElementById('entryPassword').value = '';
+      document.getElementById('passwordError').textContent = '';
+      modal.style.display = 'flex';
+    }
+
+    function checkPassword() {
+      const inputPass = document.getElementById('entryPassword').value;
+      const savedPass = localStorage.getItem("diaryMasterPassword");
+
+      if (inputPass === savedPass) {
+        alert("Conteúdo:\n\n" + currentText);
+        modal.style.display = 'none';
+      } else {
+        document.getElementById('passwordError').textContent = 'Senha incorreta!';
+      }
+    }
+
+    // Fechar modal ao clicar fora
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+
+    // Carregar entradas ao iniciar
+    loadEntries();
+  </script>
+</body>
+</html>
