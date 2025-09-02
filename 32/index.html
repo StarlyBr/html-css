@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parque de Diversões Digital</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial', sans-serif;
+        }
+
+        :root {
+            --primary: #ff6b6b;
+            --secondary: #4ecdc4;
+            --accent: #feca57;
+            --dark: #2f3542;
+            --light: #f7f7f7;
+            --purple: #a55eea;
+            --pink: #ff9ff3;
+            --blue: #54a0ff;
+            --green: #5fcd51;
+            --orange: #ff9f43;
+            --red: #ee5a24;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--dark);
+            position: relative;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 0 40px;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 4.5rem;
+            color: white;
+            text-shadow: 6px 6px 0 var(--primary), 12px 12px 0 var(--secondary), 18px 18px 0 var(--accent);
+            animation: float 3s ease-in-out infinite;
+            margin-bottom: 20px;
+            display: inline-block;
+            position: relative;
+            z-index: 3;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .subtitle {
+            font-size: 2rem;
+            color: white;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fun-zone {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin: 40px 0;
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn {
+            padding: 18px 35px;
+            font-size: 1.3rem;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            font-weight: bold;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(255,255,255,0));
+            transform: translateX(-100%);
+            transition: transform 0.5s;
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            transform: translateX(100%);
+        }
+
+        .btn:hover {
+            transform: translateY(-8px) scale(1.08);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), #ee5a24);
+            color: white;
+            border: 3px solid white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, var(--secondary), #48dbfb);
+            color: white;
+            border: 3px solid white;
+        }
+
+        .btn-accent {
+            background: linear-gradient(45deg, var(--accent), #f9ca24);
+            color: var(--dark);
+            border: 3px solid var(--dark);
+        }
+
+        .btn-purple {
+            background: linear-gradient(45deg, var(--purple), #833471);
+            color: white;
+            border: 3px solid white;
+        }
+
+        .btn-pink {
+            background: linear-gradient(45deg, var(--pink), #c8d6e5);
+            color: white;
+            border: 3px solid white;
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin: 50px 0;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 35px;
+            width: 320px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 3px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent), var(--purple), var(--pink), var(--blue));
+            z-index: 2;
+        }
+
+        .card:hover {
+            transform: translateY(-15px) rotate(6deg);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+
+        .card h3 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .card h3::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .card p {
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+
+        .emoji {
+            font-size: 5rem;
+            margin-bottom: 25px;
+            display: block;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+        }
+
+        .joke-display {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px auto;
+            max-width: 700px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--dark);
+            text-align: center;
+            line-height: 1.6;
+            border: 3px solid white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .joke-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent), var(--purple), var(--pink), var(--blue));
+        }
+
+        .game-area {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            padding: 40px;
+            margin: 50px auto;
+            max-width: 800px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 3px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .game-title {
+            font-size: 2.5rem;
+            color: var(--purple);
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+        }
+
+        .color-game {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+
+        .color-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .color-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .color-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            opacity: 0.3;
+        }
+
+        .score-board {
+            font-size: 1.8rem;
+            margin: 20px 0;
+            color: var(--dark);
+        }
+
+        .balloon {
+            position: absolute;
+            width: 70px;
+            height: 90px;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: float 10s infinite ease-in-out;
+            cursor: pointer;
+            z-index: 5;
+        }
+
+        .balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-120px) rotate(15deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            opacity: 0.8;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .rainbow-text {
+            background-image: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent), var(--purple), var(--pink), var(--blue), var(--green), var(--orange), var(--red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 400% 100%;
+            animation: rainbow 8s linear infinite;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .meme-generator {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            padding: 40px;
+            margin: 50px auto;
+            max-width: 800px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 3px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .meme-container {
+            position: relative;
+            width: 400px;
+            height: 300px;
+            margin: 30px auto;
+            border: 5px solid #333;
+            overflow: hidden;
+            background: #f0f0f0;
+        }
+
+        .meme-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .meme-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-family: 'Impact', sans-serif;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
+            padding: 5px;
+            background: rgba(0,0,0,0.5);
+            z-index: 2;
+        }
+
+        .top-text {
+            top: 10px;
+            font-size: 28px;
+        }
+
+        .bottom-text {
+            bottom: 10px;
+            font-size: 24px;
+        }
+
+        .input-group {
+            margin: 20px 0;
+        }
+
+        .input-group input {
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            width: 300px;
+            margin: 10px 0;
+        }
+
+        .input-group button {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            background: linear-gradient(45deg, var(--purple), #833471);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        footer {
+            text-align: center;
+            padding: 50px 0 30px;
+            color: white;
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
+            margin-top: 80px;
+            font-size: 1.3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-emoji {
+            font-size: 2rem;
+            margin: 0 10px;
+            animation: bounce 2s infinite;
+        }
+
+        @media (max-width: 992px) {
+            .logo {
+                font-size: 3.5rem;
+            }
+            .subtitle {
+                font-size: 1.6rem;
+            }
+            .card {
+                width: 100%;
+                max-width: 320px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.8rem;
+            }
+            .subtitle {
+                font-size: 1.4rem;
+            }
+            .fun-zone {
+                flex-direction: column;
+                align-items: center;
+            }
+            .btn {
+                width: 80%;
+                font-size: 1.1rem;
+            }
+            .meme-container {
+                width: 300px;
+                height: 225px;
+            }
+            .meme-text {
+                font-size: 20px !important;
+            }
+            .input-group input {
+                width: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 2.2rem;
+            }
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            .main-content {
+                gap: 20px;
+            }
+            .card {
+                padding: 25px;
+            }
+            .emoji {
+                font-size: 4rem;
+            }
+            .joke-display {
+                font-size: 1.2rem;
+                padding: 20px;
+            }
+            .game-title {
+                font-size: 2rem;
+            }
+            .color-game {
+                gap: 10px;
+            }
+            .color-btn {
+                width: 60px;
+                height: 60px;
+            }
+            .meme-container {
+                width: 250px;
+                height: 188px;
+            }
+            .top-text {
+                font-size: 22px;
+            }
+            .bottom-text {
+                font-size: 18px;
+            }
+        }
+
+        /* Animations for cards */
+        .card-1:hover .emoji {
+            animation: spin 1s infinite linear;
+        }
+
+        .card-2:hover .emoji {
+            animation: bounce 1s infinite;
+        }
+
+        .card-3:hover .emoji {
+            animation: shake 1s infinite;
+        }
+
+        .card-4:hover .emoji {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1.2); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0) scale(1.2); }
+            25% { transform: translateX(-10px) scale(1.2); }
+            75% { transform: translateX(10px) scale(1.2); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1.2); }
+            50% { transform: scale(1.4); }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin-loading 1.5s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+
+        @keyframes spin-loading {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            position: relative;
+            animation: modalPop 0.5s ease-out;
+        }
+
+        @keyframes modalPop {
+            from { 
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to { 
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+
+        .modal-title {
+            font-size: 2.5rem;
+            color: var(--purple);
+            margin-bottom: 20px;
+        }
+
+        .modal-text {
+            font-size: 1.2rem;
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .fact-list {
+            text-align: left;
+            margin: 20px 0;
+            padding-left: 20px;
+        }
+
+        .fact-list li {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .fact-list li::before {
+            content: '💡 ';
+            color: var(--accent);
+        }
+
+        /* Achievement system */
+        .achievements {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+
+        .achievement {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            opacity: 0.5;
+        }
+
+        .achievement.active {
+            opacity: 1;
+            transform: scale(1.2);
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Sound wave animation */
+        .sound-wave {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            margin: 20px 0;
+        }
+
+        .wave-bar {
+            width: 8px;
+            height: 10px;
+            background: var(--primary);
+            border-radius: 4px;
+            animation: wave-animation 1s infinite ease-in-out;
+        }
+
+        .wave-bar:nth-child(2) { animation-delay: 0.1s; }
+        .wave-bar:nth-child(3) { animation-delay: 0.2s; }
+        .wave-bar:nth-child(4) { animation-delay: 0.3s; }
+        .wave-bar:nth-child(5) { animation-delay: 0.4s; }
+        .wave-bar:nth-child(6) { animation-delay: 0.5s; }
+        .wave-bar:nth-child(7) { animation-delay: 0.6s; }
+        .wave-bar:nth-child(8) { animation-delay: 0.7s; }
+        .wave-bar:nth-child(9) { animation-delay: 0.8s; }
+        .wave-bar:nth-child(10) { animation-delay: 0.9s; }
+
+        @keyframes wave-animation {
+            0%, 100% { transform: scaleY(0.2); }
+            50% { transform: scaleY(1); }
+        }
+
+        /* Progress bar */
+        .progress-container {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Chat bubble */
+        .chat-bubble {
+            background: white;
+            border-radius: 20px;
+            padding: 15px 20px;
+            margin: 20px auto;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            animation: chatPop 0.5s ease-out;
+        }
+
+        @keyframes chatPop {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .chat-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 20px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            transform: rotate(45deg);
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .chat-text {
+            font-size: 1.2rem;
+            color: #333;
+            text-align: center;
+        }
+
+        .chat-author {
+            font-size: 0.9rem;
+            color: #888;
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        /* Memory game */
+        .memory-game {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 30px auto;
+            max-width: 500px;
+        }
+
+        .memory-card {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, var(--primary), #ee5a24);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .memory-card.flipped {
+            transform: rotateY(180deg);
+            background: white;
+        }
+
+        .memory-card.matched {
+            background: linear-gradient(45deg, var(--green), #38c745);
+            transform: rotate(360deg) scale(1.1);
+        }
+
+        .memory-card-content {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .memory-card-back {
+            background: linear-gradient(45deg, var(--purple), #833471);
+        }
+
+        .memory-card-front {
+            transform: rotateY(180deg);
+        }
+
+        /* Weather widget */
+        .weather-widget {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            padding: 30px;
+            margin: 50px auto;
+            max-width: 400px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 3px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .weather-icon {
+            font-size: 5rem;
+            margin: 20px 0;
+        }
+
+        .weather-temp {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .weather-location {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin: 10px 0;
+        }
+
+        .weather-description {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        /* Quotes */
+        .quotes {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            padding: 40px;
+            margin: 50px auto;
+            max-width: 800px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 3px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .quote-text {
+            font-size: 1.8rem;
+            font-style: italic;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .quote-author {
+            font-size: 1.3rem;
+            color: var(--purple);
+            font-weight: bold;
+        }
+
+        .quote-nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .quote-nav button {
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            background: linear-gradient(45deg, var(--purple), #833471);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quote-nav button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Avatar generator */
+        .avatar-generator {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            padding: 40px;
+            margin: 50px auto;
+            max-width: 800px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 3px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .avatar-container {
+            width: 200px;
+            height: 200px;
+            margin: 30px auto;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .avatar-option {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background: #f0f0f0;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .avatar-option:hover {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+
+        .avatar-option.active {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+
+        /* Loading screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+        }
+
+        .loading-logo {
+            font-size: 5rem;
+            color: white;
+            text-shadow: 6px 6px 0 var(--primary), 12px 12px 0 var(--secondary), 18px 18px 0 var(--accent);
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 1.5rem;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+        }
+
+        /* Easter egg */
+        .easter-egg {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 100;
+            animation: pulse 2s infinite;
+            display: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 576px) {
+            .memory-game {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .memory-card {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+            }
+            .avatar-container {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">🎪</div>
+        <div class="loading-text">Carregando diversão...</div>
+    </div>
+
+    <!-- Easter Egg Button -->
+    <div class="easter-egg" id="easterEgg" onclick="activateEasterEgg()">🎁</div>
+
+    <!-- Stars Background -->
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <header>
+            <h1 class="logo">🎪 PARQUE DE DIVERSÕES DIGITAL 🎪</h1>
+            <p class="subtitle">O lugar mais divertido da internet!</p>
+        </header>
+
+        <div class="fun-zone">
+            <button class="btn btn-primary" onclick="changeTheme()">Mudar Tema</button>
+            <button class="btn btn-secondary" onclick="showJoke()">Piada do Dia</button>
+            <button class="btn btn-accent" onclick="celebrate()">Festa Surpresa! 🎊</button>
+            <button class="btn btn-purple" onclick="showFact()">Curiosidade Legal</button>
+            <button class="btn btn-pink" onclick="showModal()">Sobre o Site</button>
+        </div>
+
+        <div class="joke-display" id="jokeDisplay">
+            Clique em "Piada do Dia" para ver uma piada divertida!
+        </div>
+
+        <div class="main-content">
+            <div class="card card-1">
+                <span class="emoji">😄</span>
+                <h3>Feliz!</h3>
+                <p>Você sabia que rir libera endorfinas? Isso significa que você está mais feliz agora!</p>
+            </div>
+
+            <div class="card card-2">
+                <span class="emoji">🎈</span>
+                <h3>Divertido</h3>
+                <p>Este site foi feito para te fazer sorrir. Continue explorando!</p>
+            </div>
+
+            <div class="card card-3">
+                <span class="emoji">🌈</span>
+                <h3>Colorido</h3>
+                <p>Cores brilhantes melhoram o humor. Aproveite essa explosão de alegria!</p>
+            </div>
+
+            <div class="card card-4">
+                <span class="emoji">🎮</span>
+                <h3>Jogos</h3>
+                <p>Teste suas habilidades nos nossos jogos divertidos!</p>
+            </div>
+        </div>
+
+        <!-- Game Area -->
+        <div class="game-area">
+            <h2 class="game-title">🎯 Jogo das Cores</h2>
+            <p>Click na cor que aparecer no texto! (Cuidado, o texto muda de cor!)</p>
+            
+            <div class="color-game" id="colorGame">
+                <div class="color-btn" style="background: var(--primary);" onclick="checkColor('red')"></div>
+                <div class="color-btn" style="background: var(--secondary);" onclick="checkColor('green')"></div>
+                <div class="color-btn" style="background: var(--accent);" onclick="checkColor('yellow')"></div>
+                <div class="color-btn" style="background: var(--purple);" onclick="checkColor('purple')"></div>
+                <div class="color-btn" style="background: var(--pink);" onclick="checkColor('pink')"></div>
+                <div class="color-btn" style="background: var(--blue);" onclick="checkColor('blue')"></div>
+            </div>
+            
+            <div class="score-board" id="scoreBoard">Pontuação: 0</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="sound-wave" id="soundWave" style="display: none;">
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+            </div>
+        </div>
+
+        <!-- Meme Generator -->
+        <div class="meme-generator">
+            <h2 class="game-title">🖼️ Gerador de Memes</h2>
+            <p>Crie seu meme personalizado!</p>
+            
+            <div class="meme-container">
+                <img src="https://placehold.co/400x300/4ecdc4/ffffff?text=Meme+Image" alt="Meme Image" class="meme-image">
+                <div class="meme-text top-text" id="topText">TOP TEXT</div>
+                <div class="meme-text bottom-text" id="bottomText">BOTTOM TEXT</div>
+            </div>
+            
+            <div class="input-group">
+                <input type="text" id="topTextInput" placeholder="Texto superior do meme">
+                <input type="text" id="bottomTextInput" placeholder="Texto inferior do meme">
+                <button onclick="updateMeme()">Atualizar Meme</button>
+                <button onclick="randomMeme()">Meme Aleatório</button>
+            </div>
+        </div>
+
+        <!-- Memory Game -->
+        <div class="game-area">
+            <h2 class="game-title">🧠 Jogo da Memória</h2>
+            <p>Encontre todos os pares!</p>
+            
+            <div class="memory-game" id="memoryGame"></div>
+            <div class="score-board" id="memoryScore">Acertos: 0</div>
+        </div>
+
+        <!-- Weather Widget -->
+        <div class="weather-widget">
+            <h2 class="game-title">🌤️ Clima Hoje</h2>
+            <div class="weather-icon" id="weatherIcon">☀️</div>
+            <div class="weather-temp" id="weatherTemp">25°C</div>
+            <div class="weather-location" id="weatherLocation">São Paulo, BR</div>
+            <div class="weather-description"

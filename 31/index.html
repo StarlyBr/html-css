@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Divertido</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            color: #fff;
+            text-shadow: 3px 3px 0 #ff6b6b, 6px 6px 0 #feca57;
+            animation: bounce 2s infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #fff;
+            text-shadow: 2px 2px 0 #48dbfb;
+            margin-bottom: 30px;
+        }
+
+        .fun-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+
+        .btn {
+            padding: 15px 25px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #48dbfb, #1dd1a1);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #a55eea, #833471);
+            color: white;
+        }
+
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin: 40px 0;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            width: 300px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .card:hover {
+            transform: translateY(-10px) rotate(5deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .emoji {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .joke-display {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px auto;
+            max-width: 600px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #555;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .balloon {
+            position: absolute;
+            width: 60px;
+            height: 80px;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-100px) rotate(10deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            opacity: 0.7;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: white;
+            text-shadow: 1px 1px 0 #333;
+            margin-top: 50px;
+            font-size: 1.1rem;
+        }
+
+        .rainbow-text {
+            background-image: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rainbow 5s linear infinite;
+        }
+
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            .card {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 id="title">🎉 SITE DIVERTIDO! 🎉</h1>
+            <p class="subtitle">O lugar mais feliz da internet!</p>
+        </header>
+
+        <div class="fun-buttons">
+            <button class="btn btn-primary" onclick="changeColor()">Mudar Cores</button>
+            <button class="btn btn-secondary" onclick="showJoke()">Piada do Dia</button>
+            <button class="btn btn-success" onclick="celebrate()">Festa Surpresa! 🎊</button>
+        </div>
+
+        <div class="joke-display" id="jokeDisplay">
+            Clique em "Piada do Dia" para ver uma piada divertida!
+        </div>
+
+        <div class="content">
+            <div class="card">
+                <span class="emoji">😄</span>
+                <h3>Feliz!</h3>
+                <p>Você sabia que rir libera endorfinas? Isso significa que você está mais feliz agora!</p>
+            </div>
+
+            <div class="card">
+                <span class="emoji">🎈</span>
+                <h3>Divertido</h3>
+                <p>Este site foi feito para te fazer sorrir. Continue explorando!</p>
+            </div>
+
+            <div class="card">
+                <span class="emoji">🌈</span>
+                <h3>Colorido</h3>
+                <p>Cores brilhantes melhoram o humor. Aproveite essa explosão de alegria!</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Made with <span style="color: #ff0000;">❤️</span> and lots of fun!</p>
+    </footer>
+
+    <script>
+        // Piadas divertidas
+        const jokes = [
+            "Por que o programador foi ao psicólogo? Porque ele tinha problemas com recursão!",
+            "O que o disse o zero para o oito? Cinto legal!",
+            "Por que o livro de matemática é o mais deprimido? Porque tem muitos problemas.",
+            "Como o computador se sente no verão? Super aquecido!",
+            "Por que o café adora ir a festas? Porque é um ótimo estimulante!",
+            "O que o disse o HTML ao CSS? 'Eu te acho muito atraente!'",
+            "Por que o desenvolvedor web foi ao deserto? Procurar por tags <sand>!",
+            "Como os super-heróis fazem backup dos seus arquivos? Usam super-drives!",
+            "O que o disse o array ao outro array? 'Você tem um elemento a mais!'",
+            "Por que o JavaScript é o mais popular? Porque consegue se adaptar a tudo!"
+        ];
+
+        // Cores para mudar
+        const colors = [
+            'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)',
+            'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
+            'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+            'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+            'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+            'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
+        ];
+
+        // Criar balões flutuantes
+        function createBalloons() {
+            const colors = ['#ff6b6b', '#48dbfb', '#1dd1a1', '#feca57', '#ff9ff3', '#54a0ff', '#5f27cd'];
+            for (let i = 0; i < 15; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                balloon.style.left = Math.random() * 100 + 'vw';
+                balloon.style.animationDuration = (Math.random() * 10 + 5) + 's';
+                balloon.style.animationDelay = Math.random() * 5 + 's';
+                document.body.appendChild(balloon);
+            }
+        }
+
+        // Mudar cor de fundo
+        function changeColor() {
+            const body = document.body;
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            body.style.background = randomColor;
+            
+            // Animar o título
+            const title = document.getElementById('title');
+            title.classList.remove('rainbow-text');
+            setTimeout(() => {
+                title.classList.add('rainbow-text');
+            }, 10);
+        }
+
+        // Mostrar piada
+        function showJoke() {
+            const jokeDisplay = document.getElementById('jokeDisplay');
+            const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+            jokeDisplay.textContent = randomJoke;
+            
+            // Animação de entrada
+            jokeDisplay.style.opacity = 0;
+            setTimeout(() => {
+                jokeDisplay.style.opacity = 1;
+            }, 100);
+        }
+
+        // Efeito de confete
+        function createConfetti() {
+            const confettiColors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = Math.random() * 100 + 'vh';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                document.body.appendChild(confetti);
+                
+                // Animação de queda
+                const animation = confetti.animate([
+                    { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translate(${Math.random() * 100 - 50}px, ${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                ], {
+                    duration: 3000 + Math.random() * 2000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.9, 0.1)'
+                });
+                
+                animation.onfinish = () => confetti.remove();
+            }
+        }
+
+        // Celebrar com confete
+        function celebrate() {
+            createConfetti();
+            
+            // Mudar título
+            const title = document.getElementById('title');
+            title.textContent = '🎉🎉🎉 FESTA! 🎉🎉🎉';
+            
+            // Voltar ao normal após 3 segundos
+            setTimeout(() => {
+                title.textContent = '🎉 SITE DIVERTIDO! 🎉';
+            }, 3000);
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            createBalloons();
+            
+            // Efeito de digitação no subtítulo
+            const subtitle = document.querySelector('.subtitle');
+            const text = subtitle.textContent;
+            subtitle.textContent = '';
+            let i = 0;
+            const typing = setInterval(() => {
+                if (i < text.length) {
+                    subtitle.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typing);
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>
